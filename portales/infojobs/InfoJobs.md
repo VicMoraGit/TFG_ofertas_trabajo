@@ -170,6 +170,8 @@ En primer lugar, se han definido los metodos de la interfaz de busqueda ([Operac
 
 ## 📝 Notas
 
+- Se usan expresiones regulares para extraer la experiencia y el salario de las descripciones de las ofertas.
+- 
 - Despues de que el driver clickee sobre algun elemento, se espera 1 segundo a que el navegador lo procese.
 
 - En caso de que una accion cargue una pagina, se esperan 5 segundos o se espera a la aparicion de un elemento concreto
