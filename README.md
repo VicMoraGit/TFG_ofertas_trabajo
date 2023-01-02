@@ -50,4 +50,5 @@ Basado en https://github.com/csbhakat/DataCollection_Selenium_naukri
 Para una mejor organizacion de los casos de cada portal, se ha seguido el patron de diseño recomendado por Selenium "[Page Object Models](https://www.selenium.dev/documentation/test_practices/encouraged/page_object_models/)". Los cambios realizados al script original especificos de cada portal, se pueden encontrar en la el archivo ".md" en la carpeta de cada uno de ellos. De todas formas, se iran listando a continuacion:
 
 - InfoJobs: [InfoJobs.md](./portales/infojobs/InfoJobs.md).
+- Indeed: [Indeed.md](./portales/indeed/Indeed.md).
 
