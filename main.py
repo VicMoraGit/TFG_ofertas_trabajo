@@ -36,7 +36,7 @@ if __name__ == "__main__":
     start = time()
     for keyword in keywords:
         log.info(f"Buscando {keyword} en InfoJobs")
-        #infoJobs.buscar(keyword)
+        infoJobs.buscar(keyword)
         log.info(f"Buscando {keyword} en Indeed")
         indeed.buscar(keyword)
              
