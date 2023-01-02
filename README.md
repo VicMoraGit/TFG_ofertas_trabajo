@@ -21,27 +21,28 @@ Basado en https://github.com/csbhakat/DataCollection_Selenium_naukri
 
 - La logica principal del script se desarrolla en el archivo [main](./main.py).
     
-    - Las palabras clave se declaran en la variable [keywords](./main.py#L10).  
+    - Las palabras clave se declaran en la variable [keywords](./main.py#L18).  
   
         ```python
         keywords:list=["Big Data","Backend","Spring Boot"]
         ```
    
-    - El numero de paginas se declara en la variable [n_paginas](./main.py#L11).
+    - El numero de paginas se declara en la variable [n_paginas](./main.py#L19).
     
         ```python
         n_paginas:int = 10    
         ```
 
-    - En el script original se calculan las urls de Naukri (Portal laboral indio) desde donde se van a extraer los datos de las ofertas laborales. En este caso, esta parte se gestionara desde cada portal laboral, ya que no todos pueden cambiar de pagina desde la url, o incluso ni siquiera pueden buscar las palabras clave desde ahi (p. ej. InfoJobs)
+    - En el script original se calculan las urls de Naukri (Portal laboral indio) desde donde se van a extraer los datos de las ofertas laborales. En este caso, esta parte se gestionara desde cada portal laboral, ya que no todos pueden cambiar de pagina desde la url o buscar las palabras clave desde ahi.
   
-        Se ha optado por recorrer las palabras clave en un bucle [for](./main.py#L18) e ir recabando la informacion portal a portal. 
+        Se ha optado por recorrer las palabras clave en un bucle [for](./main.py#L29) e ir recabando la informacion portal a portal. 
 
         ```python
         for keyword in keywords:
             portal.buscar(keyword)
         ```
 - Uso del modulo logging para reporte de eventos.
+  
 ## Cambios especificos de cada portal
 
 Para una mejor organizacion de los casos de cada portal, se ha seguido el patron de diseño recomendado por Selenium "[Page Object Models](https://www.selenium.dev/documentation/test_practices/encouraged/page_object_models/)". Los cambios realizados al script original especificos de cada portal, se pueden encontrar en la el archivo ".md" en la carpeta de cada uno de ellos. De todas formas, se iran listando a continuacion:
