@@ -53,6 +53,6 @@ class csvHandler:
 
 
     def __escribir_cabecera(self):
-        self.escribir_linea(['Titulo', 'Compañia', 'Experiencia', 'Salario', 'Ubicacion'])
+        self.escribir_linea(['Titulo', 'Compañia', 'Experiencia', 'Salario', 'Ubicacion','Requisitos'])
         self._log.debug("Cabecera declarada")
 
