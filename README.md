@@ -43,7 +43,7 @@ Basado en https://github.com/csbhakat/DataCollection_Selenium_naukri
         ```
 - Uso del modulo logging para reporte de eventos.
 
-- Los portales de empleo genericos como InfoJobs o Indeed no disponen de unos requisitos claros a la hora de mostrar las ofertas. El formato de los requisitos es libre para cada empresa, por lo que he sacado los requisitos mas demandados desde un [portal](https://ticjob.es/) enfocado solo a empleos tecnologicos (que tambien sera analizada) y los he almacenado en el archivo [constantes.py](./util/constantes.py) (+130 requisitos) que se comparara con cada oferta.
+- Los portales de empleo genericos como InfoJobs o Indeed no disponen de unos requisitos claros a la hora de mostrar las ofertas. El formato de los requisitos es libre para cada empresa, por lo que he sacado los requisitos mas demandados desde un [portal](https://ticjob.es/) enfocado solo a empleos tecnologicos (que tambien sera analizada) y los he almacenado en el archivo [constantes.py](./util/constantes.py) (+300 requisitos) que se comparara con cada oferta.
 
 ## Cambios especificos de cada portal
 
