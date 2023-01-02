@@ -1,10 +1,10 @@
 # Portal Infojobs
 
-En primer lugar, se han definido los metodos de la interfaz de busqueda ([OperacionesBusquedaInterface](interfaces/operacionesBusquedaInterface.py)).
+En primer lugar, se han definido los métodos de la interfaz de búsqueda ([OperacionesBusquedaInterface](interfaces/operacionesBusquedaInterface.py)).
 
 ## ✅ Pasos 
 
-1. Abre la pagina [Infojobs.net](https://www.infojobs.net/) y recorre las posiciones del total de paginas. [Codigo](./infojobs.py#L29)
+1. Abre la página [Infojobs.net](https://www.infojobs.net/) y recorre las posiciones del total de páginas. [Código](./infojobs.py#L30).
 
     ```python
     def buscar(self, keyword:str):
@@ -24,7 +24,7 @@ En primer lugar, se han definido los metodos de la interfaz de busqueda ([Operac
                 return
     ```
    
-2. Se busca la palabra clave en una pagina [Codigo](./infojobs.py#L46)
+2. Se busca la palabra clave en una página [Código](./infojobs.py#L47).
 
     ```python
     def __buscar_keyword(self,keyword:str, n_pagina:int):
@@ -42,7 +42,7 @@ En primer lugar, se han definido los metodos de la interfaz de busqueda ([Operac
         # Comprueba si hay cookies
         self.__gestionar_cookies()
     ```
-3. Al usar un navegador con un perfil recien creado, suele pedirnos que aceptemos las cookies de la pagina. [Codigo](./infojobs.py#L62)
+3. Al usar un navegador con un perfil recién creado, suele pedirnos que aceptemos las cookies de la página. [Código](./infojobs.py#L63).
     
 
    ```python
@@ -61,7 +61,7 @@ En primer lugar, se han definido los metodos de la interfaz de busqueda ([Operac
             pass
     ```
 
-4. Cuando la pagina de resultados ha cargado, en el caso de InfoJobs, es necesario bajar hasta el final de la pagina para que todas las posiciones se rendericen y aparezcan en el DOM. [Codigo](./infojobs.py#L79)
+4. Cuando la página de resultados ha cargado, en el caso de InfoJobs, es necesario bajar hasta el final de la página para que todas las posiciones se rendericen y aparezcan en el DOM. [Código](./infojobs.py#L80).
    
     ```python
     def __scroll_fin_pagina(self):
@@ -70,23 +70,23 @@ En primer lugar, se han definido los metodos de la interfaz de busqueda ([Operac
     ```
     
     
-    Para esta operacion, se requieren algunos datos internos del DOM. Para ello se usan 3 [scripts](./infojobs.py#L83). en JavaScript que se ejecutan en el navegador.
+    Para esta operación, se requieren algunos datos internos del DOM. Para ello se usan 3 [scripts](./infojobs.py#L84). En JavaScript que se ejecutan en el navegador.
 
-    - Devuelve la altura del dispositivo donde esta abierto el navegador
+    - Devuelve la altura del dispositivo donde está abierto el navegador.
 
         ```javascript
         
         return visualViewport.height;
 
         ```
-    - Devuelve la posicion inferior en pixeles del cuerpo del HTML. 
+    - Devuelve la posición inferior en píxeles del cuerpo del HTML. 
   
         ```javascript
         
         return document.body.getBoundingClientRect().bottom;
 
         ```
-    - Hace scroll hasta la posicion pasada como argumento, en este caso, la variable [altura_scroll](./infojobs.py#L100).
+    - Hace scroll hasta la posición pasada como argumento, en este caso, la variable [altura_scroll](./infojobs.py#L101).
  
         ```javascript
         
@@ -120,7 +120,7 @@ En primer lugar, se han definido los metodos de la interfaz de busqueda ([Operac
             posicion_inferior_anterior = posicion_inferior_actual
             posicion_inferior_actual  = driver.execute_script(posicion_inferior_script) 
     ```
-5. Analiza las posiciones de la pagina de resultados. Extrae el link de cada oferta, lo abre en un driver nuevo, y extrae la informacion. Por ultimo lo escribe en el csv y cierra el driver auxiliar.
+5. Analiza las posiciones de la página de resultados. Extrae el link de cada oferta, lo abre en un driver nuevo, y extrae la información. Por último lo escribe en el CSV y cierra el driver auxiliar. [Código](./infojobs.py#L113).
 
     ```python
     def __analizar_posiciones(self):
@@ -128,7 +128,7 @@ En primer lugar, se han definido los metodos de la interfaz de busqueda ([Operac
         driver = self._driver
         
         # Localizadores 
-        posiciones_locator = "div.ij-ContentSearch-list > ul div.sui-AtomCard-link"
+        posiciones_locator = "div.ij-ContentSearch-list  ul div.sui-AtomCard-link"
         resumen_posicion_locator = ".panel-canvas.panel-rounded"
 
         # Obtiene las posiciones de esa pagina
@@ -146,6 +146,8 @@ En primer lugar, se han definido los metodos de la interfaz de busqueda ([Operac
 
             #Espera a que aparezca el elemento que resume la oferta
             resumen_oferta = WebDriverWait(driver=driverAux,timeout=10).until(
+
+
                 EC.presence_of_element_located((By.CSS_SELECTOR,resumen_posicion_locator)))
             
             # Extrae la informacion
@@ -172,15 +174,18 @@ En primer lugar, se han definido los metodos de la interfaz de busqueda ([Operac
 
 - Se usan expresiones regulares para extraer la experiencia y el salario de las descripciones de las ofertas.
 
-- Despues de que el driver clickee sobre algun elemento, se espera 1 segundo a que el navegador lo procese.
+- Después de que el driver clickee sobre algún elemento, se espera 1 segundo a que el navegador lo procese.
 
-- En caso de que una accion cargue una pagina, se esperan 5 segundos o se espera a la aparicion de un elemento concreto
+- En caso de que una acción cargue una página, se esperan 5 segundos o se espera a la aparición de un elemento concreto.
   
+
+
 ## 🐞 Problemas encontrados
 
-- Cuando se abria una oferta en una nueva pestaña dentro del driver donde estan los resultados, despues de 10-15 ofertas InfoJobs muestra un captcha. Se ha optado por abrir un nuevo driver en vez de una nueva pestaña
+- Cuando se abría una oferta en una nueva pestaña dentro del driver donde están los resultados, después de 10-15 ofertas InfoJobs muestra un captcha. Se ha optado por abrir un nuevo driver en vez de una nueva pestaña.
 
-- Despues de buscar varias veces (no hay un numero exacto) acaba mostrando un captcha.
+- Después de buscar varias veces (no hay un número exacto) acaba mostrando un captcha.
 
-    En ese caso la excepcion que salta se controla desde el metodo buscar. En mi caso, para volver a lanzar el script estoy usando una vpn para cambiar de ip cada vez que aparece y funciona sin problemas
 
+
+    En ese caso la excepción que salta se controla desde el método buscar. En mi caso, para volver a lanzar el script estoy usando una vpn para cambiar de ip cada vez que aparece y funciona sin problemas.
