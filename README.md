@@ -42,7 +42,9 @@ Basado en https://github.com/csbhakat/DataCollection_Selenium_naukri
             portal.buscar(keyword)
         ```
 - Uso del modulo logging para reporte de eventos.
-  
+
+- Los portales de empleo genericos como InfoJobs o Indeed no disponen de unos requisitos claros a la hora de mostrar las ofertas. El formato de los requisitos es libre para cada empresa, por lo que he sacado los requisitos mas demandados desde un [portal](https://ticjob.es/) enfocado solo a empleos tecnologicos (que tambien sera analizada) y los he almacenado en el archivo [constantes.py](./util/constantes.py) (+300 requisitos) que se comparara con cada oferta.
+
 ## Cambios especificos de cada portal
 
 Para una mejor organizacion de los casos de cada portal, se ha seguido el patron de diseño recomendado por Selenium "[Page Object Models](https://www.selenium.dev/documentation/test_practices/encouraged/page_object_models/)". Los cambios realizados al script original especificos de cada portal, se pueden encontrar en la el archivo ".md" en la carpeta de cada uno de ellos. De todas formas, se iran listando a continuacion:

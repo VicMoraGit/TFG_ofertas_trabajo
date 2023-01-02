@@ -22,7 +22,6 @@ En primer lugar, se han definido los metodos de la interfaz de busqueda ([Operac
                 self.__analizar_posiciones()
             except (TimeoutException,NoSuchElementException):
                 return
-
     ```
    
 2. Se busca la palabra clave en una pagina [Codigo](./infojobs.py#L46)
@@ -42,8 +41,6 @@ En primer lugar, se han definido los metodos de la interfaz de busqueda ([Operac
 
         # Comprueba si hay cookies
         self.__gestionar_cookies()
-
-
     ```
 3. Al usar un navegador con un perfil recien creado, suele pedirnos que aceptemos las cookies de la pagina. [Codigo](./infojobs.py#L62)
     
@@ -122,7 +119,6 @@ En primer lugar, se han definido los metodos de la interfaz de busqueda ([Operac
             # ultima iteracion
             posicion_inferior_anterior = posicion_inferior_actual
             posicion_inferior_actual  = driver.execute_script(posicion_inferior_script) 
-
     ```
 5. Analiza las posiciones de la pagina de resultados. Extrae el link de cada oferta, lo abre en un driver nuevo, y extrae la informacion. Por ultimo lo escribe en el csv y cierra el driver auxiliar.
 
@@ -170,7 +166,6 @@ En primer lugar, se han definido los metodos de la interfaz de busqueda ([Operac
             self._csv.escribir_linea(valores=informacion_posicion.values())
 
             driverAux.close()
-
     ```
 
 ## 📝 Notas

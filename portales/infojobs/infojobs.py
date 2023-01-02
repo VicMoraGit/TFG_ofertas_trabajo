@@ -2,6 +2,7 @@
 from logging import Logger, getLogger, DEBUG
 import re
 from time import sleep
+from util.constantes import ALL_SKILLS
 
 #Clases proyecto
 from interfaces.operacionesBusquedaInterface import OperacionesBusquedaInterface as obi
@@ -22,7 +23,7 @@ class InfoJobsPage(obi):
         self._base_url:str ="https://www.infojobs.net/"
         self._driver:uc.Chrome = driver
         self._log:Logger = getLogger("InfoJobs")
-        self._log.setLevel(DEBUG)
+        # self._log.setLevel(DEBUG)
         self._n_paginas = n_paginas
         self._csv = csvHandler;
     
@@ -116,6 +117,7 @@ class InfoJobsPage(obi):
         # Localizadores 
         posiciones_locator = "div.ij-ContentSearch-list > ul div.sui-AtomCard-link"
         resumen_posicion_locator = ".panel-canvas.panel-rounded"
+        descripcion_posicion_locator = "prefijoDescripcion1"
 
         # Obtiene las posiciones de esa pagina
         posiciones = driver.find_elements(By.CSS_SELECTOR, posiciones_locator)
@@ -129,13 +131,14 @@ class InfoJobsPage(obi):
             
             driverAux = uc.Chrome()    
             driverAux.get(link_posicion)
-            self._log.debug(f"Oferta abierta")
+            self._log.debug("Oferta abierta")
 
             #Espera a que aparezca el elemento que resume la oferta
             resumen_oferta = WebDriverWait(driver=driverAux,timeout=10).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR,resumen_posicion_locator)))
             self._log.debug("Resumen de la oferta visible")
-            
+            descripcion = driver.find_element(By.ID,descripcion_posicion_locator)
+
             # Extrae la informacion
             informacion_posicion={}
             titulo=self.__get_title(resumen_oferta)
@@ -143,6 +146,7 @@ class InfoJobsPage(obi):
             compañia=self.__get_companyname(resumen_oferta)
             experiencia=self.__get_experience(resumen_oferta)
             salario=self.__get_salaryexpected(resumen_oferta)
+            skills=self.__get_skills(descripcion)
             self._log.debug("Informacion extraida.")
 
             # Rellena el diccionario
@@ -151,14 +155,14 @@ class InfoJobsPage(obi):
             informacion_posicion['experiencia']=experiencia
             informacion_posicion['salario']=salario
             informacion_posicion['ubicacion']=ubicacion
+            informacion_posicion['skills']=skills
             
             self._csv.escribir_linea(valores=informacion_posicion.values())
             self._log.debug("Informacion escrita en csv")
 
             driverAux.close()
-            self._log.debug("Driver auxiliar cerrado.")
+            self._log.debug("Driver auxiliar cerrado")
             self._log.info(f"Oferta analizada {i+1}/{len(posiciones)}")
-
 
 
     def __get_link(self, position:WebElement):
@@ -169,20 +173,22 @@ class InfoJobsPage(obi):
     def __get_title(self, position:WebElement):
         
         titulo_posicion_locator = "prefijoPuesto"
-        titulo_raw = position.find_element(By.ID, titulo_posicion_locator).text
-        titulo_limpio = titulo_raw.replace("Ofertas de trabajo en ","").replace(" ofertas de empleo profesionales","")
-        return titulo_limpio
+        return position.find_element(By.ID, titulo_posicion_locator).text
  
 
     def __get_companyname(self, position:WebElement):
         
         compañia_locator = '.link[data-track="Company Detail Clicked"]'
-        return position.find_element(By.CSS_SELECTOR, compañia_locator).get_attribute("title")  
+        nombre_compañia_raw = position.find_element(By.CSS_SELECTOR, compañia_locator).get_attribute("title")  
+        nombre_compañia_limpio = nombre_compañia_raw.replace("Ofertas de trabajo en ","").replace(" ofertas de empleo profesionales","")
+
+        return nombre_compañia_limpio
+
     
     def __get_experience(self, position:WebElement):
         
-        descripcion_posicion_locator = 'div.inner +div '
-        descripcion = position.find_element(By.CSS_SELECTOR, descripcion_posicion_locator).text
+        descripcion_resumen_locator = 'div.inner + div '
+        descripcion = position.find_element(By.CSS_SELECTOR, descripcion_resumen_locator).text
         
         try:
             p = re.compile("no requerida|(\d+\s*((experiencia)|(de \3)|(años \4)|años|año))")
@@ -197,15 +203,14 @@ class InfoJobsPage(obi):
                 return experience
 
         except:
-            self._log.debug("No tiene informacion sobre experiencia")
-            
+            self._log.debug("No tiene informacion sobre experiencia")          
         
         return "Sin informacion"
 
     def __get_salaryexpected(self, position:WebElement):
         
-        descripcion_posicion_locator = 'div.inner +div '
-        descripcion = position.find_element(By.CSS_SELECTOR, descripcion_posicion_locator).text
+        descripcion_resumen_locator = 'div.inner +div '
+        descripcion = position.find_element(By.CSS_SELECTOR, descripcion_resumen_locator).text
         
         try:
             p = re.compile("\d.+€")
@@ -214,8 +219,8 @@ class InfoJobsPage(obi):
 
             if s is not None:
                 self._log.debug("Hay informacion sobre el salario")    
-                experience = s.group()
-                return experience
+                salario = s.group()
+                return salario
 
         except:
             self._log.debug("No tiene informacion sobre salario")
@@ -232,3 +237,18 @@ class InfoJobsPage(obi):
         provincia = position.find_element(By.ID, provincia_posicon_locator).text
 
         return poblacion+provincia
+    
+    def __get_skills(self, position:WebElement):
+
+        skills_oferta = []
+        descripcion_texto = position.text
+
+        # Se compara si alguna skill esta presente en la descripcion de la oferta
+                
+        for skill in ALL_SKILLS:
+            p = re.compile(rf"\b{re.escape(skill.lower())}\b")
+            s = p.search(descripcion_texto.lower())
+            if s is not None:
+                skills_oferta.append(skill)
+        
+        return skills_oferta

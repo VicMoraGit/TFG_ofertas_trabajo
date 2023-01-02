@@ -27,3 +27,6 @@ class OperacionesBusquedaInterface():
     @abstractmethod
     def __get_location(self, position:WebElement):
         pass
+    @abstractmethod
+    def __get_skills(self, position:WebElement):
+        pass
