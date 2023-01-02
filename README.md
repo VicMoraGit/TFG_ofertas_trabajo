@@ -21,13 +21,13 @@ Basado en https://github.com/csbhakat/DataCollection_Selenium_naukri
 
 - La logica principal del script se desarrolla en el archivo [main](./main.py).
     
-    - Las palabras clave se declaran en la variable [keywords](./main.py#L18).  
+    - Las palabras clave se declaran en la variable [keywords](./main.py#L21).  
   
         ```python
         keywords:list=["Big Data","Backend","Spring Boot"]
         ```
    
-    - El numero de paginas se declara en la variable [n_paginas](./main.py#L19).
+    - El numero de paginas se declara en la variable [n_paginas](./main.py#L22).
     
         ```python
         n_paginas:int = 10    
@@ -35,7 +35,7 @@ Basado en https://github.com/csbhakat/DataCollection_Selenium_naukri
 
     - En el script original se calculan las urls de Naukri (Portal laboral indio) desde donde se van a extraer los datos de las ofertas laborales. En este caso, esta parte se gestionara desde cada portal laboral, ya que no todos pueden cambiar de pagina desde la url o buscar las palabras clave desde ahi.
   
-        Se ha optado por recorrer las palabras clave en un bucle [for](./main.py#L29) e ir recabando la informacion portal a portal. 
+        Se ha optado por recorrer las palabras clave en un bucle [for](./main.py#L37) e ir recabando la informacion portal a portal. 
 
         ```python
         for keyword in keywords:
