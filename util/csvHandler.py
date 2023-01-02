@@ -7,9 +7,8 @@ from logging import Logger, getLogger, DEBUG
 class csvHandler:
     def __init__(self) -> None:
 
-        self._log:Logger = getLogger("csv")
-        self._log.setLevel(DEBUG)
-        
+        self._log:Logger = getLogger("csv") 
+        # self._log.setLevel(DEBUG)       
         self._ruta = self.__obtener_ruta_archivo()
         self._archivo = self.__obtener_archivo()
         self._writer = self.__obtener_writer()
