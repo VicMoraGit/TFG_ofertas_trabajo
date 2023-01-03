@@ -1,10 +1,10 @@
 # Portal Indeed
 
-En primer lugar, se han definido los metodos de la interfaz de busqueda ([OperacionesBusquedaInterface](interfaces/operacionesBusquedaInterface.py)).
+En primer lugar, se han definido los métodos de la interfaz de búsqueda ([OperacionesBusquedaInterface](interfaces/operacionesBusquedaInterface.py)).
 
 ## ✅ Pasos 
 
-1. Abre la pagina [es.indeed.com](https://es.indeed.com/) y recorre las posiciones del total de paginas. [Codigo](./indeed.py#L29)
+1. Abre la página [es.indeed.com](https://es.indeed.com/) y recorre las posiciones del total de páginas. [Código](./indeed.py#L29).
 
     ```python
     def buscar(self, keyword:str):
@@ -21,7 +21,7 @@ En primer lugar, se han definido los metodos de la interfaz de busqueda ([Operac
 
     ```
    
-2. Se busca la palabra clave en una pagina [Codigo](./indeed.py#L41)
+2. Se busca la palabra clave en una página [Código](./indeed.py#L41).
 
     ```python
     def __buscar_keyword(self,keyword:str, n_pagina:int):
@@ -36,14 +36,14 @@ En primer lugar, se han definido los metodos de la interfaz de busqueda ([Operac
         # Espera que cargue la pagina
         sleep(5)    
     ```
-3. Se analizan las ofertas. Se extrae la informacion que se muestra en la pagina de resultado, y se abre la oferta en una pestaña nueva para sacar la experiencia y el salario tambien. [Codigo](./indeed.py#L53)
+3. Se analizan las ofertas. Se extrae la información que se muestra en la página de resultado, y se abre la oferta en una pestaña nueva para sacar la experiencia, el salario y los requisitos también. [Código](./indeed.py#L53).
    ```python
    def __analizar_posiciones(self):
         
         driver = self._driver
 
         # Localizadores 
-        posiciones_locator = '#mosaic-provider-jobcards > ul > li'
+        posiciones_locator = '#mosaic-provider-jobcards  ul  li'
         descripcion_oferta_locator = 'jobDescriptionText'
         
         # Guarda el id de la pestaña de resultados
@@ -71,6 +71,7 @@ En primer lugar, se han definido los metodos de la interfaz de busqueda ([Operac
 
             #Espera a que la descripcion de la oferta aparezca
             descripcion = WebDriverWait(driver=driver,timeout=10).until(
+
                 EC.presence_of_element_located((By.ID,descripcion_oferta_locator)))
             
             #Extrae mas informacion
@@ -95,12 +96,13 @@ En primer lugar, se han definido los metodos de la interfaz de busqueda ([Operac
 
 ## 📝 Notas
 
-- Se usan expresiones regulares para extraer la experiencia y el salario de las descripciones de las ofertas
+- Se usan expresiones regulares para extraer la experiencia y el salario de las descripciones de las ofertas.
 
-- En caso de que una accion cargue una pagina, se esperan 5 segundos o se espera a la aparicion de un elemento concreto
+- En caso de que una acción cargue una página, se esperan 5 segundos o se espera a la aparición de un elemento concreto.
 
-- Al contrario que en InfoJobs, Indeed no ha mostrado ningun metodo contra bots, por lo que las ofertas se han abierto en el mismo driver sin encontrar ningun problema
+- Al contrario que en InfoJobs, Indeed no ha mostrado ningún método contra bots, por lo que las ofertas se han abierto en el mismo driver sin encontrar ningún problema.
   
+
 ## 🐞 Problemas encontrados
 
-- A veces el script devuelve ofertas que no contienen ningun link, es por eso que se [comprueba si el link esta vacio](./indeed.py#L80) antes de abrir la oferta en una pestaña. Puede ser por que haya presencia de publicidad, y detecte esa publicidad como una oferta.
+- A veces el script devuelve ofertas que no contienen ningún link, es por eso que se [comprueba si el link esta vacío](./indeed.py#L80) antes de abrir la oferta en una pestaña. Puede ser porque haya presencia de publicidad, y detecte esa publicidad como una oferta.
