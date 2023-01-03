@@ -188,4 +188,4 @@ En primer lugar, se han definido los métodos de la interfaz de búsqueda ([Oper
 
 
 
-    En ese caso la excepción que salta se controla desde el método buscar. En mi caso, para volver a lanzar el script estoy usando una vpn para cambiar de ip cada vez que aparece y funciona sin problemas.
+    En ese caso la [excepción](./infojobs.py#L43) que salta se controla desde el método buscar. En mi caso, para volver a lanzar el script estoy usando una VPN para cambiar de ip cada vez que aparece y funciona sin problemas.
