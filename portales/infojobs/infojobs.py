@@ -20,12 +20,11 @@ import undetected_chromedriver as uc
 class InfoJobsPage(obi):
 
     def __init__(self, driver:uc.Chrome, n_paginas:int, csvHandler: csvHandler):
+        super().__init__(driver, n_paginas,csvHandler)
+
         self._base_url:str ="https://www.infojobs.net/"
-        self._driver:uc.Chrome = driver
         self._log:Logger = getLogger("InfoJobs")
         # self._log.setLevel(DEBUG)
-        self._n_paginas = n_paginas
-        self._csv = csvHandler;
     
     def buscar(self, keyword:str):
         driver = self._driver
