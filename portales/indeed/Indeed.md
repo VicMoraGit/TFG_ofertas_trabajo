@@ -101,7 +101,8 @@ En primer lugar, se han definido los métodos de la interfaz de búsqueda ([Oper
 - En caso de que una acción cargue una página, se esperan 5 segundos o se espera a la aparición de un elemento concreto.
 
 - Al contrario que en InfoJobs, Indeed no ha mostrado ningún método contra bots, por lo que las ofertas se han abierto en el mismo driver sin encontrar ningún problema.
-  
+
+- Algunas skills tienen caracteres que se usan para definir reglas en las expresiones regulares, por lo que se han escapado con [re.escape()](./indeed.py#L198)
 
 ## 🐞 Problemas encontrados
 
