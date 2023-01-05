@@ -15,7 +15,7 @@ En primer lugar, se han definido los métodos de la interfaz de búsqueda ([Oper
         driver.get(self._base_url)
         self._log.info("Indeed.com abierta")
         
-        for i in range(1, self._n_paginas+1):
+        for i in range(self._n_paginas):
             self.__buscar_keyword(keyword=keyword, n_pagina=i)
             self.__analizar_posiciones()
 
@@ -94,6 +94,33 @@ En primer lugar, se han definido los métodos de la interfaz de búsqueda ([Oper
             driver.switch_to.window(ch)
    ```
 
+## 📊 Analisis del portal
+
+- Se muestran 15 ofertas por cada pagina de resultados.
+- La localizacion de la oferta no esta "regulada" por el propio portal, por lo tanto se presentan diferentes problemas:
+
+    | Problema               | Ejemplo                  
+    | ---                    | ---                      
+    | Diferente formato      | Palma de Mallorca, Palma, palma
+    | Idioma                 | Alicante, Alacant
+    | Codigos postales       | 28045 Madrid
+    | Teletrabajo in "?"     | Teletrabajo in 28020 Madrid
+    | Municipio              | San-Sebastian, Marbella, Tres Cantos
+    La solucion aportada es la siguiente: 
+    
+    - Se ha generado un filtro de provincias españolas validas y sus posibles variantes (idioma, formatos)
+    - Los digitos de la localizacion se eliminan
+    - Si existe la palabra teletrabajo, se marca exclusivamente como "Teletrabajo"
+    - Algunas ofertas son mas precisas, e incluyen el tipo de municipio
+- El formato de la fecha de publicacion de la oferta tambien difiere bastante de unas a otras. Nos podemos encontrar 3 tipos de fechas: 
+    - Recien publicado, Hoy,
+    - Hace "x" dias
+    - Hace +30 dias
+
+    Para ello se aplica otro filtro de fechas, y se devuelve en formato DD-MM-YYYY
+
+## Pruebas
+
 ## 📝 Notas
 
 - Se usan expresiones regulares para extraer la experiencia y el salario de las descripciones de las ofertas.
@@ -107,3 +134,4 @@ En primer lugar, se han definido los métodos de la interfaz de búsqueda ([Oper
 ## 🐞 Problemas encontrados
 
 - A veces el script devuelve ofertas que no contienen ningún link, es por eso que se [comprueba si el link esta vacío](./indeed.py#L80) antes de abrir la oferta en una pestaña. Puede ser porque haya presencia de publicidad, y detecte esa publicidad como una oferta.
+

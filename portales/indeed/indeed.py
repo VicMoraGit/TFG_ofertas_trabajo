@@ -1,43 +1,73 @@
 #Modulos python
 from logging import Logger, getLogger, DEBUG
-import re
-from time import sleep
-from util.constantes import ALL_SKILLS
+from os import path
+from time import sleep, time
+from exceptions.DescripcionNoEmbebida import DescripcionNoEmbebida
 
 #Clases proyecto
-from interfaces.operacionesBusquedaInterface import OperacionesBusquedaInterface as obi
+from portales.portal import Portal
 from util.csvHandler import csvHandler
+import util.stats as stats
 
 #Selenium
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
+from selenium.common.exceptions import NoSuchElementException, WebDriverException,ElementClickInterceptedException
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.webdriver import WebDriver
 import undetected_chromedriver as uc
 
-class IndeedPage(obi):
+class Indeed(Portal):
 
-    def __init__(self, driver:uc.Chrome, n_paginas:int, csvHandler: csvHandler):
-        super().__init__(driver, n_paginas,csvHandler)
+    def __init__(self, n_paginas:int, csvHandler: csvHandler):
+        super().__init__(n_paginas,csvHandler)
         
-        self._base_url:str ="https://es.indeed.com/"
-        self._log:Logger = getLogger("Indeed")
+        self._base_url:str ="https://es.indeed.com/"        
+        self._log:Logger = getLogger(__class__.__name__)
         # self._log.setLevel(DEBUG)
 
     def buscar(self, keyword:str):
-        driver = self._driver
 
-        # Abre la pagina de Indeed
-        driver.delete_all_cookies()
-        driver.get(self._base_url)
-        self._log.info("Indeed.com abierta")
+        # Variables
+        busqueda_finalizada = False
+
+        # Comienza a contar
+        s_inicio = time()
         
-        for i in range(1, self._n_paginas+1):
-            self.__buscar_keyword(keyword=keyword, n_pagina=i)
-            self.__analizar_posiciones()
+        while not busqueda_finalizada:
 
-    def __buscar_keyword(self,keyword:str, n_pagina:int):
+            for i in range(self._n_paginas_analizadas, self._n_paginas_total):
+                # Para cada pagina un driver nuevo
+
+                self._driver = WebDriver("chromedriver.exe")
+                self._driver.get(self._base_url)
+                self._log.info("Indeed.com abierta")
+
+                try:
+
+                    self._buscar_keyword(keyword=keyword, n_pagina=i)
+                    self._analizar_posiciones()
+                    self._driver.quit()
+                except (DescripcionNoEmbebida, WebDriverException): 
+                    self._driver.quit()
+                    break
+                
+                if i == self._n_paginas_total-1:
+                    busqueda_finalizada = True
+
+        # Calcula el tiempo final
+        s_final = time()
+        self._t_total = round((s_final - s_inicio) / 60, 2)
+
+        # Se actualizan las estadisticas con los datos del portal
+        stats.n_ofertas_analizadas += self._n_ofertas_analizadas
+        stats.n_ofertas_con_salario += self._n_ofertas_con_salario
+        stats.n_ofertas_con_experiencia += self._n_ofertas_con_experiencia
+        stats.datos_portales.append(self.asdict())
+
+    def _buscar_keyword(self,keyword:str, n_pagina:int):
         
         ruta_busqueda = "jobs"
         parametro_keyword="q=" + keyword
@@ -45,52 +75,65 @@ class IndeedPage(obi):
         
         driver = self._driver
         driver.get(f"{self._base_url}{ruta_busqueda}?{parametro_pagina}&{parametro_keyword}")
+        self._log.info(f"Analizando pagina {str(n_pagina+1)}")
         
-        # Espera que cargue la pagina
-        sleep(5)     
+        # Localizadores 
+        posiciones_locator = '#mosaic-provider-jobcards > ul > li div.cardOutline'
+        
+        # Espera que carguen las posiciones
+        WebDriverWait(driver=driver,timeout=10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, posiciones_locator))) 
     
-    def __analizar_posiciones(self):
-        
+    def _scroll_al_elemento(self, posicion):
         driver = self._driver
 
-        # Localizadores 
-        posiciones_locator = '#mosaic-provider-jobcards > ul > li'
-        descripcion_oferta_locator = 'jobDescriptionText'
+        driver.execute_script("arguments[0].scrollIntoView(true);", posicion)
+
+    def _analizar_posiciones(self):
+    
+        driver = self._driver
+        valores_posiciones = []
         
-        # Guarda el id de la pestaña de resultados
-        ch = driver.current_window_handle
+        n_ofertas_analizadas = 0
+        n_ofertas_con_salario = 0
+        n_ofertas_con_experiencia = 0
+        
+        # Localizadores 
+        posiciones_locator = '#mosaic-provider-jobcards > ul > li div.cardOutline'
+        descripcion_oferta_locator = "div.jobsearch-JobComponent"
+        
+        # Presiona ESC ya que a veces aparece un pop up de inicio de sesion que para el script
+        driver.find_element(By.TAG_NAME,"body").send_keys(Keys.ESCAPE)
 
         # Obtiene las posiciones de esa pagina
         posiciones = driver.find_elements(By.CSS_SELECTOR,posiciones_locator)
-        self._log.info(f"Analizando {len(posiciones)} ofertas.")
+        self._log.info(f"Analizando ofertas.")
         
         # Abre cada posicion y extrae la informacion
         for i,posicion in enumerate(posiciones):
-
-            # Extrae la informacion
-            informacion_posicion={}
-            titulo=self.__get_title(posicion)
-            ubicacion=self.__get_location(posicion)
-            compañia=self.__get_companyname(posicion)
-            link_posicion = self.__get_link(posicion)
             
-            # Si el link esta vacio, pasa a la siguiente posicion.
-            # Si no, abre la oferta en una nueva pestaña y extrae el salario y la experiencia
-            if link_posicion == "":
-                continue
-            driver.tab_new(link_posicion)           
-            driver.switch_to.window(driver.window_handles[1])
-            self._log.debug("Oferta abierta")
+            #Se mueve al elemento y espera a que cargue su descripcion para sacar la info
+            self._scroll_al_elemento(posicion)
+            sleep(0.5)
+            posicion.click()
 
-            #Espera a que la descripcion de la oferta aparezca
+            if len(driver.window_handles) > 1:
+                raise DescripcionNoEmbebida("Descripcion no embebida")
+
+            # Si despues de dos segundos no ha encontrado la descripcion, ha saltado un captcha
             descripcion = WebDriverWait(driver=driver,timeout=10).until(
-                EC.presence_of_element_located((By.ID,descripcion_oferta_locator)))
-            self._log.debug("Resumen de la oferta visible")
+                EC.presence_of_element_located((By.CSS_SELECTOR, descripcion_oferta_locator)))
             
-            #Extrae mas informacion
-            experiencia=self.__get_experience(descripcion)
-            salario=self.__get_salaryexpected(descripcion)
-            skills=self.__get_skills(descripcion)
+            # Extrae la informacion de la oferta visible
+            informacion_posicion={}
+            titulo=self._get_title(posicion)
+            ubicacion=self._get_location(posicion)
+            compañia=self._get_companyname(posicion)
+            fecha=self._get_publish_date(posicion)
+            experiencia=self._get_experience(descripcion)
+            salario=self._get_salaryexpected(descripcion)
+            skills=self._get_skills(descripcion)
+
             self._log.debug("Informacion extraida.")
             
             # Rellena el diccionario
@@ -100,29 +143,36 @@ class IndeedPage(obi):
                 informacion_posicion['experiencia']=experiencia
                 informacion_posicion['salario']=salario
                 informacion_posicion['ubicacion']=ubicacion
+                informacion_posicion['fecha'] = fecha
                 informacion_posicion['skills']=skills
 
-                #Write to csv file
-                self._csv.escribir_linea(valores=informacion_posicion.values())
-                self._log.debug("Informacion escrita en csv")
+                # Escribe en csv
+                valores_posiciones.append(informacion_posicion.values())
 
-            #Cierra la oferta y devuelve el control a la pestaña de resultados                
-            driver.close()
-            driver.switch_to.window(ch)
-            self._log.debug("Pestaña cerrada")
-            self._log.info(f"Oferta analizada {i+1}/{len(posiciones)}")
+                # Actualiza estadisticas
+                n_ofertas_analizadas+=1
+                if salario != "Sin informacion":
+                    n_ofertas_con_salario +=1
+                if experiencia != "Sin informacion":
+                    n_ofertas_con_experiencia+=1
 
-    
-    
-    def __get_link(self, position:WebElement):
+                self._log.debug("Estadisticas actualizadas")
 
-        try:
-            link= position.find_element(By.CSS_SELECTOR,'.jobTitle > a').get_attribute("href")
-        except:
-            link=""
-        return link
+            
+            self._log.debug(f"Oferta analizada {i+1}/{len(posiciones)}")
+        self._log.info(f"{len(posiciones)} ofertas analizadas.")
+        
+        #Escribe todas las ofertas en el csv
+        self._csv.escribir_lineas(valores=valores_posiciones)
+        self._log.debug("Informacion escrita en el CSV")
 
-    def __get_title(self, position:WebElement):
+        # Actualiza estadisticas
+        self._n_ofertas_analizadas += n_ofertas_analizadas     
+        self._n_ofertas_con_salario += n_ofertas_con_salario
+        self._n_ofertas_con_experiencia += n_ofertas_con_experiencia
+        self._n_paginas_analizadas += 1
+
+    def _get_title(self, position:WebElement):
         
         try:
             title=position.find_element(By.CSS_SELECTOR,'.jobTitle').text
@@ -132,7 +182,7 @@ class IndeedPage(obi):
         return title
 
 
-    def __get_companyname(self, position:WebElement):
+    def _get_companyname(self, position:WebElement):
         
         try:
             company=position.find_element(By.CSS_SELECTOR,'.companyName').text
@@ -141,63 +191,47 @@ class IndeedPage(obi):
             company=""
         return company 
 
-    def __get_experience(self, position:WebElement):
+    def _get_experience(self, position:WebElement):
         
-        try:
-            # Filtra la experiencia de la descripcion
-            re_general = re.compile("(experiencia.* )*\d+.*((experiencia)|(de \3)|(años \4))")
-            
-            # Filtra solo los años 
-            re_años = re.compile("\d+ (años)")
-            
-            s = re_general.search(position.text)
-            if s is not None:
-                s2 =re_años.search(s.group())
-                if s2 is not None:
-                    experience = s2.group()
-                    self._log.debug("Si requiere experiencia")    
+        return self._filtro.filtrar_experiencia(position.text)
 
-                    return experience
-        except:
-            self._log.debug("No tiene informacion sobre experiencia")
 
-        return "Sin informacion"
-
-    def __get_salaryexpected(self, position:WebElement):
+    def _get_salaryexpected(self, position:WebElement):
         
-        try:
-            p = re.compile("(\d|\.|\,){3,}.+€")
-            s = p.search(position.text)
-            if s is not None:
-                salary = s.group()
-                self._log.debug("Hay informacion sobre el salario")    
-                return salary
-        except:
-            self._log.debug("No tiene informacion sobre salario")
-
-        return "Sin informacion"
+        return self._filtro.filtrar_salario(position.text)
 
 
-    def __get_location(self, position:WebElement):
+    def _get_location(self, position:WebElement):
         
+        posicion = position.find_element(By.CSS_SELECTOR,'.companyLocation')
         try:
-            location=position.find_element(By.CSS_SELECTOR,'.companyLocation').text
+            location=self._filtro.filtrar_localizacion(posicion.text)
             
         except:
             location=""
         return location
 
-    def __get_skills(self, position:WebElement):
+    def _get_skills(self, position:WebElement):
 
-        skills_oferta = []
-        descripcion_texto = position.text
-
-        # Se compara si alguna skill esta presente en la descripcion de la oferta
-                
-        for skill in ALL_SKILLS:
-            p = re.compile(rf"\b{re.escape(skill.lower())}\b")
-            s = p.search(descripcion_texto.lower())
-            if s is not None:
-                skills_oferta.append(skill)
+        return self._filtro.filtrar_skills(position.text)
         
-        return skills_oferta
+    def _get_publish_date(self,position:WebElement):
+        
+        try:
+            publish_date=position.find_element(By.CSS_SELECTOR,'span.date').text
+        except:
+            publish_date=""
+
+        return self._filtro.filtrar_fecha(publish_date)
+
+
+
+    def asdict(self):
+
+        dict_super =  super().asdict()
+        dict_super["nombre"] = __class__.__name__
+        
+        if self._es_bloqueado:
+            dict_super["ruta_captura_error"] = self._ruta_captura_captcha;
+        
+        return dict_super

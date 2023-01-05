@@ -1,10 +1,10 @@
-import undetected_chromedriver as uc
 import logging
 from time import time
 
 from util.csvHandler import csvHandler
-from portales.infojobs.infojobs import InfoJobsPage
-from portales.indeed.indeed import IndeedPage
+import util.stats as stats
+from portales.infojobs.infojobs import InfoJobs
+from portales.indeed.indeed import Indeed
 
 if __name__ == "__main__":
     
@@ -18,27 +18,30 @@ if __name__ == "__main__":
     # Clase encargada del csv
     csvh = csvHandler()
     # Declaracion variables
-    keywords = ["Desarrollador web"]
-    n_paginas = 1
+    keywords = ["Big Data"]
+    n_paginas = 30
+    
+    # infoJobs:InfoJobs = InfoJobs(
+    #     driver=driver,
+    #     n_paginas=n_paginas,
+    #     csvHandler=csvh)
 
-    driver:uc.Chrome = uc.Chrome()
-    log.debug("Navegador nuevo abierto")
-
-    infoJobs:InfoJobsPage = InfoJobsPage(
-        driver=driver,
+    indeed:Indeed = Indeed(
         n_paginas=n_paginas,
         csvHandler=csvh)
 
-    indeed:IndeedPage = IndeedPage(
-        driver=driver,
-        n_paginas=n_paginas,
-        csvHandler=csvh)
-    start = time()
+    stats.s_inicio = time()
+
     for keyword in keywords:
-        log.info(f"Buscando {keyword} en InfoJobs")
-        infoJobs.buscar(keyword)
+
+        #log.info(f"Buscando {keyword} en InfoJobs")
+        #infoJobs.buscar(keyword)
+
         log.info(f"Buscando {keyword} en Indeed")
         indeed.buscar(keyword)
-             
+        
+
     csvh.cerrar_archivo()
-    log.info('Tiempo para recoger los datos: {} mins'.format(round((time() - start) / 60, 2)))
+    stats.s_final = time()
+    stats.imprime_stats()
+    stats.exporta_stats()

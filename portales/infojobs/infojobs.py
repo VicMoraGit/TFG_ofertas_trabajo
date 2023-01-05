@@ -1,12 +1,14 @@
 #Modulos python
 from logging import Logger, getLogger, DEBUG
+from os import path
 import re
-from time import sleep
+from time import sleep, time
 from util.constantes import ALL_SKILLS
 
 #Clases proyecto
-from interfaces.operacionesBusquedaInterface import OperacionesBusquedaInterface as obi
 from util.csvHandler import csvHandler
+from portales.portal import Portal
+import util.stats as stats
 
 #Selenium
 from selenium.webdriver.remote.webelement import WebElement
@@ -17,17 +19,20 @@ from selenium.common.exceptions import TimeoutException, NoSuchElementException
 
 import undetected_chromedriver as uc
 
-class InfoJobsPage(obi):
+class InfoJobs(Portal):
 
     def __init__(self, driver:uc.Chrome, n_paginas:int, csvHandler: csvHandler):
         super().__init__(driver, n_paginas,csvHandler)
-
+        
         self._base_url:str ="https://www.infojobs.net/"
-        self._log:Logger = getLogger("InfoJobs")
+        self._log:Logger = getLogger(__class__.__name__)
         # self._log.setLevel(DEBUG)
     
     def buscar(self, keyword:str):
         driver = self._driver
+
+        # Comienza a contar
+        s_inicio = time()
 
         # Abre la pagina de InfoJobs
         driver.delete_all_cookies()
@@ -35,15 +40,34 @@ class InfoJobsPage(obi):
         self._log.info("Infojobs.net abierta")
         
         for i in range(1, self._n_paginas+1):
+            
             try:
-                self.__buscar_keyword(keyword=keyword, n_pagina=i)
-                self.__scroll_fin_pagina()
-                self.__analizar_posiciones()
-            except (TimeoutException,NoSuchElementException):
-                self._log.error("Captcha en pantalla, busqueda en InfoJobs interrumpida")
-                return
 
-    def __buscar_keyword(self,keyword:str, n_pagina:int):
+                self._buscar_keyword(keyword=keyword, n_pagina=i)
+                self._scroll_fin_pagina()
+                self._analizar_posiciones()
+            
+            except (TimeoutException,NoSuchElementException):
+                
+                self._ruta_captura_captcha = path.join("data","capturasError","error"+__class__.__name__+".png")
+                self._driver.save_screenshot(self._ruta_captura_captcha)
+
+                self._es_bloqueado = True     
+                self._log.error("Captcha en pantalla, busqueda en InfoJobs interrumpida")
+
+                break
+            
+        # Calcula el tiempo final
+        s_final = time()
+        self._t_total = round((s_final - s_inicio) / 60, 2)
+
+        # Se actualizan las estadisticas con los datos del portal
+        stats.n_ofertas_analizadas += self._n_ofertas_analizadas
+        stats.n_ofertas_con_salario += self._n_ofertas_con_salario
+        stats.n_ofertas_con_experiencia += self._n_ofertas_con_experiencia
+        stats.datos_portales.append(self.asdict())
+
+    def _buscar_keyword(self,keyword:str, n_pagina:int):
         
         ruta_busqueda = "jobsearch/search-results/list.xhtml"
         parametro_keyword="keyword=" + keyword
@@ -56,10 +80,10 @@ class InfoJobsPage(obi):
         sleep(5)
 
         # Comprueba si hay cookies
-        self.__gestionar_cookies()
+        self._gestionar_cookies()
 
 
-    def __gestionar_cookies(self):
+    def _gestionar_cookies(self):
         driver = self._driver
         
         # Localizadores
@@ -76,7 +100,7 @@ class InfoJobsPage(obi):
             # No hay pop up de cookies
             self._log.debug("No hay cookies")
 
-    def __scroll_fin_pagina(self):
+    def _scroll_fin_pagina(self):
         
         driver = self._driver
 
@@ -109,7 +133,7 @@ class InfoJobsPage(obi):
             posicion_inferior_actual  = driver.execute_script(posicion_inferior_script) 
 
       
-    def __analizar_posiciones(self):
+    def _analizar_posiciones(self):
 
         driver = self._driver
         
@@ -126,7 +150,7 @@ class InfoJobsPage(obi):
         for i,posicion in enumerate(posiciones):
             
             #Carga la oferta en un nuevo driver
-            link_posicion = self.__get_link(posicion)
+            link_posicion = self._get_link(posicion)
             
             driverAux = uc.Chrome()    
             driverAux.get(link_posicion)
@@ -140,12 +164,12 @@ class InfoJobsPage(obi):
 
             # Extrae la informacion
             informacion_posicion={}
-            titulo=self.__get_title(resumen_oferta)
-            ubicacion=self.__get_location(resumen_oferta)
-            compañia=self.__get_companyname(resumen_oferta)
-            experiencia=self.__get_experience(resumen_oferta)
-            salario=self.__get_salaryexpected(resumen_oferta)
-            skills=self.__get_skills(descripcion)
+            titulo=self._get_title(resumen_oferta)
+            ubicacion=self._get_location(resumen_oferta)
+            compañia=self._get_companyname(resumen_oferta)
+            experiencia=self._get_experience(resumen_oferta)
+            salario=self._get_salaryexpected(resumen_oferta)
+            skills=self._get_skills(descripcion)
             self._log.debug("Informacion extraida.")
 
             # Rellena el diccionario
@@ -156,26 +180,38 @@ class InfoJobsPage(obi):
             informacion_posicion['ubicacion']=ubicacion
             informacion_posicion['skills']=skills
             
+            # Escribe en csv
             self._csv.escribir_linea(valores=informacion_posicion.values())
             self._log.debug("Informacion escrita en csv")
+
+            # Actualiza estadisticas
+            self._n_ofertas_analizadas+=1
+            if salario != "Sin informacion":
+                self._n_ofertas_con_salario+=1
+            if experiencia != "Sin informacion":
+                self._n_ofertas_con_experiencia+=1
+
+            self._log.debug("Estadisticas actualizadas")
 
             driverAux.close()
             self._log.debug("Driver auxiliar cerrado")
             self._log.info(f"Oferta analizada {i+1}/{len(posiciones)}")
 
+        # Actualiza estadisticas
+        self._n_paginas_analizadas += 1
 
-    def __get_link(self, position:WebElement):
+    def _get_link(self, position:WebElement):
 
         link_posicion_locator = "h2.ij-OfferCardContent-description-title > a"    
         return position.find_element(By.CSS_SELECTOR, link_posicion_locator).get_attribute("href")
 
-    def __get_title(self, position:WebElement):
+    def _get_title(self, position:WebElement):
         
         titulo_posicion_locator = "prefijoPuesto"
         return position.find_element(By.ID, titulo_posicion_locator).text
  
 
-    def __get_companyname(self, position:WebElement):
+    def _get_companyname(self, position:WebElement):
         
         compañia_locator = '.link[data-track="Company Detail Clicked"]'
         nombre_compañia_raw = position.find_element(By.CSS_SELECTOR, compañia_locator).get_attribute("title")  
@@ -184,13 +220,13 @@ class InfoJobsPage(obi):
         return nombre_compañia_limpio
 
     
-    def __get_experience(self, position:WebElement):
+    def _get_experience(self, position:WebElement):
         
         descripcion_resumen_locator = 'div.inner + div '
         descripcion = position.find_element(By.CSS_SELECTOR, descripcion_resumen_locator).text
         
         try:
-            p = re.compile("no requerida|(\d+\s*((experiencia)|(de \3)|(años \4)|años|año))")
+            p = re.compile("no requerida|(\d+\s*(años|año|(años de experiencia))(?!.*(mercado|sector)))")
             s = p.search(descripcion)
 
             if s is not None:
@@ -206,7 +242,7 @@ class InfoJobsPage(obi):
         
         return "Sin informacion"
 
-    def __get_salaryexpected(self, position:WebElement):
+    def _get_salaryexpected(self, position:WebElement):
         
         descripcion_resumen_locator = 'div.inner +div '
         descripcion = position.find_element(By.CSS_SELECTOR, descripcion_resumen_locator).text
@@ -227,7 +263,7 @@ class InfoJobsPage(obi):
         
         return "Sin informacion"
 
-    def __get_location(self, position:WebElement):
+    def _get_location(self, position:WebElement):
         
         poblacion_posicion_locator = 'prefijoPoblacion'
         provincia_posicon_locator = 'prefijoProvincia'
@@ -237,7 +273,7 @@ class InfoJobsPage(obi):
 
         return poblacion+provincia
     
-    def __get_skills(self, position:WebElement):
+    def _get_skills(self, position:WebElement):
 
         skills_oferta = []
         descripcion_texto = position.text
@@ -251,3 +287,13 @@ class InfoJobsPage(obi):
                 skills_oferta.append(skill)
         
         return skills_oferta
+
+    def asdict(self):
+
+        dict_super =  super().asdict()
+        dict_super["nombre"] = __class__.__name__
+        
+        if self._es_bloqueado:
+            dict_super["ruta_captura_error"] = self._ruta_captura_captcha;
+        
+        return dict_super
