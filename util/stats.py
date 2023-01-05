@@ -3,16 +3,15 @@ from os import getcwd, path
 
 
 def imprime_stats():
-
-    print("="*60)
-    
-    print(f"Se han analizado {n_ofertas_analizadas} ofertas.")
-    print(f"Solo {n_ofertas_con_salario} ofertas tienen informacion sobre el salario.")
-    print(f"Solo {n_ofertas_con_experiencia} ofertas tienen informacion sobre la experiencia.")
-    
     print("\n")
+    print("="*60)
+    print("\n")
+    
     for portal in datos_portales:
+        print("\n")
         print("*"*60)
+        print("\n")
+
         print(f"Datos de {portal['nombre']}:")
 
         print(f"Script bloqueado:........................{'Si' if portal['es_bloqueado'] else 'No'}")
@@ -21,15 +20,20 @@ def imprime_stats():
             print("\n")
         
         print(f"Total de ofertas analizadas:.............{portal['ofertas_analizadas']}")
-        print(f"Total de paginas recorridas:.............{portal['paginas_analizadas']}")
         print(f"Total de ofertas con salario:............{portal['ofertas_con_salario']}")
         print(f"Total de ofertas con experiencia:........{portal['ofertas_con_experiencia']}")
         print(f"Tiempo de recoleccion:...................{portal['tiempo_total']} mins.")
     
+    print("\n")
     print("*"*60)
-
+    print("\n")
+    
+    print(f"Se han analizado {n_ofertas_analizadas} ofertas.")
+    print(f"Solo {n_ofertas_con_salario} ofertas tienen informacion sobre el salario.")
+    print(f"Solo {n_ofertas_con_experiencia} ofertas tienen informacion sobre la experiencia.")
     print(f"Tiempo para recoger los datos: {round((s_final - s_inicio) / 60, 2)} mins.")
     
+    print("\n")
     print("="*60)
 
 def exporta_stats():
@@ -43,14 +47,12 @@ def exporta_stats():
         f.write("="*60)
         f.write("\n")
 
-        f.write(f"Se han analizado {n_ofertas_analizadas} ofertas.\n")
-        f.write(f"Solo {n_ofertas_con_salario} ofertas tienen informacion sobre el salario.\n")
-        f.write(f"Solo {n_ofertas_con_experiencia} ofertas tienen informacion sobre la experiencia.\n")
-        
-        f.write("\n")
+       
         for portal in datos_portales:
+            f.write("\n")
             f.write("*"*60)
             f.write("\n")
+
             f.write(f"Datos de {portal['nombre']}:\n")
             f.write("\n")
             f.write(f"Script bloqueado:........................{'Si' if portal['es_bloqueado'] else 'No'}\n")
@@ -59,14 +61,17 @@ def exporta_stats():
                 f.write("\n")
             
             f.write(f"Total de ofertas analizadas:.............{portal['ofertas_analizadas']}\n")
-            f.write(f"Total de paginas recorridas:.............{portal['paginas_analizadas']}\n")
             f.write(f"Total de ofertas con salario:............{portal['ofertas_con_salario']}\n")
             f.write(f"Total de ofertas con experiencia:........{portal['ofertas_con_experiencia']}\n")
             f.write(f"Tiempo de recoleccion:...................{portal['tiempo_total']} mins.\n")
         
+        f.write("\n")
         f.write("*"*60)
         f.write("\n")
 
+        f.write(f"Se han analizado {n_ofertas_analizadas} ofertas.\n")
+        f.write(f"Solo {n_ofertas_con_salario} ofertas tienen informacion sobre el salario.\n")
+        f.write(f"Solo {n_ofertas_con_experiencia} ofertas tienen informacion sobre la experiencia.\n")
         f.write(f"Tiempo para recoger los datos: {round((s_final - s_inicio) / 60, 2)} mins.\n")
         
         f.write("="*60)

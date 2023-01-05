@@ -7,6 +7,7 @@ from time import sleep, time
 from portales.portal import Portal
 from util.csvHandler import csvHandler
 import util.stats as stats
+
 from exceptions.DescripcionNoEmbebida import DescripcionNoEmbebida
 
 #Selenium
@@ -31,11 +32,13 @@ class Indeed(Portal):
 
     def buscar(self, keyword:str):
 
-        # Variables
+        # Reseteo de variables en cada busqueda
+        self._busqueda_finalizada = False
+        self._n_paginas_analizadas = 0
+        
 
         # Comienza a contar
         s_inicio = time()
-        
         while not self._busqueda_finalizada:
 
             for i in range(self._n_paginas_analizadas, self._n_paginas_total):
@@ -64,11 +67,9 @@ class Indeed(Portal):
         # Calcula el tiempo final
         s_final = time()
         self._t_total = round((s_final - s_inicio) / 60, 2)
-
-        # Se actualizan las estadisticas con los datos del portal
-        stats.n_ofertas_analizadas += self._n_ofertas_analizadas
-        stats.n_ofertas_con_salario += self._n_ofertas_con_salario
-        stats.n_ofertas_con_experiencia += self._n_ofertas_con_experiencia
+    
+    def actualizar_estadisticas(self):
+        super().actualizar_estadisticas()
         stats.datos_portales.append(self.asdict())
 
     def _buscar_keyword(self,keyword:str, n_pagina:int):
@@ -101,7 +102,8 @@ class Indeed(Portal):
         n_ofertas_analizadas = 0
         n_ofertas_con_salario = 0
         n_ofertas_con_experiencia = 0
-        
+        titulo=0
+
         # Localizadores 
         posiciones_locator = '#mosaic-provider-jobcards > ul > li div.cardOutline'
         descripcion_oferta_locator = "div.jobsearch-JobComponent"

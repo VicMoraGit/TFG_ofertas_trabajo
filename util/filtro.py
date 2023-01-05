@@ -1,6 +1,6 @@
 import re
 from logging import Logger, getLogger
-from datetime import date, timedelta
+from datetime import date
 from dateutil.relativedelta import relativedelta
 
 #Modulos externos
@@ -54,11 +54,11 @@ class FiltroOfertas:
     def filtrar_salario(self,texto:str):
         salario = "Sin informacion"
 
-        # Extrae el salario de un texto, teniendo en cuenta numero de digitos, puntos, comas, espacios y simbolo €
+        # Extrae el salario de un texto, teniendo en cuenta numero de digitos, puntos, espacios y simbolo €
         #  regexr.com/75m25    
 
         try:
-            p = re.compile(r"(\d|\.|\,){3,}(\s|)€")
+            p = re.compile(r"(\d|\.){3,}(\s|)€")
             s = p.search(texto)
             if s is not None:
                 # Hay ofertas donde el salario publicado es un rango, por lo tanto se devuelve solo el primer valor

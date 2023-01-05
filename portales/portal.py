@@ -1,11 +1,11 @@
 #Clases proyecto
 from util.csvHandler import csvHandler
 from util.filtro import FiltroOfertas
+import util.stats as stats
 
 from interfaces.operacionesBusquedaInterface import OperacionesBusquedaInterface as obi
 
 #Selenium
-import undetected_chromedriver as uc
 from selenium.webdriver.remote.webelement import WebElement
 
 
@@ -57,11 +57,16 @@ class Portal(obi):
         pass
     def _get_publish_date(self,position:WebElement):
         pass
+
+    def actualizar_estadisticas(self):
+        stats.n_ofertas_analizadas += self._n_ofertas_analizadas
+        stats.n_ofertas_con_salario += self._n_ofertas_con_salario
+        stats.n_ofertas_con_experiencia += self._n_ofertas_con_experiencia
+        
     def asdict(self):
 
         return {
             "ofertas_analizadas": str(self._n_ofertas_analizadas),
-            "paginas_analizadas": str(self._n_paginas_analizadas),
             "ofertas_con_salario": str(self._n_ofertas_con_salario),
             "ofertas_con_experiencia": str(self._n_ofertas_con_experiencia),
             "es_bloqueado": self._es_bloqueado,
