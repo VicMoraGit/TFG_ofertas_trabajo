@@ -2,22 +2,21 @@
 from logging import Logger, getLogger, DEBUG
 from os import path
 from time import sleep, time
-from exceptions.DescripcionNoEmbebida import DescripcionNoEmbebida
 
 #Clases proyecto
 from portales.portal import Portal
 from util.csvHandler import csvHandler
 import util.stats as stats
+from exceptions.DescripcionNoEmbebida import DescripcionNoEmbebida
 
 #Selenium
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import NoSuchElementException, WebDriverException,ElementClickInterceptedException
-from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.chrome.webdriver import WebDriver
-import undetected_chromedriver as uc
 
 class Indeed(Portal):
 
@@ -26,17 +25,18 @@ class Indeed(Portal):
         
         self._base_url:str ="https://es.indeed.com/"        
         self._log:Logger = getLogger(__class__.__name__)
+        self._titulo_ultima_oferta_pagina = ""
+        self._busqueda_finalizada = False
         # self._log.setLevel(DEBUG)
 
     def buscar(self, keyword:str):
 
         # Variables
-        busqueda_finalizada = False
 
         # Comienza a contar
         s_inicio = time()
         
-        while not busqueda_finalizada:
+        while not self._busqueda_finalizada:
 
             for i in range(self._n_paginas_analizadas, self._n_paginas_total):
                 # Para cada pagina un driver nuevo
@@ -50,12 +50,16 @@ class Indeed(Portal):
                     self._buscar_keyword(keyword=keyword, n_pagina=i)
                     self._analizar_posiciones()
                     self._driver.quit()
+                    
+                    if self._busqueda_finalizada:
+                        break
+
                 except (DescripcionNoEmbebida, WebDriverException): 
                     self._driver.quit()
                     break
                 
                 if i == self._n_paginas_total-1:
-                    busqueda_finalizada = True
+                    self._busqueda_finalizada = True
 
         # Calcula el tiempo final
         s_final = time()
@@ -160,6 +164,14 @@ class Indeed(Portal):
 
             
             self._log.debug(f"Oferta analizada {i+1}/{len(posiciones)}")
+            
+            
+
+        if titulo == self._titulo_ultima_oferta_pagina:
+            self._busqueda_finalizada = True
+        else:
+            self._titulo_ultima_oferta_pagina = titulo
+
         self._log.info(f"{len(posiciones)} ofertas analizadas.")
         
         #Escribe todas las ofertas en el csv

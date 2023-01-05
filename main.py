@@ -18,8 +18,8 @@ if __name__ == "__main__":
     # Clase encargada del csv
     csvh = csvHandler()
     # Declaracion variables
-    keywords = ["Big Data"]
-    n_paginas = 30
+    keywords = ["Big Data","Desarrollo Web","Backend","QA"]
+    n_paginas = 50
     
     # infoJobs:InfoJobs = InfoJobs(
     #     driver=driver,
