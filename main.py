@@ -32,10 +32,11 @@ if __name__ == "__main__":
 
     stats.s_inicio = time()
     for portal in portales:
+
+        portal._iniciar_cronometro()
         
         for keyword in keywords:
-        #log.info(f"Buscando {keyword} en InfoJobs")
-        #infoJobs.buscar(keyword)        
+                
             log.info(f"Buscando {keyword} en {portal.__class__.__name__}")
             portal.buscar(keyword)
         

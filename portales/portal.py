@@ -34,6 +34,9 @@ class Portal(obi):
 
     def _analizar_posiciones(self):
         pass
+    
+    def _iniciar_cronometro(self):
+        pass
 
     def _get_link(self, position:WebElement):
         pass

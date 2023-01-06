@@ -7,7 +7,6 @@ from time import sleep, time
 from portales.portal import Portal
 from util.csvHandler import csvHandler
 import util.stats as stats
-
 from exceptions.DescripcionNoEmbebida import DescripcionNoEmbebida
 
 #Selenium
@@ -28,7 +27,6 @@ class Indeed(Portal):
         self._log:Logger = getLogger(__class__.__name__)
         self._titulo_ultima_oferta_pagina = ""
         self._busqueda_finalizada = False
-        self._s_inicio = time()
         # self._log.setLevel(DEBUG)
 
     def buscar(self, keyword:str):
@@ -37,14 +35,11 @@ class Indeed(Portal):
         self._busqueda_finalizada = False
         self._n_paginas_analizadas = 0
         
-
-        # Comienza a contar
-        
         while not self._busqueda_finalizada:
 
             for i in range(self._n_paginas_analizadas, self._n_paginas_total):
+                
                 # Para cada pagina un driver nuevo
-
                 self._driver = WebDriver("chromedriver.exe")
                 self._driver.get(self._base_url)
                 self._log.info("Indeed.com abierta")
@@ -94,8 +89,10 @@ class Indeed(Portal):
     
     def _scroll_al_elemento(self, posicion):
         driver = self._driver
-
         driver.execute_script("arguments[0].scrollIntoView(true);", posicion)
+
+    def _iniciar_cronometro(self):
+        self._s_inicio = time()
 
     def _analizar_posiciones(self):
     
@@ -105,7 +102,7 @@ class Indeed(Portal):
         n_ofertas_analizadas = 0
         n_ofertas_con_salario = 0
         n_ofertas_con_experiencia = 0
-        titulo=0
+        titulo=""
 
         # Localizadores 
         posiciones_locator = '#mosaic-provider-jobcards > ul > li div.cardOutline'
@@ -170,16 +167,19 @@ class Indeed(Portal):
             
             self._log.debug(f"Oferta analizada {i+1}/{len(posiciones)}")
             
-            
+        # Comprueba si esta es la ultima pagina de la palabra clave. 
+        # Si es la ultima, finaliza la busqueda y no añade las ultimas
+        # posiciones ni estadisticas.
 
         if titulo == self._titulo_ultima_oferta_pagina:
             self._busqueda_finalizada = True
+            return 
         else:
             self._titulo_ultima_oferta_pagina = titulo
 
         self._log.info(f"{len(posiciones)} ofertas analizadas.")
         
-        #Escribe todas las ofertas en el csv
+        # Escribe todas las ofertas en el csv
         self._csv.escribir_lineas(valores=valores_posiciones)
         self._log.debug("Informacion escrita en el CSV")
 
@@ -240,8 +240,6 @@ class Indeed(Portal):
             publish_date=""
 
         return self._filtro.filtrar_fecha(publish_date)
-
-
 
     def asdict(self):
 

@@ -4,24 +4,18 @@ En primer lugar, se han definido los métodos de la interfaz de búsqueda ([Oper
 
 ## ✅ Pasos 
 
-1. Abre la página [es.indeed.com](https://es.indeed.com/) y recorre las posiciones del total de páginas. [Código](./indeed.py#L29).
+1. Abre la página [es.indeed.com](https://es.indeed.com/) y recorre las posiciones del total de páginas. [Código](./indeed.py#L32).
+
+    Se usan dos variables de control, en caso de que haya algun error si la busqueda no esta finalizada, se vuelve a buscar a partir de la ultima pagina finalizada.
 
     ```python
-    def buscar(self, keyword:str):
-        driver = self._driver
-
-        # Abre la pagina de Indeed
-        driver.delete_all_cookies()
-        driver.get(self._base_url)
-        self._log.info("Indeed.com abierta")
-        
-        for i in range(self._n_paginas):
-            self.__buscar_keyword(keyword=keyword, n_pagina=i)
-            self.__analizar_posiciones()
+    
+        self._busqueda_finalizada = False
+        self._n_paginas_analizadas = 0
 
     ```
    
-2. Se busca la palabra clave en una página [Código](./indeed.py#L41).
+2. Se busca la palabra clave en una página [Código](./indeed.py#L73).
 
     ```python
     def __buscar_keyword(self,keyword:str, n_pagina:int):
@@ -33,66 +27,16 @@ En primer lugar, se han definido los métodos de la interfaz de búsqueda ([Oper
         driver = self._driver
         driver.get(f"{self._base_url}{ruta_busqueda}?{parametro_pagina}&{parametro_keyword}")
         
-        # Espera que cargue la pagina
-        sleep(5)    
-    ```
-3. Se analizan las ofertas. Se extrae la información que se muestra en la página de resultado, y se abre la oferta en una pestaña nueva para sacar la experiencia, el salario y los requisitos también. [Código](./indeed.py#L53).
-   ```python
-   def __analizar_posiciones(self):
-        
-        driver = self._driver
-
         # Localizadores 
-        posiciones_locator = '#mosaic-provider-jobcards  ul  li'
-        descripcion_oferta_locator = 'jobDescriptionText'
+        posiciones_locator = '#mosaic-provider-jobcards > ul > li div.cardOutline'
         
-        # Guarda el id de la pestaña de resultados
-        ch = driver.current_window_handle
+        # Espera que carguen las posiciones
+        WebDriverWait(driver=driver,timeout=10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, posiciones_locator))) 
+    ```
+3. Se analizan las ofertas. En caso de que el titulo de la ultima oferta de la ultima pagina analizada coincida con el titulo de la ultima oferta de la pagina actual, se finaliza la busqueda.  [Código](./indeed.py#L97).
 
-        # Obtiene las posiciones de esa pagina
-        posiciones = driver.find_elements(By.CSS_SELECTOR,posiciones_locator)
-        
-        # Abre cada posicion y extrae la informacion
-        for i,posicion in enumerate(posiciones):
-
-            # Extrae la informacion
-            informacion_posicion={}
-            titulo=self.__get_title(posicion)
-            ubicacion=self.__get_location(posicion)
-            compañia=self.__get_companyname(posicion)
-            link_posicion = self.__get_link(posicion)
-            
-            # Si el link esta vacio, pasa a la siguiente posicion.
-            # Si no, abre la oferta en una nueva pestaña y extrae el salario y la experiencia
-            if link_posicion == "":
-                continue
-            driver.tab_new(link_posicion)           
-            driver.switch_to.window(driver.window_handles[1])
-
-            #Espera a que la descripcion de la oferta aparezca
-            descripcion = WebDriverWait(driver=driver,timeout=10).until(
-
-                EC.presence_of_element_located((By.ID,descripcion_oferta_locator)))
-            
-            #Extrae mas informacion
-            experiencia=self.__get_experience(descripcion)
-            salario=self.__get_salaryexpected(descripcion)
-            
-            # Rellena el diccionario
-            if not titulo=="":
-                informacion_posicion['titulo']=titulo
-                informacion_posicion['compañia']=compañia
-                informacion_posicion['experiencia']=experiencia
-                informacion_posicion['salario']=salario
-                informacion_posicion['ubicacion']=ubicacion
-   
-                #Write to csv file
-                self._csv.escribir_linea(valores=informacion_posicion.values())
-
-            #Cierra la oferta y devuelve el control a la pestaña de resultados                
-            driver.close()
-            driver.switch_to.window(ch)
-   ```
+4. Mientras se analizan todas las ofertas, se van rellenando las estadisticas.
 
 ## 📊 Analisis del portal
 
@@ -109,25 +53,41 @@ En primer lugar, se han definido los métodos de la interfaz de búsqueda ([Oper
     La solucion aportada es la siguiente: 
     
     - Se ha generado un filtro de provincias españolas validas y sus posibles variantes (idioma, formatos)
-    - Los digitos de la localizacion se eliminan
     - Si existe la palabra teletrabajo, se marca exclusivamente como "Teletrabajo"
-    - Algunas ofertas son mas precisas, e incluyen el tipo de municipio
+  
+
 - El formato de la fecha de publicacion de la oferta tambien difiere bastante de unas a otras. Nos podemos encontrar 3 tipos de fechas: 
     - Recien publicado, Hoy,
     - Hace "x" dias
+    - Hace "x" horas
     - Hace +30 dias
 
     Para ello se aplica otro filtro de fechas, y se devuelve en formato DD-MM-YYYY
+- Indeed muestra los datos de salarios, experiencia y requerimientos dentro de las descripciones de las ofertas. Para acceder a esas descripciones, hay que clickar sobre las ofertas de la pagina de resultados. Detalles a tener en cuenta:
+  - El tamaño de la ventana del driver tiene que ser lo suficientemente amplio como para permitir que las descripciones se muestren embebidas dentro de la pagina de resultados.
+  - Si se abren muchas descripciones de esta manera, nos detecta como bot y se abren en una ventana nueva. Para ello se usa un [nuevo driver](./indeed.py#L42) por pagina de resultados.
+  - Nos interesa obtener la descripcion embebida en la pagina de resultados para ahorrar tiempo.
 
-## Pruebas
+## 🧪 Pruebas
+
+Para comprobar el rendimiento y la robustez del script, se ha hecho la siguiente prueba: 
+
+> Keywords =  Big Data, Desarrollo Web, Backend, Microservicios
+> 
+> Numero de paginas = 50
+
+Arrojando [este csv](../../data/CSV/Indeed.csv) y las siguientes estadisticas:
+ 
+|   |   |
+|---|---|    
+|Ofertas analizadas      | 2280        
+|Ofertas con salario     | 418
+|Ofertas con experiencia | 276 
+|Tiempo                  | 95.42 mins.
 
 ## 📝 Notas
 
-- Se usan expresiones regulares para extraer la experiencia y el salario de las descripciones de las ofertas.
-
-- En caso de que una acción cargue una página, se esperan 5 segundos o se espera a la aparición de un elemento concreto.
-
-- Al contrario que en InfoJobs, Indeed no ha mostrado ningún método contra bots, por lo que las ofertas se han abierto en el mismo driver sin encontrar ningún problema.
+- Se usan expresiones regulares para extraer la experiencia, el salario y los requerimientos de las descripciones de las ofertas.
 
 - Algunas skills tienen caracteres que se usan para definir reglas en las expresiones regulares, por lo que se han escapado con [re.escape()](./indeed.py#L198)
 
