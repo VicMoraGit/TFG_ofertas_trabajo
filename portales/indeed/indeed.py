@@ -28,6 +28,7 @@ class Indeed(Portal):
         self._log:Logger = getLogger(__class__.__name__)
         self._titulo_ultima_oferta_pagina = ""
         self._busqueda_finalizada = False
+        self._s_inicio = time()
         # self._log.setLevel(DEBUG)
 
     def buscar(self, keyword:str):
@@ -38,7 +39,7 @@ class Indeed(Portal):
         
 
         # Comienza a contar
-        s_inicio = time()
+        
         while not self._busqueda_finalizada:
 
             for i in range(self._n_paginas_analizadas, self._n_paginas_total):
@@ -64,12 +65,14 @@ class Indeed(Portal):
                 if i == self._n_paginas_total-1:
                     self._busqueda_finalizada = True
 
-        # Calcula el tiempo final
-        s_final = time()
-        self._t_total = round((s_final - s_inicio) / 60, 2)
+        
     
     def actualizar_estadisticas(self):
         super().actualizar_estadisticas()
+
+        # Calcula el tiempo final
+        s_final = time()
+        self._t_total = round((s_final - self._s_inicio) / 60, 2)
         stats.datos_portales.append(self.asdict())
 
     def _buscar_keyword(self,keyword:str, n_pagina:int):

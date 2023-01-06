@@ -20,8 +20,8 @@ if __name__ == "__main__":
     csvh = csvHandler()
     # Declaracion variables
     portales:list[Portal] = []
-    keywords = ["Big Data","Desarrollo Web"]
-    n_paginas = 1
+    keywords = ["Big Data","Desarrollo Web","Backend","Microservicios"]
+    n_paginas = 50
     
     # infoJobs:InfoJobs = InfoJobs(
     #     driver=driver,
