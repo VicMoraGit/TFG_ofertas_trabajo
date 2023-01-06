@@ -71,7 +71,7 @@ PROVINCIAS = {
     "Remoto":"Teletrabajo",
 }
 
-ALL_SKILLS = ["Angular",
+ALL_SKILLS = [
 "Aurelia",
 "Emberjs",
 "Ember"
@@ -118,11 +118,9 @@ ALL_SKILLS = ["Angular",
 "somajs",
 "soma",
 "sketchjs",
-"sketch",
 "Jaggery",
 "Mithril",
 "Enact",
-"jQuery",
 "Kango",
 "Cappuccino",
 "ZK",
@@ -189,7 +187,6 @@ ALL_SKILLS = ["Angular",
 "script.aculo.us",
 "SmartClient",
 "Backbonejs",
-"Backbone",
 "Brick",
 "Spine",
 "UIZE JavaScript Framework",
