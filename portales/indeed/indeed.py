@@ -1,6 +1,5 @@
 #Modulos python
 from logging import Logger, getLogger, DEBUG
-from os import path
 from time import sleep, time
 
 #Clases proyecto
@@ -59,15 +58,9 @@ class Indeed(Portal):
                 
                 if i == self._n_paginas_total-1:
                     self._busqueda_finalizada = True
-
-        
-    
+ 
     def actualizar_estadisticas(self):
         super().actualizar_estadisticas()
-
-        # Calcula el tiempo final
-        s_final = time()
-        self._t_total = round((s_final - self._s_inicio) / 60, 2)
         stats.datos_portales.append(self.asdict())
 
     def _buscar_keyword(self,keyword:str, n_pagina:int):
@@ -91,11 +84,8 @@ class Indeed(Portal):
         driver = self._driver
         driver.execute_script("arguments[0].scrollIntoView(true);", posicion)
 
-    def _iniciar_cronometro(self):
-        self._s_inicio = time()
-
     def _analizar_posiciones(self):
-    
+        
         driver = self._driver
         valores_posiciones = []
         
@@ -245,8 +235,6 @@ class Indeed(Portal):
 
         dict_super =  super().asdict()
         dict_super["nombre"] = __class__.__name__
-        
-        if self._es_bloqueado:
-            dict_super["ruta_captura_error"] = self._ruta_captura_captcha;
+
         
         return dict_super
