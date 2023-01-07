@@ -1,17 +1,17 @@
 ============================================================
 
 ************************************************************
-Datos de Indeed:
+Datos de Tecnoempleo:
 
 Script bloqueado:........................No
-Total de ofertas analizadas:.............2280
-Total de ofertas con salario:............418
-Total de ofertas con experiencia:........276
-Tiempo de recoleccion:...................30.08 mins.
+Total de ofertas analizadas:.............30
+Total de ofertas con salario:............14
+Total de ofertas con experiencia:........26
+Tiempo de recoleccion:...................0.78 mins.
 
 ************************************************************
-Se han analizado 2280 ofertas.
-Solo 418 ofertas tienen informacion sobre el salario.
-Solo 276 ofertas tienen informacion sobre la experiencia.
-Tiempo para recoger los datos: 95.42 mins.
+Se han analizado 30 ofertas.
+Solo 14 ofertas tienen informacion sobre el salario.
+Solo 26 ofertas tienen informacion sobre la experiencia.
+Tiempo para recoger los datos: 0.78 mins.
 ============================================================

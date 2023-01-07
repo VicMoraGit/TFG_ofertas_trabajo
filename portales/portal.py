@@ -1,4 +1,5 @@
 #Clases proyecto
+from time import time
 from util.csvHandler import csvHandler
 from util.filtro import FiltroOfertas
 import util.stats as stats
@@ -36,7 +37,7 @@ class Portal(obi):
         pass
     
     def _iniciar_cronometro(self):
-        pass
+        self._s_inicio = time()
 
     def _get_link(self, position:WebElement):
         pass
@@ -58,6 +59,7 @@ class Portal(obi):
 
     def _get_skills(self, position:WebElement):
         pass
+
     def _get_publish_date(self,position:WebElement):
         pass
 
@@ -66,6 +68,10 @@ class Portal(obi):
         stats.n_ofertas_con_salario += self._n_ofertas_con_salario
         stats.n_ofertas_con_experiencia += self._n_ofertas_con_experiencia
         
+        # Calcula el tiempo final
+        s_final = time()
+        self._t_total = round((s_final - self._s_inicio) / 60, 2)
+
     def asdict(self):
 
         return {

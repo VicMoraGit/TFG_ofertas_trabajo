@@ -1,6 +1,6 @@
 # Portal Indeed
 
-En primer lugar, se han definido los métodos de la interfaz de búsqueda ([OperacionesBusquedaInterface](interfaces/operacionesBusquedaInterface.py)).
+Hereda de la clase [Portal](../portal.py)
 
 ## ✅ Pasos 
 
@@ -34,7 +34,7 @@ En primer lugar, se han definido los métodos de la interfaz de búsqueda ([Oper
         WebDriverWait(driver=driver,timeout=10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, posiciones_locator))) 
     ```
-3. Se analizan las ofertas. En caso de que el titulo de la ultima oferta de la ultima pagina analizada coincida con el titulo de la ultima oferta de la pagina actual, se finaliza la busqueda.  [Código](./indeed.py#L97).
+3. Se analizan las ofertas. En caso de que el titulo de la ultima oferta de la ultima pagina analizada coincida con el titulo de la ultima oferta de la pagina actual, se finaliza la busqueda.  [Código](./indeed.py#L94).
 
 4. Mientras se analizan todas las ofertas, se van rellenando las estadisticas.
 

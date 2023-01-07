@@ -1,6 +1,6 @@
 import re
 from logging import Logger, getLogger
-from datetime import date
+from datetime import date, datetime
 from dateutil.relativedelta import relativedelta
 
 #Modulos externos
@@ -19,26 +19,30 @@ class FiltroOfertas:
         fecha_string = "Sin informacion"
         texto_lowercase = unidecode(texto.lower())
         
-        # Si contiene digitos, se comprueban diferentes palabras para sacar la fecha
+        # Si contiene digitos, se comprueban diferentes situaciones para obtener la fecha
         digitos = self._filtrar_digitos(texto)
         
         if digitos is not None:
             #Horas 
 
-            if any(x in texto_lowercase for x in FILTRO_HORAS): 
+            if any(x in texto_lowercase for x in FILTRO_HORAS): # la fecha contiene palabras relacionadas con "hora". Indeed
                 fecha_string = date.today().strftime(formato_fecha)
             
             #Dias
-            elif any(x in texto_lowercase for x in FILTRO_DIAS):
+            elif any(x in texto_lowercase for x in FILTRO_DIAS): # la fecha contiene palabras relacionadas con "dias". Indeed
                 hoy = date.today()
                 fecha_oferta = hoy - relativedelta(days=int(digitos.strip()))
                 fecha_string = fecha_oferta.strftime(formato_fecha)
                 
             #Meses
-            elif any(x in texto_lowercase for x in FILTRO_MESES):
+            elif any(x in texto_lowercase for x in FILTRO_MESES): # la fecha contiene palabras relacionadas con "meses". Indeed
                 hoy = date.today()
                 fecha_oferta = hoy - relativedelta(months=int(digitos.strip()))
                 fecha_string = fecha_oferta.strftime(formato_fecha)
+
+            elif "/" in texto_lowercase: # fecha en formato DD/MM/YY. si contiene la palabra "actualizada" se borra. Tecnoempleo
+                fecha_string = datetime.strptime(texto_lowercase.replace("actualizada",""), '%d/%m/%Y').strftime(formato_fecha)
+                
 
         # Si no contiene digitos, se habra publicado hoy. ej. "Recien publicado", "Hoy".        
         else:
@@ -76,10 +80,9 @@ class FiltroOfertas:
 
         experiencia = "Sin informacion"
         texto_lowercase = unidecode(texto.lower())
-
         try:
             # Filtra la experiencia de la descripcion en ingles https://regexr.com/75m3i o español https://regexr.com/75m4v.
-            re_esp = re.compile(r"(experiencia\s)*(\+*)\d(\+*)+\s*(años de experiencia|años|año)(?!.*(mercado|sector))")
+            re_esp = re.compile(r"(experiencia\s)*(\+*)\d(\+*)+\s*(anos de experiencia|anos|ano)(?!.*(mercado|sector))")
             re_eng = re.compile(r"(|required\s)(experience\s)*(\+*)\d(\+*)+\s*(years of experience|years|year)(?!.*(market|sector))")
             
             

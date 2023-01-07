@@ -1,5 +1,6 @@
 import logging
 from time import time
+from portales.tecnoempleo.tecnoempleo import Tecnoempleo
 
 from util.csvHandler import csvHandler
 import util.stats as stats
@@ -20,7 +21,7 @@ if __name__ == "__main__":
     csvh = csvHandler()
     # Declaracion variables
     portales:list[Portal] = []
-    keywords = ["Big Data","Desarrollo Web","Backend","Microservicios"]
+    keywords = ["Big Data", "Desarrollo Web", "Backend", "Microservicios"]
     n_paginas = 50
     
     # infoJobs:InfoJobs = InfoJobs(
@@ -28,7 +29,8 @@ if __name__ == "__main__":
     #     n_paginas=n_paginas,
     #     csvHandler=csvh)
 
-    portales.append(Indeed(n_paginas=n_paginas,csvHandler=csvh))
+    #portales.append(Indeed(n_paginas=n_paginas,csvHandler=csvh))
+    portales.append(Tecnoempleo(n_paginas=n_paginas,csvHandler=csvh))
 
     stats.s_inicio = time()
     for portal in portales:
