@@ -47,6 +47,7 @@ PROVINCIAS = {
     "lleida":"Lleida",
     "lugo":"Lugo",
     "madrid":"Madrid",
+    "mad":"Madrid",
     "malaga":"Málaga",
     "melilla":"Melilla",
     "murcia":"Murcia",
@@ -68,7 +69,7 @@ PROVINCIAS = {
     "zaragoza":"Zaragoza",
     "teletrabajo":"Teletrabajo",
     "tele trabajo":"Teletrabajo",
-    "Remoto":"Teletrabajo",
+    "remoto":"Teletrabajo",
 }
 
 ALL_SKILLS = [
