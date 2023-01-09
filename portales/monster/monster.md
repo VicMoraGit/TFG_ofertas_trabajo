@@ -52,4 +52,4 @@ Arrojando [este csv](https://github.com/VicMoraGit/TFG_ofertas_trabajo/blob/main
 
 ## 🐞 Problemas encontrados
 
-- A veces el script devuelve ofertas que no contienen ningún link, es por eso que se [comprueba si el link esta vacío](https://github.com/VicMoraGit/TFG_ofertas_trabajo/blob/main/portales/monster/monster.py#L80) antes de abrir la oferta en una pestaña. Puede ser porque haya presencia de publicidad, y detecte esa publicidad como una oferta.
+- Ninguno
