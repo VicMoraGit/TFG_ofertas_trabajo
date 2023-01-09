@@ -1,13 +1,18 @@
 import logging
 from time import time
-from portales.tecnoempleo.tecnoempleo import Tecnoempleo
 
 from util.csvHandler import csvHandler
 import util.stats as stats
 
-from portales.infojobs.infojobs import InfoJobs
+from portales.tecnoempleo.tecnoempleo import Tecnoempleo
+#from portales.infojobs.infojobs import InfoJobs
 from portales.indeed.indeed import Indeed
+from portales.monster.monster import Monster
+
 from portales.portal import Portal
+
+
+
 
 if __name__ == "__main__":
     
@@ -29,8 +34,9 @@ if __name__ == "__main__":
     #     n_paginas=n_paginas,
     #     csvHandler=csvh)
 
-    #portales.append(Indeed(n_paginas=n_paginas,csvHandler=csvh))
+    portales.append(Indeed(n_paginas=n_paginas,csvHandler=csvh))
     portales.append(Tecnoempleo(n_paginas=n_paginas,csvHandler=csvh))
+    portales.append(Monster(n_paginas=n_paginas,csvHandler=csvh))
 
     stats.s_inicio = time()
     for portal in portales:

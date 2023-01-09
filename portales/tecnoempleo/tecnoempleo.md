@@ -1,32 +1,16 @@
 # Portal Tecnoempleo
 
-Hereda de la clase [Portal](../portal.py)
+Hereda de la clase [Portal](https://github.com/VicMoraGit/TFG_ofertas_trabajo/blob/main/portales/portal.py)
 
 ## ✅ Pasos 
 
-1. Abre la página [https://www.tecnoempleo.com/](https://www.tecnoempleo.com/) y recorre las posiciones de cada pagina. [Código](./tecnoempleo.py#L32).
+1. Abre la página [https://www.tecnoempleo.com/](https://www.tecnoempleo.com/) y recorre las posiciones de cada pagina. [Código](https://github.com/VicMoraGit/TFG_ofertas_trabajo/blob/main/portales/tecnoempleo/tecnoempleo.py#L30).
 
    
-2. Se busca la palabra clave en una página [Código](./tecnoempleo.py#L73).
+2. Se busca la palabra clave en una página [Código](https://github.com/VicMoraGit/TFG_ofertas_trabajo/blob/main/portales/tecnoempleo/tecnoempleo.py#L45).
 
-    ```python
-    def __buscar_keyword(self,keyword:str, n_pagina:int):
-        
-        ruta_busqueda = "ofertas-trabajo"
-        parametro_keyword="te=" + keyword
-        parametro_pagina="pagina=" +str(n_pagina)
-        
-        driver = self._driver
-        driver.get(f"{self._base_url}{ruta_busqueda}/?{parametro_keyword}&{parametro_pagina}")
-        
-        # Localizadores
-        posiciones_locator = 'div.bg-white.col-12.col-sm-12.col-md-12.col-lg-9 > div.p-2.border-bottom.py-3.bg-white'
-        
-        # Espera que carguen las posiciones
-        WebDriverWait(driver=driver,timeout=10).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, posiciones_locator))) 
-    ```
-3. Se analizan las ofertas. En caso de que el titulo de la ultima oferta de la ultima pagina analizada coincida con el titulo de la ultima oferta de la pagina actual, se finaliza la busqueda.  [Código](./tecnoempleo.py#L94).
+
+3. Se analizan las ofertas. En caso de que el titulo de la ultima oferta de la ultima pagina analizada coincida con el titulo de la ultima oferta de la pagina actual, se finaliza la busqueda.  [Código](https://github.com/VicMoraGit/TFG_ofertas_trabajo/blob/main/portales/tecnoempleo/tecnoempleo.py#L63).
 
 4. Mientras se analizan todas las ofertas, se van rellenando las estadisticas.
 
@@ -47,7 +31,7 @@ Para comprobar el rendimiento y la robustez del script, se ha hecho la siguiente
 > 
 > Numero de paginas = 50
 
-Arrojando [este csv](../../data/CSV/Tecnoempleo.csv) y las siguientes estadisticas:
+Arrojando [este csv](https://github.com/VicMoraGit/TFG_ofertas_trabajo/blob/main/data/CSV/Tecnoempleo.csv) y las siguientes estadisticas:
  
 |   |   |
 |---|---|    
@@ -60,9 +44,7 @@ Arrojando [este csv](../../data/CSV/Tecnoempleo.csv) y las siguientes estadistic
 
 - Se usan expresiones regulares para extraer la experiencia, el salario y los requerimientos de las descripciones de las ofertas.
 
-- Algunas skills tienen caracteres que se usan para definir reglas en las expresiones regulares, por lo que se han escapado con [re.escape()](./tecnoempleo.py#L198)
-
 ## 🐞 Problemas encontrados
 
-- A veces el script devuelve ofertas que no contienen ningún link, es por eso que se [comprueba si el link esta vacío](./tecnoempleo.py#L80) antes de abrir la oferta en una pestaña. Puede ser porque haya presencia de publicidad, y detecte esa publicidad como una oferta.
+- A veces el script devuelve ofertas que no contienen ningún link, es por eso que se [comprueba si el link esta vacío](https://github.com/VicMoraGit/TFG_ofertas_trabajo/blob/main/portales/tecnoempleo/tecnoempleo.py#L107) antes de abrir la oferta en una pestaña. Puede ser porque haya presencia de publicidad, y detecte esa publicidad como una oferta.
 

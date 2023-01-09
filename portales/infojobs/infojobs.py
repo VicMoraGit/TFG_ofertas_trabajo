@@ -3,12 +3,12 @@ from logging import Logger, getLogger, DEBUG
 from os import path
 import re
 from time import sleep, time
-from util.constantes import ALL_SKILLS
+#from util.constantes import ALL_SKILLS
 
 #Clases proyecto
-from util.csvHandler import csvHandler
-from portales.portal import Portal
-import util.stats as stats
+#from util.csvHandler import csvHandler
+#from portales.portal import Portal
+#import util.stats as stats
 
 #Selenium
 from selenium.webdriver.remote.webelement import WebElement
@@ -16,18 +16,18 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
-
-import undetected_chromedriver as uc
-
+from selenium.webdriver.chrome.webdriver import WebDriver
+"""
 class InfoJobs(Portal):
 
-    def __init__(self, driver:uc.Chrome, n_paginas:int, csvHandler: csvHandler):
-        super().__init__(driver, n_paginas,csvHandler)
+    def __init__(self, n_paginas:int, csvHandler: csvHandler):
+        super().__init__(n_paginas,csvHandler)
         
         self._base_url:str ="https://www.infojobs.net/"
         self._log:Logger = getLogger(__class__.__name__)
         # self._log.setLevel(DEBUG)
-    
+        self._driver = WebDriver("chromedriver.exe")
+
     def buscar(self, keyword:str):
         driver = self._driver
 
@@ -39,7 +39,7 @@ class InfoJobs(Portal):
         driver.get(self._base_url)
         self._log.info("Infojobs.net abierta")
         
-        for i in range(1, self._n_paginas+1):
+        for i in range(1, self._n_paginas_total+1):
             
             try:
 
@@ -297,3 +297,19 @@ class InfoJobs(Portal):
             dict_super["ruta_captura_error"] = self._ruta_captura_captcha;
         
         return dict_super
+
+"""
+driver = WebDriver("chromedriver.exe")
+
+driver.get("https://developer.infojobs.net/test-console/execute.xhtml")
+
+
+for i in range(1,21):
+    input_url = driver.find_element(By.ID,"apiuri")
+    boton_enviar = driver.find_element(By.ID,"send-button")
+
+    input_url.clear()
+    input_url.send_keys("https://api.infojobs.net/api/7/offer?q=Big%20Data&page=" + str(i))
+    boton_enviar.click()
+
+    print(driver.find_element(By.ID,"formattedBody").text)  

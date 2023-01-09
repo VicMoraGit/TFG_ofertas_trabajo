@@ -1,6 +1,6 @@
 #Modulos python
 from logging import Logger, getLogger, DEBUG
-from time import sleep, time
+from time import sleep
 
 #Clases proyecto
 from portales.portal import Portal
