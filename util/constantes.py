@@ -1,5 +1,5 @@
 #Filtros español - ingles
-FILTRO_HORAS = ["horas","hora","hours","hours"]
+FILTRO_HORAS = ["horas","hora","hour","hours"]
 FILTRO_DIAS = ["dias","dia","day","days"]
 FILTRO_MESES = ["meses","mes","month","months"]
 
