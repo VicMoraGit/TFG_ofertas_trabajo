@@ -62,7 +62,7 @@ class FiltroOfertas:
         #  regexr.com/75m25    
 
         try:
-            p = re.compile(r"(\d|\.){3,}(\s|)€")
+            p = re.compile(r"£(\d|\.|\,){3,}(\s|)|(\d|\.|\,){3,}(\s|)€")
             s = p.search(texto)
             if s is not None:
                 # Hay ofertas donde el salario publicado es un rango, por lo tanto se devuelve solo el primer valor

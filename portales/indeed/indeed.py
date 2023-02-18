@@ -22,11 +22,13 @@ class Indeed(Portal):
     def __init__(self, n_paginas:int, csvHandler: csvHandler):
         super().__init__(n_paginas,csvHandler)
         
-        self._base_url:str ="https://es.indeed.com/"        
+        self._base_url:str ="https://uk.indeed.com/"        
         self._log:Logger = getLogger(__class__.__name__)
         self._titulo_ultima_oferta_pagina = ""
         self._busqueda_finalizada = False
         # self._log.setLevel(DEBUG)
+
+    
 
     def buscar(self, keyword:str):
 
