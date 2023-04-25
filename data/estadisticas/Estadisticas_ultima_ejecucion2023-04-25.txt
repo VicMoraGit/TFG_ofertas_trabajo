@@ -1,0 +1,35 @@
+============================================================
+
+************************************************************
+Datos de Tecnoempleo:
+
+Script bloqueado:........................No
+Total de ofertas analizadas:.............29
+Total de ofertas con salario:............17
+Total de ofertas con experiencia:........24
+Tiempo de recoleccion:...................0.68 mins.
+
+************************************************************
+Datos de Monster:
+
+Script bloqueado:........................No
+Total de ofertas analizadas:.............0
+Total de ofertas con salario:............0
+Total de ofertas con experiencia:........0
+Tiempo de recoleccion:...................0.23 mins.
+
+************************************************************
+Datos de Indeed:
+
+Script bloqueado:........................No
+Total de ofertas analizadas:.............15
+Total de ofertas con salario:............7
+Total de ofertas con experiencia:........5
+Tiempo de recoleccion:...................0.54 mins.
+
+************************************************************
+Se han analizado 44 ofertas.
+Solo 24 ofertas tienen informacion sobre el salario.
+Solo 29 ofertas tienen informacion sobre la experiencia.
+Tiempo para recoger los datos: 1.45 mins.
+============================================================

@@ -1,6 +1,7 @@
 #Modulos python
 from logging import Logger, getLogger, DEBUG
 from time import sleep
+from traceback import format_exc
 
 #Clases proyecto
 from portales.portal import Portal
@@ -16,6 +17,8 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.chrome.webdriver import WebDriver
+from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
 
 class Indeed(Portal):
 
@@ -41,7 +44,7 @@ class Indeed(Portal):
             for i in range(self._n_paginas_analizadas, self._n_paginas_total):
                 
                 # Para cada pagina un driver nuevo
-                self._driver = WebDriver("chromedriver.exe")
+                super().abrir_nav()
                 self._driver.get(self._base_url)
                 self._log.info("Indeed.com abierta")
 
@@ -55,6 +58,7 @@ class Indeed(Portal):
                         break
 
                 except (DescripcionNoEmbebida, WebDriverException): 
+                    self._log.error(format_exc())
                     self._driver.quit()
                     break
                 

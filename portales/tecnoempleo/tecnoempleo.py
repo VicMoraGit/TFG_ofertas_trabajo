@@ -9,11 +9,10 @@ import util.stats as stats
 #Selenium
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.chrome.webdriver import WebDriver
+from selenium.webdriver.chrome.options import Options
 
 class Tecnoempleo(Portal):
 
@@ -23,7 +22,7 @@ class Tecnoempleo(Portal):
         self._base_url:str ="https://www.tecnoempleo.com/"        
         self._log:Logger = getLogger(__class__.__name__)
         self._titulo_ultima_oferta_pagina = ""
-        self._driver = WebDriver("chromedriver.exe")
+        super().abrir_nav(headless=True)
 
         # self._log.setLevel(DEBUG)
 
@@ -86,10 +85,13 @@ class Tecnoempleo(Portal):
 
             driver.switch_to.new_window("tab")
             driver.get(link)
-
-            descripcion = WebDriverWait(driver=driver,timeout=10).until(
+            try:
+                descripcion = WebDriverWait(driver=driver,timeout=10).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, descripcion_oferta_locator)))
-            
+            except:
+                driver.close()
+                driver.switch_to.window(ch)
+                continue
 
             # Extrae la informacion de la oferta visible
             informacion_posicion={}

@@ -23,18 +23,13 @@ if __name__ == "__main__":
     csvh = csvHandler()
     # Declaracion variables
     portales:list[Portal] = []
-    keywords = ["Big Data", "Backend"]
+    keywords = ["Big Data"]
     n_paginas = 1
-  
-    # infoJobs:InfoJobs = InfoJobs(
-    #     driver=driver,
-    #     n_paginas=n_paginas,
-    #     csvHandler=csvh)
 
+
+    portales.append(Tecnoempleo(n_paginas=n_paginas,csvHandler=csvh))
+    portales.append(Monster(n_paginas=n_paginas,csvHandler=csvh))
     portales.append(Indeed(n_paginas=n_paginas,csvHandler=csvh))
-
-    # portales.append(Tecnoempleo(n_paginas=n_paginas,csvHandler=csvh))
-    # portales.append(Monster(n_paginas=n_paginas,csvHandler=csvh))
 
     stats.s_inicio = time()
     for portal in portales:

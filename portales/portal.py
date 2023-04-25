@@ -8,7 +8,12 @@ from interfaces.operacionesBusquedaInterface import OperacionesBusquedaInterface
 
 #Selenium
 from selenium.webdriver.remote.webelement import WebElement
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.webdriver import WebDriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 
+DRIVER_VERSION = "112.0.5615.49"
 
 class Portal(obi):
     def __init__(self, n_paginas:int, csvHandler: csvHandler):
@@ -26,7 +31,18 @@ class Portal(obi):
         self._es_bloqueado = False
         self._ruta_captura_captcha = ""
         self._t_total = 0
-        
+    
+
+    def abrir_nav(self,headless=False):
+        options = Options()
+        #options.add_experimental_option("useAutomationExtension",False)
+        #options.add_experimental_option("excludeSwitches",["enable-automation"])
+        if headless: 
+            options.add_argument('--headless')
+        s=Service(ChromeDriverManager(version=DRIVER_VERSION).install())
+  
+        self._driver = WebDriver(service=s, options=options)
+
     def buscar(self, keyword:str):
         pass
     

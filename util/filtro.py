@@ -6,7 +6,7 @@ from dateutil.relativedelta import relativedelta
 #Modulos externos
 from unidecode import unidecode #util para no tener en cuenta acentos y caracteres no-Ascii
 
-from util.constantes import ALL_SKILLS, FILTRO_HORAS, FILTRO_DIAS, FILTRO_MESES, PROVINCIAS
+from util.constantes import ALL_SKILLS, FILTRO_HORAS, FILTRO_DIAS, FILTRO_MESES, FILTRO_FECHAS, PROVINCIAS
 
 log:Logger = getLogger("FiltroOfertas")
 #log.setLevel(DEBUG)
@@ -39,9 +39,11 @@ class FiltroOfertas:
                 hoy = date.today()
                 fecha_oferta = hoy - relativedelta(months=int(digitos.strip()))
                 fecha_string = fecha_oferta.strftime(formato_fecha)
-
-            elif "/" in texto_lowercase: # fecha en formato DD/MM/YY. si contiene la palabra "actualizada" se borra. Tecnoempleo
-                fecha_string = datetime.strptime(texto_lowercase.replace("actualizada",""), '%d/%m/%Y').strftime(formato_fecha)
+                  
+            elif "/" in texto_lowercase: # fecha en formato DD/MM/YY. se eliminan posibles palabras. Tecnoempleo
+                for palabra in FILTRO_FECHAS:
+                    texto_lowercase = texto_lowercase.replace(palabra,"")
+                fecha_string = datetime.strptime(texto_lowercase, '%d/%m/%Y').strftime(formato_fecha)
                 
 
         # Si no contiene digitos, se habra publicado hoy. ej. "Recien publicado", "Hoy".        

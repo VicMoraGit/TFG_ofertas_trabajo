@@ -2,6 +2,7 @@
 FILTRO_HORAS = ["horas","hora","hours","hours"]
 FILTRO_DIAS = ["dias","dia","day","days"]
 FILTRO_MESES = ["meses","mes","month","months"]
+FILTRO_FECHAS = ["nueva","actualizada","reciente"]
 
 PROVINCIAS = {
     "la coruña":"La Coruña",
