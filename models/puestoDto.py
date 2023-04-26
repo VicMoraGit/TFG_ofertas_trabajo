@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 @dataclass
-class PuestoDto:
+class Puesto:
 
     _id:int
     _nombre:str

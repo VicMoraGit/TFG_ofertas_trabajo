@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 @dataclass
-class UbicacionDto:
+class Ubicacion:
 
     _id:int
     _provincia:str
