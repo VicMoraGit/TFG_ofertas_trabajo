@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from models.ofertaDto import Oferta
 
-class ofertaDaoInterface(ABC):
+class OfertaDaoInterface(ABC):
     def __init__(self):
         super().__init__()
     

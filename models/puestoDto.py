@@ -18,4 +18,6 @@ class Puesto:
     def nombre(self,nombre:str):
         self._nombre = nombre
 
+    def __str__(self) -> str:
+        return f"Puesto {self._id}: {self._nombre}"
     

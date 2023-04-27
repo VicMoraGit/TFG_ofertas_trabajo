@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from models.ubicacionDto import Ubicacion
 
-class ubicacionDaoInterface(ABC):
+class UbicacionDaoInterface(ABC):
     def __init__(self):
         super().__init__()
     

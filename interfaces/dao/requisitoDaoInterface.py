@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from models.requisitoDto import Requisito
 
-class requisitoDaoInterface(ABC):
+class RequisitoDaoInterface(ABC):
     def __init__(self):
         super().__init__()
     

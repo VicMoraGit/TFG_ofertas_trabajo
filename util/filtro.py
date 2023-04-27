@@ -15,7 +15,7 @@ class FiltroOfertas:
 
     def filtrar_fecha(self,texto:str):
         
-        formato_fecha = "%d-%m-%Y"
+        formato_fecha = "%Y-%m-%d"
         fecha_string = "Sin informacion"
         texto_lowercase = unidecode(texto.lower())
         
