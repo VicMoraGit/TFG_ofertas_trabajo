@@ -1,0 +1,17 @@
+============================================================
+
+************************************************************
+Datos de Indeed:
+
+Script bloqueado:........................No
+Total de ofertas analizadas:.............30
+Total de ofertas con salario:............8
+Total de ofertas con experiencia:........10
+Tiempo de recoleccion:...................1.1 mins.
+
+************************************************************
+Se han analizado 30 ofertas.
+Solo 8 ofertas tienen informacion sobre el salario.
+Solo 10 ofertas tienen informacion sobre la experiencia.
+Tiempo para recoger los datos: 1.1 mins.
+============================================================

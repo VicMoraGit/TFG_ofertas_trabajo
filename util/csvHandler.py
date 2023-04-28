@@ -7,7 +7,7 @@ from logging import Logger, getLogger, DEBUG
 class csvHandler:
     def __init__(self) -> None:
 
-        self._log:Logger = getLogger("csv") 
+        self._log:Logger = getLogger(__class__.__name__) 
         # self._log.setLevel(DEBUG)       
         self._ruta = self.__obtener_ruta_archivo()
         self._archivo = self.__obtener_archivo()
@@ -16,9 +16,9 @@ class csvHandler:
         self.__escribir_cabecera()
 
     
-    def escribir_linea(self, valores):
-        self._writer.writerow(valores)
-        self._log.debug("Linea escrita en csv")
+    def escribir_lineas(self, valores):
+        self._writer.writerows(valores)
+        self._log.debug("Lineas escritas en csv")
 
     def __obtener_ruta_archivo(self):
 
@@ -26,7 +26,7 @@ class csvHandler:
         dateTimeObj = date.today()
         nombre_archivo = "Analisis_"+str(dateTimeObj)+".csv"
 
-        ruta = path.join(getcwd(),nombre_archivo)
+        ruta = path.join(getcwd(),"data","CSV",nombre_archivo)
         self._log.debug("Ruta creada")
         
         return ruta
@@ -53,6 +53,6 @@ class csvHandler:
 
 
     def __escribir_cabecera(self):
-        self.escribir_linea(['Titulo', 'Compañia', 'Experiencia', 'Salario', 'Ubicacion'])
+        self._writer.writerow(['Titulo', 'Compañia', 'Experiencia', 'Salario', 'Ubicacion','Fecha','Requisitos'])
         self._log.debug("Cabecera declarada")
 

@@ -1,0 +1,17 @@
+============================================================
+
+************************************************************
+Datos de Monster:
+
+Script bloqueado:........................No
+Total de ofertas analizadas:.............796
+Total de ofertas con salario:............28
+Total de ofertas con experiencia:........487
+Tiempo de recoleccion:...................33.56 mins.
+
+************************************************************
+Se han analizado 796 ofertas.
+Solo 28 ofertas tienen informacion sobre el salario.
+Solo 487 ofertas tienen informacion sobre la experiencia.
+Tiempo para recoger los datos: 33.56 mins.
+============================================================
