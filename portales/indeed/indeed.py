@@ -5,6 +5,7 @@ from traceback import format_exc
 
 #Clases proyecto
 from portales.portal import Portal
+from util.azure_translator import Traductor
 from util.csvHandler import csvHandler
 import util.stats as stats
 from exceptions.DescripcionNoEmbebida import DescripcionNoEmbebida
@@ -44,7 +45,7 @@ class Indeed(Portal):
                 # Para cada pagina un driver nuevo
                 super().abrir_nav()
                 self._driver.get(self._base_url)
-                self._log.info(f"Indeed.com {self.dominio_pais.upper} abierta")
+                self._log.info(f"Indeed.com {self.dominio_pais.upper()} abierta")
 
                 try:
 
@@ -138,6 +139,7 @@ class Indeed(Portal):
             
             # Rellena el diccionario
             if not titulo=="":
+
                 informacion_posicion['titulo']=titulo
                 informacion_posicion['compañia']=compañia
                 informacion_posicion['experiencia']=experiencia
@@ -184,10 +186,14 @@ class Indeed(Portal):
         self._n_paginas_analizadas += 1
 
     def _get_title(self, position:WebElement):
-        
+        td = Traductor()    
         try:
             title=position.find_element(By.CSS_SELECTOR,'.jobTitle').text
+            dominio_idioma = td.detectar_idioma(title)
+            if dominio_idioma != "es":
+                title = td.traducir(dominio_idioma, "es",title)
         except:
+            self._log.error(format_exc())
             title=""
 
         return title
