@@ -29,7 +29,9 @@ if __name__ == "__main__":
 
     portales.append(Tecnoempleo(n_paginas=n_paginas,csvHandler=csvh))
     portales.append(Monster(n_paginas=n_paginas,csvHandler=csvh))
-    portales.append(Indeed(n_paginas=n_paginas,csvHandler=csvh))
+    portales.append(Indeed(n_paginas=n_paginas,csvHandler=csvh,dominio_pais="es"))
+    portales.append(Indeed(n_paginas=n_paginas,csvHandler=csvh,dominio_pais="uk"))
+    portales.append(Indeed(n_paginas=n_paginas,csvHandler=csvh,dominio_pais="fr"))
 
     stats.s_inicio = time()
     for portal in portales:

@@ -22,16 +22,14 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 class Indeed(Portal):
 
-    def __init__(self, n_paginas:int, csvHandler: csvHandler):
+    def __init__(self, n_paginas:int, csvHandler: csvHandler, dominio_pais="es"):
         super().__init__(n_paginas,csvHandler)
-        
-        self._base_url:str ="https://uk.indeed.com/"        
+        self.dominio_pais = dominio_pais
+        self._base_url:str = f"https://{dominio_pais}.indeed.com/"        
         self._log:Logger = getLogger(__class__.__name__)
         self._titulo_ultima_oferta_pagina = ""
         self._busqueda_finalizada = False
         # self._log.setLevel(DEBUG)
-
-    
 
     def buscar(self, keyword:str):
 
@@ -46,7 +44,7 @@ class Indeed(Portal):
                 # Para cada pagina un driver nuevo
                 super().abrir_nav()
                 self._driver.get(self._base_url)
-                self._log.info("Indeed.com abierta")
+                self._log.info(f"Indeed.com {self.dominio_pais.upper} abierta")
 
                 try:
 
