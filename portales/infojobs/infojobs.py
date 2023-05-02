@@ -1,22 +1,24 @@
-#Modulos python
+# Modulos python
 from logging import Logger, getLogger, DEBUG
 from os import path
 import re
 from time import sleep, time
-#from util.constantes import ALL_SKILLS
 
-#Clases proyecto
-#from util.csvHandler import csvHandler
-#from portales.portal import Portal
-#import util.stats as stats
+# from util.constantes import ALL_SKILLS
 
-#Selenium
+# Clases proyecto
+# from util.csvHandler import csvHandler
+# from portales.portal import Portal
+# import util.stats as stats
+
+# Selenium
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from selenium.webdriver.chrome.webdriver import WebDriver
+
 """
 class InfoJobs(Portal):
 
@@ -304,12 +306,14 @@ driver = WebDriver("chromedriver.exe")
 driver.get("https://developer.infojobs.net/test-console/execute.xhtml")
 
 
-for i in range(1,21):
-    input_url = driver.find_element(By.ID,"apiuri")
-    boton_enviar = driver.find_element(By.ID,"send-button")
+for i in range(1, 21):
+    input_url = driver.find_element(By.ID, "apiuri")
+    boton_enviar = driver.find_element(By.ID, "send-button")
 
     input_url.clear()
-    input_url.send_keys("https://api.infojobs.net/api/7/offer?q=Big%20Data&page=" + str(i))
+    input_url.send_keys(
+        "https://api.infojobs.net/api/7/offer?q=Big%20Data&page=" + str(i)
+    )
     boton_enviar.click()
 
-    print(driver.find_element(By.ID,"formattedBody").text)  
+    print(driver.find_element(By.ID, "formattedBody").text)

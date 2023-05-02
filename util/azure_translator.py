@@ -5,8 +5,7 @@ from uuid import uuid4
 from requests import post
 
 
-class Traductor():
-
+class Traductor:
     def __init__(self) -> None:
         self._endpoint = "https://api.cognitive.microsofttranslator.com"
         self._location = "westeurope"
@@ -16,32 +15,24 @@ class Traductor():
         ruta = "/translate"
         url = self._endpoint + ruta
 
-        params = {
-            'api-version': '3.0',
-            'from': dominio_from,
-            'to': dominio_to
-        }
+        params = {"api-version": "3.0", "from": dominio_from, "to": dominio_to}
 
         headers = {
-            'Ocp-Apim-Subscription-Key': api_key_azure,
-            'Ocp-Apim-Subscription-Region': self._location,
-            'Content-type': 'application/json',
-            'X-ClientTraceId': str(uuid4())
+            "Ocp-Apim-Subscription-Key": api_key_azure,
+            "Ocp-Apim-Subscription-Region": self._location,
+            "Content-type": "application/json",
+            "X-ClientTraceId": str(uuid4()),
         }
 
-        body = [{
-            'text': texto
-        }]
+        body = [{"text": texto}]
         try:
-
             request = post(url, params=params, headers=headers, json=body)
             json = request.json()
             print(json)
 
             return json[0]["translations"][0]["text"]
-        
-        except:
 
+        except:
             self._log.error(format_exc())
             return None
 
@@ -50,27 +41,23 @@ class Traductor():
         url = self._endpoint + ruta
 
         params = {
-            'api-version': '3.0',
+            "api-version": "3.0",
         }
 
         headers = {
-            'Ocp-Apim-Subscription-Key': api_key_azure,
-            'Ocp-Apim-Subscription-Region': self._location,
-            'Content-type': 'application/json',
-            'X-ClientTraceId': str(uuid4())
+            "Ocp-Apim-Subscription-Key": api_key_azure,
+            "Ocp-Apim-Subscription-Region": self._location,
+            "Content-type": "application/json",
+            "X-ClientTraceId": str(uuid4()),
         }
 
-        body = [{
-            'text': texto
-        }]
+        body = [{"text": texto}]
         try:
-
             request = post(url, params=params, headers=headers, json=body)
             json = request.json()
             print(json)
             return json[0]["language"]
-        
-        except:
 
+        except:
             self._log.error(format_exc())
             return None

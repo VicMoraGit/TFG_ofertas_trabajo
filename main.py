@@ -5,14 +5,14 @@ from util.csvHandler import csvHandler
 import util.stats as stats
 
 from portales.tecnoempleo.tecnoempleo import Tecnoempleo
-#from portales.infojobs.infojobs import InfoJobs
+
+# from portales.infojobs.infojobs import InfoJobs
 from portales.indeed.indeed import Indeed
 from portales.monster.monster import Monster
 
 from portales.portal import Portal
 
 if __name__ == "__main__":
-    
     # Configuracion logger
     # logging.basicConfig(level=logging.INFO)
     logging.basicConfig(level=logging.INFO)
@@ -22,26 +22,24 @@ if __name__ == "__main__":
     # Clase encargada del csv
     csvh = csvHandler()
     # Declaracion variables
-    portales:list[Portal] = []
+    portales: list[Portal] = []
     keywords = ["Big Data"]
     n_paginas = 1
 
-    #portales.append(Tecnoempleo(n_paginas=n_paginas,csvHandler=csvh))
-    #portales.append(Monster(n_paginas=n_paginas,csvHandler=csvh))
-    #portales.append(Indeed(n_paginas=n_paginas,csvHandler=csvh,dominio_pais="es"))
-    portales.append(Indeed(n_paginas=n_paginas,csvHandler=csvh,dominio_pais="uk"))
-    #portales.append(Indeed(n_paginas=n_paginas,csvHandler=csvh,dominio_pais="fr"))
+    # portales.append(Tecnoempleo(n_paginas=n_paginas,csvHandler=csvh))
+    # portales.append(Monster(n_paginas=n_paginas,csvHandler=csvh))
+    # portales.append(Indeed(n_paginas=n_paginas,csvHandler=csvh,dominio_pais="es"))
+    portales.append(Indeed(n_paginas=n_paginas, csvHandler=csvh, dominio_pais="uk"))
+    # portales.append(Indeed(n_paginas=n_paginas,csvHandler=csvh,dominio_pais="fr"))
 
     stats.s_inicio = time()
     for portal in portales:
-
         portal._iniciar_cronometro()
-        
+
         for keyword in keywords:
-                
             log.info(f"Buscando {keyword} en {portal.__class__.__name__}")
             portal.buscar(keyword)
-        
+
         portal.actualizar_estadisticas()
 
     csvh.cerrar_archivo()
