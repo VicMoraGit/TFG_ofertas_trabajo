@@ -6,6 +6,10 @@ class RequisitoDaoInterface(ABC):
         super().__init__()
     
     @abstractmethod
+    def obtener_por_nombre(self, nombre:str):
+        pass
+
+    @abstractmethod
     def obtener(self, idRequisito:int):
         pass
 

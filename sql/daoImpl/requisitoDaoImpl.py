@@ -8,6 +8,29 @@ class RequisitoDao(RequisitoDaoInterface):
         super().__init__()
         self._log:Logger = getLogger(__class__.__name__)
 
+    def obtener_por_nombre(self, nombre:str):
+        requisito = None
+        
+        with conexion_sql() as con:
+
+            cursor = con.cursor()
+            cursor.execute(f"SELECT * FROM requisito WHERE Nombre={nombre}")
+
+            requisitoRaw = cursor.fetchone()
+
+            if requisitoRaw is None:
+                self._log.debug("No hay ningun requisito con ese nombre")
+            else: 
+                id_requisito=int(str(requisitoRaw[0]))
+                descripcion=str(requisitoRaw[2])
+                enlace=str(requisitoRaw[3])
+                categoria=str(requisitoRaw[4])
+
+                requisito = Requisito(id_requisito,nombre,descripcion,enlace,categoria)
+                self._log.debug(str(requisito))
+        
+        return requisito
+
     def obtener(self, idRequisito:int) -> None|Requisito:
 
         requisito = None
