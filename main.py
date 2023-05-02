@@ -29,27 +29,22 @@ if __name__ == "__main__":
 
     portales.append(Tecnoempleo(n_paginas=n_paginas,csvHandler=csvh))
     portales.append(Monster(n_paginas=n_paginas,csvHandler=csvh))
-    portales.append(Indeed(n_paginas=n_paginas,csvHandler=csvh))
+    portales.append(Indeed(n_paginas=n_paginas,csvHandler=csvh,dominio_pais="es"))
+    portales.append(Indeed(n_paginas=n_paginas,csvHandler=csvh,dominio_pais="uk"))
+    portales.append(Indeed(n_paginas=n_paginas,csvHandler=csvh,dominio_pais="fr"))
 
     stats.s_inicio = time()
     for portal in portales:
 
-    infoJobs:InfoJobsPage = InfoJobsPage(
-        driver=driver,
-        n_paginas=n_paginas,
-        csvHandler=csvh)
+        portal._iniciar_cronometro()
+        
+        for keyword in keywords:
+                
+            log.info(f"Buscando {keyword} en {portal.__class__.__name__}")
+            portal.buscar(keyword)
+        
+        portal.actualizar_estadisticas()
 
-    indeed:IndeedPage = IndeedPage(
-        driver=driver,
-        n_paginas=n_paginas,
-        csvHandler=csvh)
-    start = time()
-    for keyword in keywords:
-        log.info(f"Buscando {keyword} en InfoJobs")
-        #infoJobs.buscar(keyword)
-        log.info(f"Buscando {keyword} en Indeed")
-        indeed.buscar(keyword)
-             
     csvh.cerrar_archivo()
     stats.s_final = time()
     stats.imprime_stats()
