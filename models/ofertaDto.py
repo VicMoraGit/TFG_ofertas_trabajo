@@ -18,6 +18,7 @@ class Oferta:
     _ubicacion:list[UbicacionDto]
     _requisitos:list[RequisitoDto]
 
+
     @property
     def id(self):
         return self._id

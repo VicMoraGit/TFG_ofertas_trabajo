@@ -134,3 +134,5 @@ dmypy.json
 
 #Proyecto
 dataviz.py
+config.py
+data

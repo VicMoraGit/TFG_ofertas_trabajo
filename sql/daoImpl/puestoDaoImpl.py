@@ -9,7 +9,7 @@ class PuestoDao(PuestoDaoInterface):
         super().__init__()
         self._log:Logger = getLogger(__class__.__name__)
 
-    def obtener(self, idPuesto:int) -> None|Puesto:
+    def obtener(self, idPuesto: int) -> None|Puesto:
 
         puesto = None
         
@@ -29,7 +29,7 @@ class PuestoDao(PuestoDaoInterface):
         
         return puesto
     
-    def actualizar(self,puesto:Puesto):
+    def actualizar(self,puesto: Puesto):
 
         with conexion_sql() as con:
 
@@ -38,7 +38,7 @@ class PuestoDao(PuestoDaoInterface):
             
             con.commit()
 
-            if cursor.rowcount is 0:
+            if cursor.rowcount == 0:
                 self._log.debug("No hay ningun puesto con ese ID")
                 return False
             else: 
@@ -46,7 +46,7 @@ class PuestoDao(PuestoDaoInterface):
 
                 return True
 
-    def borrar(self, idPuesto:int):
+    def borrar(self, idPuesto: int):
 
         with conexion_sql() as con:
 
@@ -55,7 +55,7 @@ class PuestoDao(PuestoDaoInterface):
             
             con.commit()
 
-            if cursor.rowcount is 0:
+            if cursor.rowcount == 0:
                 self._log.debug("No hay ningun puesto con ese ID")
                 return False
             else: 
@@ -63,7 +63,7 @@ class PuestoDao(PuestoDaoInterface):
 
                 return True
 
-    def crear(self, puesto:Puesto):
+    def crear(self, puesto: Puesto):
         
         with conexion_sql() as con:
 
@@ -72,7 +72,7 @@ class PuestoDao(PuestoDaoInterface):
             
             con.commit()
 
-            if cursor.rowcount is 0:
+            if cursor.rowcount == 0:
                 self._log.debug("No se ha podido crear el puesto")
                 return False
             else: 

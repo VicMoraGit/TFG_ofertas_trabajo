@@ -8,79 +8,79 @@ from sql.conexion import conexion_sql
 class UbicacionDao(UbicacionDaoInterface):
     def __init__(self):
         super().__init__()
-        self._log:Logger = getLogger(__class__.__name__)
-    
-    def obtener(self, idUbicacion:int):
+        self._log: Logger = getLogger(__class__.__name__)
 
+    def obtener(self, idUbicacion: int):
         ubicacion = None
-        
-        with conexion_sql() as con:
 
+        with conexion_sql() as con:
             cursor = con.cursor()
-            cursor.execute(f"SELECT * FROM ubicacion WHERE ID={idUbicacion}",)
+            cursor.execute(
+                f"SELECT * FROM ubicacion WHERE ID={idUbicacion}",
+            )
 
             ubicacionRaw = cursor.fetchone()
 
             if ubicacionRaw is None:
                 self._log.debug("No hay ninguna ubicacion con ese ID")
-            else: 
-                provincia=str(ubicacionRaw[1])
-                comunidad=str(ubicacionRaw[2])
-                ubicacion = Ubicacion(idUbicacion,provincia,comunidad)
+            else:
+                provincia = str(ubicacionRaw[1])
+                comunidad = str(ubicacionRaw[2])
+                ubicacion = Ubicacion(idUbicacion, provincia, comunidad)
                 self._log.debug(str(ubicacion))
-        
+
         return ubicacion
 
-    def actualizar(self,ubicacion:Ubicacion):
-
+    def actualizar(self, ubicacion: Ubicacion):
         with conexion_sql() as con:
-
             cursor = con.cursor()
-            cursor.execute(f'''UPDATE ubicacion SET 
+            cursor.execute(
+                f"""UPDATE ubicacion SET 
                             Provincia='{ubicacion.provincia}' 
                             Comunidad='{ubicacion.comunidad}' 
-                            WHERE ID={ubicacion.id}''')
+                            WHERE ID={ubicacion.id}"""
+            )
 
             con.commit()
 
-            if cursor.rowcount is 0:
+            if cursor.rowcount == 0:
                 self._log.debug("No hay ningun ubicacion con ese ID")
                 return False
-            else: 
+            else:
                 self._log.debug("Ubicacion actualizado")
 
                 return True
 
-    def borrar(self, idUbicacion:int):
-
+    def borrar(self, idUbicacion: int):
         with conexion_sql() as con:
-
             cursor = con.cursor()
-            cursor.execute(f"DELETE FROM ubicacion WHERE ID={idUbicacion}",)
+            cursor.execute(
+                f"DELETE FROM ubicacion WHERE ID={idUbicacion}",
+            )
 
             con.commit()
 
-            if cursor.rowcount is 0:
+            if cursor.rowcount == 0:
                 self._log.debug("No hay ningun ubicacion con ese ID")
                 return False
-            else: 
+            else:
                 self._log.debug("Ubicacion actualizado")
 
                 return True
 
-    def crear(self, ubicacion:Ubicacion):
-
+    def crear(self, ubicacion: Ubicacion):
         with conexion_sql() as con:
-
             cursor = con.cursor()
-            cursor.execute(f"INSERT INTO ubicacion VALUES ('{ubicacion.provincia}','{ubicacion.comunidad}')",)
+            cursor.execute(
+                f"INSERT INTO ubicacion VALUES ('{ubicacion.provincia}','{ubicacion.comunidad}')",
+            )
 
             con.commit()
 
-            if cursor.rowcount is 0:
+            if cursor.rowcount == 0:
                 self._log.debug("No se ha podido crear la ubicacion")
                 return False
-            else: 
+            else:
                 self._log.debug("Ubicacion actualizado")
 
-                return True 
+                return True
