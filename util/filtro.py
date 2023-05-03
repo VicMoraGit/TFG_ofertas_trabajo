@@ -164,7 +164,7 @@ class FiltroOfertas:
 
         return localizacion
 
-    def filtrar_posicion(self, texto: str):
+    def filtrar_posicion(self, titulo: str):
         """
         Cada indice representa un rol de IT. La lista que se encuentra en cada indice,
         alberga palabras que se relacionan con ese rol.
@@ -178,9 +178,16 @@ class FiltroOfertas:
         indice_mas_alto = 99
         n_palabras = 0
         n_palabras_maximas = 0
-        for indice_actual, palabras in enumerate(palabras_relacionadas_posicion):
+
+        for palabra in palabras_relacionadas_posicion[0]:
+            if palabra in titulo:
+                return 0
+
+        for indice_actual, palabras in enumerate(
+            palabras_relacionadas_posicion, start=1
+        ):
             for palabra in palabras:
-                if palabra in texto:
+                if palabra in titulo:
                     n_palabras += 1
             if n_palabras > n_palabras_maximas:
                 indice_mas_alto = indice_actual
