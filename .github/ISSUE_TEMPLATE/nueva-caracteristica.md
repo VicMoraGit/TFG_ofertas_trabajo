@@ -1,6 +1,6 @@
 ---
 name: Nueva caracteristica
-about: Plantilla para bugs
+about: Plantilla para nuevas funciones
 title: ''
 labels: enhancement
 assignees: VicMoraGit
