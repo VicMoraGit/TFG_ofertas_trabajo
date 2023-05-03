@@ -38,7 +38,7 @@ class PuestoDao(PuestoDaoInterface):
             
             con.commit()
 
-            if cursor.rowcount is 0:
+            if cursor.rowcount == 0:
                 self._log.debug("No hay ningun puesto con ese ID")
                 return False
             else: 
@@ -55,7 +55,7 @@ class PuestoDao(PuestoDaoInterface):
             
             con.commit()
 
-            if cursor.rowcount is 0:
+            if cursor.rowcount == 0:
                 self._log.debug("No hay ningun puesto con ese ID")
                 return False
             else: 
@@ -72,7 +72,7 @@ class PuestoDao(PuestoDaoInterface):
             
             con.commit()
 
-            if cursor.rowcount is 0:
+            if cursor.rowcount == 0:
                 self._log.debug("No se ha podido crear el puesto")
                 return False
             else: 

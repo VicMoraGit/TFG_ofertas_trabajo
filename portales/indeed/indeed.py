@@ -5,6 +5,7 @@ from traceback import format_exc
 
 # Clases proyecto
 from portales.portal import Portal
+from sql.daoImpl.puestoDaoImpl import PuestoDao
 from util.azure_translator import Traductor
 from util.csvHandler import csvHandler
 import util.stats as stats
@@ -30,6 +31,7 @@ class Indeed(Portal):
         self._log: Logger = getLogger(__class__.__name__)
         self._titulo_ultima_oferta_pagina = ""
         self._busqueda_finalizada = False
+        self.puestoDao = PuestoDao()
         # self._log.setLevel(DEBUG)
 
     def buscar(self, keyword: str):
@@ -184,11 +186,19 @@ class Indeed(Portal):
 
     def _get_title(self, position: WebElement):
         td = Traductor()
+
         try:
             title = position.find_element(By.CSS_SELECTOR, ".jobTitle").text
             dominio_idioma = td.detectar_idioma(title)
+
             if dominio_idioma != "es":
                 title = td.traducir(dominio_idioma, "es", title)
+
+            indice_puesto = self._filtro.filtrar_posicion(title)
+            print("Titulo oferta ", title)
+            title = self.puestoDao.obtener(indice_puesto)
+            print(title)
+
         except:
             self._log.error(format_exc())
             title = ""

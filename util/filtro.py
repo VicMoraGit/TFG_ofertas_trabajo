@@ -15,6 +15,7 @@ from util.constantes import (
     FILTRO_MESES,
     FILTRO_FECHAS,
     PROVINCIAS,
+    PALABRAS_RELACIONADAS_ROL,
 )
 
 log: Logger = getLogger("FiltroOfertas")
@@ -168,29 +169,34 @@ class FiltroOfertas:
         """
         Cada indice representa un rol de IT. La lista que se encuentra en cada indice,
         alberga palabras que se relacionan con ese rol.
-        1. Se recorren todas las listas.
-        2. Se suma 1 por cada palabra de la lista que este en el puesto.
+        1. Se recorren todas las listas. Cada lista tiene unas palabras que se relacionan con la posicion.
+        Dependiendo de la relevancia de la palabra en el rol se le da un valor del 1 - 5
+        2. Se suma el valor de la palabra de la lista si esta en el titulo de la oferta.
         3. La lista que tenga mas palabras es el puesto de la oferta.
         4. Ese indice es el mismo que el de la BD.
         """
+        # Eliminamos acentos y el femenino, se pasa a minusculas y se divide por palabras.
+        titulo = unidecode(titulo.lower()).replace("/a", "").split(" ")
 
-        palabras_relacionadas_posicion = []
         indice_mas_alto = 99
-        n_palabras = 0
-        n_palabras_maximas = 0
+        puntuacion_rol = 0
+        puntuacion_rol_maxima = 0
 
-        for palabra in palabras_relacionadas_posicion[0]:
+        # En caso de que se haga referencia a una beca/practicas se devuelve ese indice antes de comparar nada mas
+
+        for palabra in PALABRAS_RELACIONADAS_ROL[0].keys():
             if palabra in titulo:
-                return 0
+                return 1
 
-        for indice_actual, palabras in enumerate(
-            palabras_relacionadas_posicion, start=1
-        ):
-            for palabra in palabras:
+        for indice_actual, palabras in enumerate(PALABRAS_RELACIONADAS_ROL):
+            for palabra in palabras.keys():
                 if palabra in titulo:
-                    n_palabras += 1
-            if n_palabras > n_palabras_maximas:
-                indice_mas_alto = indice_actual
-                n_palabras_maximas = n_palabras
+                    puntuacion_rol += palabras[palabra]
 
-        return indice_mas_alto
+            if puntuacion_rol > puntuacion_rol_maxima:
+                indice_mas_alto = indice_actual
+                puntuacion_rol_maxima = puntuacion_rol
+
+            puntuacion_rol = 0
+
+        return indice_mas_alto + 1

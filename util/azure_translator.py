@@ -28,8 +28,6 @@ class Traductor:
         try:
             request = post(url, params=params, headers=headers, json=body)
             json = request.json()
-            print(json)
-
             return json[0]["translations"][0]["text"]
 
         except:
@@ -55,7 +53,6 @@ class Traductor:
         try:
             request = post(url, params=params, headers=headers, json=body)
             json = request.json()
-            print(json)
             return json[0]["language"]
 
         except:
