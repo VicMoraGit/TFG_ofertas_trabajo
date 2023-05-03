@@ -64,7 +64,7 @@ class OfertaDao(OfertaDaoInterface):
             )
             con.commit()
 
-            if cursor.rowcount is 0:
+            if cursor.rowcount == 0:
                 self._log.debug("No hay ningun oferta con ese ID")
                 return False
             else:
@@ -79,7 +79,7 @@ class OfertaDao(OfertaDaoInterface):
 
             con.commit()
 
-            if cursor.rowcount is 0:
+            if cursor.rowcount == 0:
                 self._log.debug("No hay ningun oferta con ese ID")
                 return False
             else:
@@ -104,7 +104,7 @@ class OfertaDao(OfertaDaoInterface):
 
             con.commit()
 
-            if cursor.rowcount is 0:
+            if cursor.rowcount == 0:
                 self._log.debug("No se ha podido crear el oferta")
                 return False
             else:
