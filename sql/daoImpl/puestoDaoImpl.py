@@ -16,7 +16,7 @@ class PuestoDao(PuestoDaoInterface):
         with conexion_sql() as con:
 
             cursor = con.cursor()
-            cursor.execute(f"SELECT * FROM puesto WHERE ID={idPuesto}")
+            cursor.execute(f"SELECT * FROM puesto WHERE ID={idPuesto};")
 
             puestoRaw = cursor.fetchone()
 
@@ -34,7 +34,7 @@ class PuestoDao(PuestoDaoInterface):
         with conexion_sql() as con:
 
             cursor = con.cursor()
-            cursor.execute(f"UPDATE puesto SET Nombre='{puesto.nombre}' WHERE ID={puesto.id}")
+            cursor.execute(f"UPDATE puesto SET Nombre='{puesto.nombre}' WHERE ID={puesto.id};")
             
             con.commit()
 
@@ -51,7 +51,7 @@ class PuestoDao(PuestoDaoInterface):
         with conexion_sql() as con:
 
             cursor = con.cursor()
-            cursor.execute(f"DELETE FROM puesto WHERE ID={idPuesto}")
+            cursor.execute(f"DELETE FROM puesto WHERE ID={idPuesto};")
             
             con.commit()
 
@@ -68,7 +68,7 @@ class PuestoDao(PuestoDaoInterface):
         with conexion_sql() as con:
 
             cursor = con.cursor()
-            cursor.execute(f"INSERT INTO puesto VALUES ('{puesto.nombre}')")
+            cursor.execute(f"INSERT INTO puesto (Nombre) VALUES ('{puesto.nombre}');")
             
             con.commit()
 

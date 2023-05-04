@@ -14,7 +14,7 @@ class RequisitoDao(RequisitoDaoInterface):
 
         with conexion_sql() as con:
             cursor = con.cursor()
-            cursor.execute(f"SELECT * FROM requisito WHERE Nombre={nombre}")
+            cursor.execute(f"SELECT * FROM requisito WHERE Nombre={nombre};")
 
             requisitoRaw = cursor.fetchone()
 
@@ -38,7 +38,7 @@ class RequisitoDao(RequisitoDaoInterface):
 
         with conexion_sql() as con:
             cursor = con.cursor()
-            cursor.execute(f"SELECT * FROM requisito WHERE ID={idRequisito}")
+            cursor.execute(f"SELECT * FROM requisito WHERE ID={idRequisito};")
 
             requisitoRaw = cursor.fetchone()
 
@@ -66,7 +66,7 @@ class RequisitoDao(RequisitoDaoInterface):
                             Descripcion='{requisito.descripcion}' 
                             Enlace_referencia='{requisito.enlace}' 
                             Categoria='{requisito.categoria}'
-                            WHERE ID={requisito.id}"""
+                            WHERE ID={requisito.id};"""
             )
 
             con.commit()
@@ -82,7 +82,7 @@ class RequisitoDao(RequisitoDaoInterface):
     def borrar(self, idRequisito: int):
         with conexion_sql() as con:
             cursor = con.cursor()
-            cursor.execute(f"DELETE FROM requisito WHERE ID={idRequisito}")
+            cursor.execute(f"DELETE FROM requisito WHERE ID={idRequisito};")
 
             con.commit()
 
@@ -98,11 +98,11 @@ class RequisitoDao(RequisitoDaoInterface):
         with conexion_sql() as con:
             cursor = con.cursor()
             cursor.execute(
-                f"""INSERT INTO requisito VALUES (
+                f"""INSERT INTO requisito (Nombre, Descripcion, Enlace_referencia, Categoria) VALUES (
                 '{requisito.nombre}',
                 '{requisito.descripcion}',
                 '{requisito.enlace}',
-                '{requisito.categoria}')
+                '{requisito.categoria}');
                 """
             )
 
