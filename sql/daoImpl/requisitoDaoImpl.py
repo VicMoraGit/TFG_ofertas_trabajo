@@ -25,9 +25,10 @@ class RequisitoDao(RequisitoDaoInterface):
                 descripcion = str(requisitoRaw[2])
                 enlace = str(requisitoRaw[3])
                 categoria = str(requisitoRaw[4])
+                subcategoria = str(requisitoRaw[5])
 
                 requisito = Requisito(
-                    id_requisito, nombre, descripcion, enlace, categoria
+                    id_requisito, nombre, descripcion, enlace, categoria, subcategoria
                 )
                 self._log.debug(str(requisito))
 
@@ -49,9 +50,10 @@ class RequisitoDao(RequisitoDaoInterface):
                 descripcion = str(requisitoRaw[2])
                 enlace = str(requisitoRaw[3])
                 categoria = str(requisitoRaw[4])
+                subcategoria = str(requisitoRaw[5])
 
                 requisito = Requisito(
-                    idRequisito, nombre, descripcion, enlace, categoria
+                    idRequisito, nombre, descripcion, enlace, categoria, subcategoria
                 )
                 self._log.debug(str(requisito))
 
@@ -66,6 +68,7 @@ class RequisitoDao(RequisitoDaoInterface):
                             Descripcion='{requisito.descripcion}' 
                             Enlace_referencia='{requisito.enlace}' 
                             Categoria='{requisito.categoria}'
+                            Subcategoria='{requisito.subcategoria}'
                             WHERE ID={requisito.id};"""
             )
 
@@ -98,11 +101,12 @@ class RequisitoDao(RequisitoDaoInterface):
         with conexion_sql() as con:
             cursor = con.cursor()
             cursor.execute(
-                f"""INSERT INTO requisito (Nombre, Descripcion, Enlace_referencia, Categoria) VALUES (
+                f"""INSERT INTO requisito (Nombre, Descripcion, Enlace_referencia, Categoria, Subcategoria) VALUES (
                 '{requisito.nombre}',
                 '{requisito.descripcion}',
                 '{requisito.enlace}',
-                '{requisito.categoria}');
+                '{requisito.categoria}',
+                '{requisito.subcategoria}');
                 """
             )
 

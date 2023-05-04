@@ -8,6 +8,7 @@ class Requisito:
     _descripcion:str
     _enlace:str
     _categoria:str
+    _subcategoria:str
 
 	
     @property
@@ -45,5 +46,13 @@ class Requisito:
     @categoria.setter
     def categoria(self,categoria:str):
         self._categoria = categoria
+
+    @property
+    def subcategoria(self):
+        return self._subcategoria
+    
+    @subcategoria.setter
+    def subcategoria(self,subcategoria:str):
+        self._subcategoria = subcategoria
     
     
