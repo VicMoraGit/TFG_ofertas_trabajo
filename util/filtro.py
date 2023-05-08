@@ -14,7 +14,7 @@ from util.constantes import (
     FILTRO_DIAS,
     FILTRO_MESES,
     FILTRO_FECHAS,
-    PROVINCIAS,
+    PROVINCIAS_NORMALIZADAS,
     PALABRAS_RELACIONADAS_ROL,
 )
 
@@ -158,9 +158,9 @@ class FiltroOfertas:
         localizacion = "Sin informacion"
         texto_lowercase = unidecode(texto.lower())
 
-        for provincia in PROVINCIAS.keys():
+        for provincia in PROVINCIAS_NORMALIZADAS.keys():
             if provincia in texto_lowercase:
-                localizacion = PROVINCIAS[provincia]
+                localizacion = PROVINCIAS_NORMALIZADAS[provincia]
                 break
 
         return localizacion
