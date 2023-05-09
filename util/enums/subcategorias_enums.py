@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class SubFramework(Enum):
     FRONTEND = "Front-end"
     BACKEND = "Back-end"
@@ -12,6 +13,8 @@ class SubFramework(Enum):
     GAME = "Videojuegos"
     ROBOTICA = "Robótica"
     BLOCKCHAIN = "Cadena de bloques"
+
+
 class SubLibreria(Enum):
     GESTION_DATOS = "Gestión de datos"
     UI = "Interfaz de usuario"
@@ -23,7 +26,8 @@ class SubLibreria(Enum):
     ESTADO = "Gestión de estado"
     API = "Contenedor de API"
     TEST = "Testing"
-    pass    
+
+
 class SubSoftware(Enum):
     CMS = "Sistema de gestor de contenidos"
     DISENYO = "Diseño"
@@ -44,31 +48,28 @@ class SubSoftware(Enum):
     ERP = "Sistema de planificación de recursos empresariales"
     SEGUIMIENTO = "Seguimiento de proyectos e incidencias"
     CRM = "Gestión de relaciones con clientes"
-    pass
+
 
 class SubNoAplica(Enum):
     NO_APLICA = "No aplica"
+
 
 class SubOS(Enum):
     LINUX = "GNU/Linux"
     WIN = "Windows"
     BSD = "BSD (Berkeley Software Distribution)"
     UNIX = "UNIX"
-    pass
 
 
 class SubServidor(Enum):
-    WEB ="Web"
-    pass
+    WEB = "Web"
+
 
 class SubSGBD(Enum):
-    SQL = "Base de datos relacional",
+    SQL = ("Base de datos relacional",)
     NO_SQL = "Base de datos no relacional"
-    pass
+
 
 class SubVCS(Enum):
-    DIST = "Distribuido",
+    DIST = ("Distribuido",)
     CENT = "Centralizado"
-    pass
-
-
