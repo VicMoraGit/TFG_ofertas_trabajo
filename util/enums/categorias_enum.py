@@ -1,6 +1,6 @@
-from enum import Enum
+from strenum import StrEnum
 
-class Categoria(Enum):
+class Categoria(StrEnum):
     FRAMEWORK = "Framework"
     LIBRERIA = "Librería"
     SDK = "Kit de desarrollo de software"

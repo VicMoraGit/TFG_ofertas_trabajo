@@ -1,7 +1,7 @@
-from enum import Enum
+from strenum import StrEnum
 
 
-class SubFramework(Enum):
+class SubFramework(StrEnum):
     FRONTEND = "Front-end"
     BACKEND = "Back-end"
     FULLSTACK = "Full-stack"
@@ -15,7 +15,7 @@ class SubFramework(Enum):
     BLOCKCHAIN = "Cadena de bloques"
 
 
-class SubLibreria(Enum):
+class SubLibreria(StrEnum):
     GESTION_DATOS = "Gestión de datos"
     UI = "Interfaz de usuario"
     AI = "Inteligencia Artificial"
@@ -28,7 +28,7 @@ class SubLibreria(Enum):
     TEST = "Testing"
 
 
-class SubSoftware(Enum):
+class SubSoftware(StrEnum):
     CMS = "Sistema de gestor de contenidos"
     DISENYO = "Diseño"
     BUILD = "Construcción de proyectos"
@@ -50,26 +50,26 @@ class SubSoftware(Enum):
     CRM = "Gestión de relaciones con clientes"
 
 
-class SubNoAplica(Enum):
+class SubNoAplica(StrEnum):
     NO_APLICA = "No aplica"
 
 
-class SubOS(Enum):
+class SubOS(StrEnum):
     LINUX = "GNU/Linux"
     WIN = "Windows"
     BSD = "BSD (Berkeley Software Distribution)"
     UNIX = "UNIX"
 
 
-class SubServidor(Enum):
+class SubServidor(StrEnum):
     WEB = "Web"
 
 
-class SubSGBD(Enum):
+class SubSGBD(StrEnum):
     SQL = ("Base de datos relacional",)
     NO_SQL = "Base de datos no relacional"
 
 
-class SubVCS(Enum):
+class SubVCS(StrEnum):
     DIST = ("Distribuido",)
     CENT = "Centralizado"
