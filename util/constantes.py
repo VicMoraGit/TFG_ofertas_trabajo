@@ -568,7 +568,7 @@ PROVINCIAS_COMUNIDADES = {
     "Zaragoza": "Aragón",
     "Teletrabajo": "Teletrabajo",
 }
-ALL_SKILLS = {
+ALL_SKILLS = [
     [
         "Aurelia",
         "Framework de JavaScript para aplicaciones de navegador, moviles y de escritorio",
@@ -634,7 +634,7 @@ ALL_SKILLS = {
     ],
     [
         "NativeScript",
-        "Framework de JavaScript para aplicaciones nativas en iOS o Android"
+        "Framework de JavaScript para aplicaciones nativas en iOS o Android",
         "https://docs.nativescript.org/",
         Categoria.FRAMEWORK,
         SubFramework.MOVIL,
@@ -1896,13 +1896,15 @@ ALL_SKILLS = {
         "MS SQL",
         "Sistema de gestión de bases de datos relacionales desarrollado por Microsoft",
         "https://docs.microsoft.com/en-us/sql/sql-server/?view=sql-server-ver15",
-        Categoria.SGBD,SubSGBD.SQL
+        Categoria.SGBD,
+        SubSGBD.SQL,
     ],
     [
         "MySQL",
         "Sistema de gestión de bases de datos relacionales de código abierto",
         "https://dev.mysql.com/doc/",
-        Categoria.SGBD,SubSGBD.SQL
+        Categoria.SGBD,
+        SubSGBD.SQL,
     ],
     [
         "NUnit",
@@ -2069,8 +2071,8 @@ ALL_SKILLS = {
         "Shell",
         "Interprete de comandos que permite interactuar con el sistema operativo mediante comandos",
         "https://www.gnu.org/software/bash/manual/bash.html",
-        Categoria.CLI,        SubNoAplica.NO_APLICA,
-
+        Categoria.CLI,
+        SubNoAplica.NO_APLICA,
     ],
     [
         "Sketch",
@@ -2090,7 +2092,8 @@ ALL_SKILLS = {
         "SQLite",
         "Sistema de gestión de bases de datos relacional y embebido",
         "https://www.sqlite.org/docs.html",
-        Categoria.SGBD,SubSGBD.SQL
+        Categoria.SGBD,
+        SubSGBD.SQL,
     ],
     [
         "Swift",
@@ -2194,67 +2197,78 @@ ALL_SKILLS = {
         "SGBD",
         "Sistemas de gestión de bases de datos",
         "https://docs.microsoft.com/en-us/sql/?view=sql-server-ver15",
-        Categoria.SGBD,SubNoAplica.NO_APLICA
+        Categoria.SGBD,
+        SubNoAplica.NO_APLICA,
     ],
     [
         "Access",
         "Sistema de gestión de bases de datos de Microsoft",
         "https://docs.microsoft.com/en-us/office/client-developer/access/",
-        Categoria.SGBD,SubSGBD.SQL
+        Categoria.SGBD,
+        SubSGBD.SQL,
     ],
     [
         "DB2",
         "Sistema de gestión de bases de datos relacional de IBM",
         "https://www.ibm.com/es-es/db2",
-        Categoria.SGBD,SubSGBD.SQL
+        Categoria.SGBD,
+        SubSGBD.SQL,
     ],
     [
         "DynamoDB",
         "Base de datos NoSQL totalmente administrada de Amazon Web Services",
         "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html",
-        Categoria.SGBD,SubSGBD.NO_SQL
+        Categoria.SGBD,
+        SubSGBD.NO_SQL,
     ],
     [
         "Informix",
         "Sistema de gestión de bases de datos relacional de IBM",
         "https://www.ibm.com/es-es/products/informix",
-        Categoria.SGBD,SubSGBD.SQL
+        Categoria.SGBD,
+        SubSGBD.SQL,
     ],
     [
         "MongoDB",
         "Base de datos NoSQL de código abierto",
         "https://docs.mongodb.com/",
-        Categoria.SGBD,SubSGBD.NO_SQL
+        Categoria.SGBD,
+        SubSGBD.NO_SQL,
     ],
     [
         "OracleDB",
         "Sistema de gestión de bases de datos relacional de Oracle",
         "https://docs.oracle.com/en/database/oracle/oracle-database/",
-        Categoria.SGBD,SubSGBD.SQL
+        Categoria.SGBD,
+        SubSGBD.SQL,
     ],
     [
         "Postgre",
         "Sistema de gestión de bases de datos relacional de código abierto",
         "https://www.postgresql.org/docs/",
-        Categoria.SGBD,SubSGBD.SQL
+        Categoria.SGBD,
+        SubSGBD.SQL,
     ],
     [
         "PostgreSQL",
         "Sistema de gestión de bases de datos relacional de código abierto",
         "https://www.postgresql.org/docs/",
-        Categoria.SGBD,SubSGBD.SQL
+        Categoria.SGBD,
+        SubSGBD.SQL,
     ],
     [
         "Redis",
         "Base de datos en memoria de código abierto",
         "https://redis.io/documentation",
-        Categoria.SGBD,SubSGBD.NO_SQL
+        Categoria.SGBD,
+        SubSGBD.NO_SQL,
     ],
     [
         "SQL Server",
         "Sistema de gestión de bases de datos relacional de Microsoft",
         "https://docs.microsoft.com/en-us/sql/sql-server/?view=sql-server-ver15",
-        Categoria.SGBD,SubSGBD.SQL
+        Categoria.SGBD,
+        SubSGBD.SQL,
     ],
     [
         "IIS",
@@ -2547,13 +2561,15 @@ ALL_SKILLS = {
         "CVS",
         "Sistema de control de versiones",
         "https://www.nongnu.org/cvs/",
-        Categoria.VCS,SubVCS.CENT
+        Categoria.VCS,
+        SubVCS.CENT,
     ],
     [
         "GIT",
         "Sistema de control de versiones distribuido",
         "https://git-scm.com/documentation",
-        Categoria.VCS,SubVCS.DIST
+        Categoria.VCS,
+        SubVCS.DIST,
     ],
     [
         "Jenkins",
@@ -2566,25 +2582,29 @@ ALL_SKILLS = {
         "Mercurial",
         "Sistema de control de versiones distribuido",
         "https://www.mercurial-scm.org/",
-        Categoria.VCS,SubVCS.DIST
+        Categoria.VCS,
+        SubVCS.DIST,
     ],
     [
         "TFS",
         "Herramienta de gestión de proyectos y control de versiones de Microsoft",
         "https://docs.microsoft.com/en-us/azure/devops/server/?view=azure-devops",
-        Categoria.VCS,SubVCS.CENT
+        Categoria.VCS,
+        SubVCS.CENT,
     ],
     [
         "Azure devOps",
         "Herramienta de gestión de proyectos y control de versiones de Microsoft",
         "https://docs.microsoft.com/en-us/azure/devops/server/?view=azure-devops",
-        Categoria.VCS,SubVCS.CENT
+        Categoria.VCS,
+        SubVCS.CENT,
     ],
     [
         "SVN",
         "Sistema de control de versiones centralizado",
         "https://subversion.apache.org/docs/",
-        Categoria.VCS,SubVCS.CENT
+        Categoria.VCS,
+        SubVCS.CENT,
     ],
     [
         "Svelte",
@@ -2637,7 +2657,7 @@ ALL_SKILLS = {
     ],
     [
         "WebSphere",
-        "Plataforma de servidor de aplicaciones Java EE de IBM"
+        "Plataforma de servidor de aplicaciones Java EE de IBM",
         "https://www.ibm.com/docs/en/was-nd",
         Categoria.SERVIDOR,
         SubServidor.WEB,
@@ -2695,7 +2715,8 @@ ALL_SKILLS = {
         "Cassandra",
         "Base de datos distribuida NoSQL de código abierto diseñada para manejar grandes cantidades de datos en múltiples servidores, proporcionando alta disponibilidad y sin un único punto de falla",
         "https://cassandra.apache.org/doc/latest/",
-        Categoria.SGBD,SubSGBD.NO_SQL
+        Categoria.SGBD,
+        SubSGBD.NO_SQL,
     ],
     [
         "Hadoop",
@@ -2921,4 +2942,4 @@ ALL_SKILLS = {
         Categoria.SOFTWARE,
         SubSoftware.RENDIMIENTO,
     ],
-}
+]
