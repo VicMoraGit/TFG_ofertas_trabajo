@@ -1,4 +1,5 @@
 from logging import Logger, getLogger
+import traceback
 
 from interfaces.dao.ubicacionDaoInterface import UbicacionDaoInterface
 from models.ubicacionDto import Ubicacion
@@ -16,7 +17,7 @@ class UbicacionDao(UbicacionDaoInterface):
         with conexion_sql() as con:
             cursor = con.cursor()
             cursor.execute(
-                f"SELECT * FROM ubicacion WHERE ID={idUbicacion}",
+                f"SELECT * FROM ubicacion WHERE ID={idUbicacion};",
             )
 
             ubicacionRaw = cursor.fetchone()
@@ -36,9 +37,9 @@ class UbicacionDao(UbicacionDaoInterface):
             cursor = con.cursor()
             cursor.execute(
                 f"""UPDATE ubicacion SET 
-                            Provincia='{ubicacion.provincia}' 
+                            Provincia='{ubicacion.provincia}',
                             Comunidad='{ubicacion.comunidad}' 
-                            WHERE ID={ubicacion.id}"""
+                            WHERE ID={ubicacion.id};"""
             )
 
             con.commit()
@@ -55,7 +56,7 @@ class UbicacionDao(UbicacionDaoInterface):
         with conexion_sql() as con:
             cursor = con.cursor()
             cursor.execute(
-                f"DELETE FROM ubicacion WHERE ID={idUbicacion}",
+                f"DELETE FROM ubicacion WHERE ID={idUbicacion};",
             )
 
             con.commit()
@@ -69,18 +70,18 @@ class UbicacionDao(UbicacionDaoInterface):
                 return True
 
     def crear(self, ubicacion: Ubicacion):
-        with conexion_sql() as con:
-            cursor = con.cursor()
-            cursor.execute(
-                f"INSERT INTO ubicacion VALUES ('{ubicacion.provincia}','{ubicacion.comunidad}')",
-            )
+        try:
+            with conexion_sql() as con:
+                cursor = con.cursor()
 
-            con.commit()
+                cursor.execute(f"INSERT INTO ubicacion (Provincia, Comunidad) VALUES('{ubicacion.provincia}','{ubicacion.comunidad}');")
+                con.commit()
+                if cursor.rowcount == 0:
+                    self._log.debug("No se ha podido crear la ubicacion")
+                    return False
+                else:
+                    self._log.debug("Ubicacion actualizado")
 
-            if cursor.rowcount == 0:
-                self._log.debug("No se ha podido crear la ubicacion")
-                return False
-            else:
-                self._log.debug("Ubicacion actualizado")
-
-                return True
+                    return True
+        except:
+            print(traceback.format_exc())

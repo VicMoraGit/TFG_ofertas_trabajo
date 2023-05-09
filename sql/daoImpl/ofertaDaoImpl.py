@@ -3,6 +3,7 @@ from logging import Logger, getLogger
 from interfaces.dao.ofertaDaoInterface import OfertaDaoInterface
 from models.ofertaDto import Oferta
 from sql.conexion import conexion_sql
+from sql.daoImpl.ubicacionDaoImpl import UbicacionDao
 
 # TODO: Agregar operaciones de puestos, requisitos y ubicaciones a tablas auxiliares.
 
@@ -11,13 +12,14 @@ class OfertaDao(OfertaDaoInterface):
     def __init__(self):
         super().__init__()
         self._log: Logger = getLogger(__class__.__name__)
+        self.ubicacionDao = UbicacionDao()
 
     def obtener(self, idOferta: int) -> None | Oferta:
         oferta = None
 
         with conexion_sql() as con:
             cursor = con.cursor()
-            cursor.execute(f"SELECT * FROM oferta WHERE ID={idOferta}")
+            cursor.execute(f"SELECT * FROM oferta WHERE ID={idOferta};")
 
             ofertaRaw = cursor.fetchone()
 
@@ -53,14 +55,14 @@ class OfertaDao(OfertaDaoInterface):
             cursor = con.cursor()
             cursor.execute(
                 f"""UPDATE ubicacion SET 
-                            Titulo='{oferta.titulo}' 
-                            Companyia='{oferta.companyia}' 
-                            Experiencia='{oferta.experiencia}' 
-                            Salario='{oferta.salario}'
-                            Fecha_publicacion='{oferta.fecha_publicacion}' 
-                            Puesto_id='{oferta.puesto}' 
+                            Titulo='{oferta.titulo}', 
+                            Companyia='{oferta.companyia}', 
+                            Experiencia='{oferta.experiencia}', 
+                            Salario='{oferta.salario}',
+                            Fecha_publicacion='{oferta.fecha_publicacion}', 
+                            Puesto_id='{oferta.puesto}', 
                             Es_teletrabajo='{oferta.es_teletrabajo}' 
-                            WHERE ID={oferta.id}"""
+                            WHERE ID={oferta.id};"""
             )
             con.commit()
 
@@ -75,7 +77,7 @@ class OfertaDao(OfertaDaoInterface):
     def borrar(self, idOferta: int):
         with conexion_sql() as con:
             cursor = con.cursor()
-            cursor.execute(f"DELETE FROM oferta WHERE ID={idOferta}")
+            cursor.execute(f"DELETE FROM oferta WHERE ID={idOferta};")
 
             con.commit()
 
@@ -91,14 +93,15 @@ class OfertaDao(OfertaDaoInterface):
         with conexion_sql() as con:
             cursor = con.cursor()
             cursor.execute(
-                f"""INSERT INTO oferta VALUES (
+                f"""INSERT INTO oferta (Titulo, Companyia, Experiencia, Salario, Fecha_publicacion, Puesto_id, Es_teletrabajo) VALUES (
                 '{oferta.titulo}',
                 '{oferta.companyia}',
                 '{oferta.experiencia}', 
                 '{oferta.salario}',
                 '{oferta.fecha_publicacion}', 
                 '{oferta.puesto}', 
-                '{oferta.es_teletrabajo}', 
+                '{oferta.es_teletrabajo}'
+                );
                 """
             )
 
