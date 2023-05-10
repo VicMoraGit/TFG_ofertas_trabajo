@@ -1,9 +1,9 @@
 from datetime import date
 from dataclasses import dataclass
 
-from models.puestoDto import PuestoDto
-from models.requisitoDto import RequisitoDto
-from models.ubicacionDto import UbicacionDto
+from models.puestoDto import Puesto
+from models.requisitoDto import Requisito
+from models.ubicacionDto import Ubicacion
 
 @dataclass
 class Oferta:
@@ -13,10 +13,10 @@ class Oferta:
     _experiencia:str
     _salario:int
     _fecha_publicacion:date
-    _puesto:PuestoDto 
+    _puesto:Puesto
     _es_teletrabajo:bool
-    _ubicacion:list[UbicacionDto]
-    _requisitos:list[RequisitoDto]
+    _ubicacion:list[Ubicacion]
+    _requisitos:list[Requisito]
 
 
     @property
