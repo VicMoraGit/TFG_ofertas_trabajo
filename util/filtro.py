@@ -142,15 +142,17 @@ class FiltroOfertas:
         texto_lowercase = unidecode(texto.lower())
         # Se compara si alguna skill esta presente en la descripcion de la oferta
 
-        for skill in ALL_SKILLS:
+        for indice, skill in enumerate(ALL_SKILLS):
             # La expresion regular se asegura de que la skill coincida con una palabra completa
-            p = re.compile(rf"\b{re.escape(skill.lower())}\b")
+
+            p = re.compile(rf"\b{re.escape(skill[0].lower())}\b")
             s = p.search(texto_lowercase)
+
             if s is not None:
-                skills_oferta.append(skill)
+                skills_oferta.append(indice + 1)
 
         if len(skills_oferta) == 0:
-            log.debug("No se encontraron skils")
+            log.debug("No se encontraron requisitos")
 
         return skills_oferta
 

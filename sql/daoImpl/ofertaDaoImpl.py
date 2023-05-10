@@ -5,7 +5,17 @@ from models.ofertaDto import Oferta
 from sql.conexion import conexion_sql
 from sql.daoImpl.ubicacionDaoImpl import UbicacionDao
 
-# TODO: Agregar operaciones de puestos, requisitos y ubicaciones a tablas auxiliares.
+# TODO: Operaciones CRUD de tablas auxiliares
+# [ ] - Tabla requisitos_oferta
+#   [ ] - Insertar
+#   [ ] - Borrar
+#   [ ] - Eliminar
+#   [ ] - Actualizar
+# [ ] - Tabla ubicacion_oferta
+#   [ ] - Insertar
+#   [ ] - Borrar
+#   [ ] - Eliminar
+#   [ ] - Actualizar
 
 
 class OfertaDao(OfertaDaoInterface):
@@ -105,12 +115,25 @@ class OfertaDao(OfertaDaoInterface):
                 """
             )
 
-            con.commit()
-
             if cursor.rowcount == 0:
-                self._log.debug("No se ha podido crear el oferta")
+                self._log.debug("No se ha podido crear la oferta")
                 return False
             else:
-                self._log.debug("Oferta creado")
+                cursor.execute(f"SELECT last_insert_id();")
+                id_oferta = int(str(cursor.fetchone()[0]))
+                print(id_oferta)
+
+                for id_requisito in oferta.requisitos:
+                    cursor.execute(
+                        f"INSERT INTO requisitos_oferta (id_requisito, id_oferta) VALUES({id_requisito}, {id_oferta});"
+                    )
+
+                for id_ubicacion in oferta.ubicacion:
+                    cursor.execute(
+                        f"INSERT INTO ubicaciones_oferta (id_oferta, id_ubicacion) VALUES({id_ubicacion}, {id_oferta});"
+                    )
+
+                con.commit()
+                self._log.debug("Oferta creada")
 
                 return True

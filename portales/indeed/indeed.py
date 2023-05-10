@@ -2,14 +2,18 @@
 from logging import Logger, getLogger, DEBUG
 from time import sleep
 from traceback import format_exc
+from models.ofertaDto import Oferta
 
 # Clases proyecto
 from portales.portal import Portal
-from sql.daoImpl.puestoDaoImpl import PuestoDao
 from util.azure_translator import Traductor
 from util.csvHandler import csvHandler
 import util.stats as stats
 from exceptions.DescripcionNoEmbebida import DescripcionNoEmbebida
+
+#DAOs
+from sql.daoImpl.ofertaDaoImpl import OfertaDao
+from sql.daoImpl.puestoDaoImpl import PuestoDao
 
 # Selenium
 from selenium.webdriver.remote.webelement import WebElement
@@ -18,10 +22,10 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import WebDriverException
-from selenium.webdriver.chrome.webdriver import WebDriver
-from selenium.webdriver.chrome.options import Options
-from webdriver_manager.chrome import ChromeDriverManager
 
+#TODO: 
+# [ ]: Comprobar teletrabajo
+# [ ]: Multiples ofertas
 
 class Indeed(Portal):
     def __init__(self, n_paginas: int, csvHandler: csvHandler, dominio_pais="es"):
@@ -31,7 +35,11 @@ class Indeed(Portal):
         self._log: Logger = getLogger(__class__.__name__)
         self._titulo_ultima_oferta_pagina = ""
         self._busqueda_finalizada = False
+        
+        #DAOs
+        
         self.puestoDao = PuestoDao()
+        self.ofertaDao = OfertaDao()
         # self._log.setLevel(DEBUG)
 
     def buscar(self, keyword: str):
@@ -119,43 +127,44 @@ class Indeed(Portal):
             if len(driver.window_handles) > 1:
                 raise DescripcionNoEmbebida("Descripcion no embebida")
 
-            # Si despues de dos segundos no ha encontrado la descripcion, ha saltado un captcha
-            descripcion = WebDriverWait(driver=driver, timeout=10).until(
+            # Si despues de tres segundos no ha encontrado la descripcion, ha saltado un captcha
+            descripcion = WebDriverWait(driver=driver, timeout=3).until(
                 EC.presence_of_element_located(
                     (By.CSS_SELECTOR, descripcion_oferta_locator)
                 )
             )
-
             # Extrae la informacion de la oferta visible
-            informacion_posicion = {}
-            titulo = self._get_title(posicion)
-            ubicacion = self._get_location(posicion)
-            compañia = self._get_companyname(posicion)
-            fecha = self._get_publish_date(posicion)
-            experiencia = self._get_experience(descripcion)
-            salario = self._get_salaryexpected(descripcion)
-            skills = self._get_skills(descripcion)
-
-            self._log.debug("Informacion extraida.")
+            oferta:Oferta = Oferta()
+            oferta.titulo = self._get_title(posicion)   
+            
 
             # Rellena el diccionario
-            if not titulo == "":
-                informacion_posicion["titulo"] = titulo
-                informacion_posicion["compañia"] = compañia
-                informacion_posicion["experiencia"] = experiencia
-                informacion_posicion["salario"] = salario
-                informacion_posicion["ubicacion"] = ubicacion
-                informacion_posicion["fecha"] = fecha
-                informacion_posicion["skills"] = skills
+            if not oferta.titulo == "":
+
+                oferta.ubicacion = self._get_location(posicion)
+                oferta.companyia = self._get_companyname(posicion)
+                oferta.fecha_publicacion = self._get_publish_date(posicion)
+                oferta.experiencia = self._get_experience(descripcion)
+                oferta.salario = self._get_salaryexpected(descripcion)
+                # WIP ⬇⬇⬇
+                #oferta.es_teletrabajo = WIP
+                oferta.es_teletrabajo = False
+                oferta.requisitos = self._get_skills(descripcion)    
+                
+                self._log.debug("Informacion extraida.")
 
                 # Escribe en csv
                 valores_posiciones.append(informacion_posicion.values())
 
+                #Inserta la oferta en BD
+
+                self.ofertaDao.crear(oferta)
+
                 # Actualiza estadisticas
                 n_ofertas_analizadas += 1
-                if salario != "Sin informacion":
+                if oferta.salario != "Sin informacion":
                     n_ofertas_con_salario += 1
-                if experiencia != "Sin informacion":
+                if oferta.experiencia != "Sin informacion":
                     n_ofertas_con_experiencia += 1
 
                 self._log.debug("Estadisticas actualizadas")
@@ -197,7 +206,6 @@ class Indeed(Portal):
             indice_puesto = self._filtro.filtrar_posicion(title)
             print("Titulo oferta ", title)
             title = self.puestoDao.obtener(indice_puesto)
-            print(title)
 
         except:
             self._log.error(format_exc())
