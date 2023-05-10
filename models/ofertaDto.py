@@ -68,7 +68,7 @@ class Oferta:
         return self._puesto
     
     @puesto.setter
-    def puesto(self,puesto:PuestoDto):
+    def puesto(self,puesto:Puesto):
         self._puesto = puesto
 
     @property
@@ -84,7 +84,7 @@ class Oferta:
         return self._ubicacion
     
     @ubicacion.setter
-    def ubicacion(self,ubicacion:list[UbicacionDto]):
+    def ubicacion(self,ubicacion:list[Ubicacion]):
         self._ubicacion = ubicacion
 
     @property
@@ -92,7 +92,7 @@ class Oferta:
         return self._requisitos
     
     @requisitos.setter
-    def requisitos(self,requisitos:list[RequisitoDto]):
+    def requisitos(self,requisitos:list[Requisito]):
         self._requisitos = requisitos
 
     
