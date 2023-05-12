@@ -2,21 +2,20 @@ from datetime import date
 from dataclasses import dataclass
 
 from models.puestoDto import Puesto
-from models.requisitoDto import Requisito
-from models.ubicacionDto import Ubicacion
+
 
 @dataclass
 class Oferta:
-    _id:int
-    _titulo:str
-    _companyia:str
-    _experiencia:str
-    _salario:int
-    _fecha_publicacion:date
-    _puesto:Puesto
-    _es_teletrabajo:bool
-    _ubicacion:list[Ubicacion]
-    _requisitos:list[Requisito]
+    _id:int = 0
+    _titulo:str = None
+    _companyia:str = None
+    _experiencia:str = None
+    _salario:int = 0
+    _fecha_publicacion:str = None
+    _puesto:Puesto = None
+    _es_teletrabajo:bool = None
+    _ubicaciones:list[int] = None
+    _requisitos:list[int] = None
 
 
     @property
@@ -60,7 +59,7 @@ class Oferta:
         return self._fecha_publicacion
     
     @fecha_publicacion.setter
-    def fecha_publicacion(self,fecha_publicacion:date):
+    def fecha_publicacion(self,fecha_publicacion:str):
         self._fecha_publicacion = fecha_publicacion
 
     @property
@@ -80,19 +79,19 @@ class Oferta:
         self._es_teletrabajo = es_teletrabajo
 
     @property
-    def ubicacion(self):
-        return self._ubicacion
+    def ubicaciones(self):
+        return self._ubicaciones
     
-    @ubicacion.setter
-    def ubicacion(self,ubicacion:list[Ubicacion]):
-        self._ubicacion = ubicacion
+    @ubicaciones.setter
+    def ubicaciones(self,ubicaciones:list[int]):
+        self._ubicaciones = ubicaciones
 
     @property
     def requisitos(self):
         return self._requisitos
     
     @requisitos.setter
-    def requisitos(self,requisitos:list[Requisito]):
+    def requisitos(self,requisitos:list[int]):
         self._requisitos = requisitos
 
     

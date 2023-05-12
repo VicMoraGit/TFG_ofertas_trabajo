@@ -142,7 +142,7 @@ PALABRAS_RELACIONADAS_ROL = [
         "analizadores": 5,
         "analistas": 5,
         "calidad": 5,
-        "QA": 5,
+        "QA": 7,
         "control": 2,
     },  # 14
     {  # 15

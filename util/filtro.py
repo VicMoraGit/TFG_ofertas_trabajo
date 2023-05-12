@@ -1,6 +1,7 @@
 import re
 from logging import Logger, getLogger
 from datetime import date, datetime
+import traceback
 from dateutil.relativedelta import relativedelta
 
 # Modulos externos
@@ -14,6 +15,7 @@ from util.constantes import (
     FILTRO_DIAS,
     FILTRO_MESES,
     FILTRO_FECHAS,
+    PROVINCIAS_COMUNIDADES,
     PROVINCIAS_NORMALIZADAS,
     PALABRAS_RELACIONADAS_ROL,
 )
@@ -25,7 +27,7 @@ log: Logger = getLogger("FiltroOfertas")
 class FiltroOfertas:
     def filtrar_fecha(self, texto: str):
         formato_fecha = "%Y-%m-%d"
-        fecha_string = "Sin informacion"
+        fecha_string = "NULL"
         texto_lowercase = unidecode(texto.lower())
 
         # Si contiene digitos, se comprueban diferentes situaciones para obtener la fecha
@@ -73,7 +75,7 @@ class FiltroOfertas:
         return fecha_string
 
     def filtrar_salario(self, texto: str):
-        salario = "Sin informacion"
+        salario = "NULL"
 
         # Extrae el salario de un texto, teniendo en cuenta numero de digitos, puntos, espacios y simbolo €
         #  regexr.com/75m25
@@ -86,6 +88,7 @@ class FiltroOfertas:
                 # coincida con la expresion regular. ej: 30.000 - 35.000 € devolvera 35.000€ por el '€'
 
                 salario = s.group()
+                salario = int(re.sub(r"[€$.,£]","",salario))
                 log.debug("Hay informacion sobre el salario")
 
         except:
@@ -94,15 +97,15 @@ class FiltroOfertas:
         return salario
 
     def filtrar_experiencia(self, texto: str):
-        experiencia = "Sin informacion"
+        experiencia = "NULL"
         texto_lowercase = unidecode(texto.lower())
         try:
             # Filtra la experiencia de la descripcion en ingles https://regexr.com/75m3i o español https://regexr.com/75m4v.
             re_esp = re.compile(
-                r"(experiencia\s)*(\+*)\d(\+*)+\s*(anos de experiencia|anos|ano)(?!.*(mercado|sector))"
+                r"(experiencia\s)*(\+*)[1-6](\+*)+\s*(anos de experiencia|anos|ano)(?!.*(mercado|sector))"
             )
             re_eng = re.compile(
-                r"(|required\s)(experience\s)*(\+*)\d(\+*)+\s*(years of experience|years|year)(?!.*(market|sector))"
+                r"(|required\s)(experience\s)*(\+*)[1-6](\+*)+\s*(years of experience|years|year)(?!.*(market|sector))"
             )
 
             # Busqueda de coincidencias
@@ -157,13 +160,14 @@ class FiltroOfertas:
         return skills_oferta
 
     def filtrar_localizacion(self, texto: str):
-        localizacion = "Sin informacion"
+        localizacion = []
         texto_lowercase = unidecode(texto.lower())
 
-        for provincia in PROVINCIAS_NORMALIZADAS.keys():
+        for  provincia in PROVINCIAS_NORMALIZADAS.keys():
             if provincia in texto_lowercase:
-                localizacion = PROVINCIAS_NORMALIZADAS[provincia]
-                break
+                indice = list(PROVINCIAS_COMUNIDADES.keys()).index(provincia)+1
+                localizacion.append(indice)
+                
 
         return localizacion
 
@@ -180,7 +184,7 @@ class FiltroOfertas:
         # Eliminamos acentos y el femenino, se pasa a minusculas y se divide por palabras.
         titulo = unidecode(titulo.lower()).replace("/a", "").split(" ")
 
-        indice_mas_alto = 99
+        indice_mas_alto = 98
         puntuacion_rol = 0
         puntuacion_rol_maxima = 0
 

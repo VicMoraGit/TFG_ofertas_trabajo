@@ -6,16 +6,14 @@ from sql.conexion import conexion_sql
 from sql.daoImpl.ubicacionDaoImpl import UbicacionDao
 
 # TODO: Operaciones CRUD de tablas auxiliares
-# [ ] - Tabla requisitos_oferta
-#   [ ] - Insertar
-#   [ ] - Borrar
-#   [ ] - Eliminar
-#   [ ] - Actualizar
-# [ ] - Tabla ubicacion_oferta
-#   [ ] - Insertar
-#   [ ] - Borrar
-#   [ ] - Eliminar
-#   [ ] - Actualizar
+# [x] - Tabla requisitos_oferta
+#   [x] - Insertar
+#   [x] - Obtener
+#   [x] - Eliminar
+# [x] - Tabla ubicacion_oferta
+#   [x] - Insertar
+#   [x] - Obtener
+#   [x] - Eliminar
 
 
 class OfertaDao(OfertaDaoInterface):
@@ -43,6 +41,24 @@ class OfertaDao(OfertaDaoInterface):
                 fecha_publicacion = datetime.strptime(str(ofertaRaw[5]), "%Y-%m-%d")
                 puesto_id = int(str(ofertaRaw[6]))
                 es_teletrabajo = bool(ofertaRaw[7])
+                
+                requisitos = []
+                cursor.execute(f"SELECT * FROM requisitos_oferta WHERE ID={idOferta};")
+                requisitosRaw = cursor.fetchall()
+
+
+                if requisitosRaw is not None:
+                    for requisito in requisitosRaw:
+                        requisitos.append(requisito[1])
+
+                ubicaciones = []
+                cursor.execute(f"SELECT * FROM ubicaciones_oferta WHERE ID={idOferta};")
+                ubicacionesRaw = cursor.fetchall()
+
+
+                if ubicacionesRaw is not None:
+                    for ubicacion in ubicacionesRaw:
+                        ubicaciones.append(ubicacion[1])
 
                 oferta = Oferta(
                     idOferta,
@@ -53,49 +69,29 @@ class OfertaDao(OfertaDaoInterface):
                     fecha_publicacion,
                     puesto_id,
                     es_teletrabajo,
-                    [],
-                    [],
+                    ubicaciones,
+                    requisitos,
                 )
                 self._log.debug(str(oferta))
 
         return oferta
 
-    def actualizar(self, oferta: Oferta):
-        with conexion_sql() as con:
-            cursor = con.cursor()
-            cursor.execute(
-                f"""UPDATE ubicacion SET 
-                            Titulo='{oferta.titulo}', 
-                            Companyia='{oferta.companyia}', 
-                            Experiencia='{oferta.experiencia}', 
-                            Salario='{oferta.salario}',
-                            Fecha_publicacion='{oferta.fecha_publicacion}', 
-                            Puesto_id='{oferta.puesto}', 
-                            Es_teletrabajo='{oferta.es_teletrabajo}' 
-                            WHERE ID={oferta.id};"""
-            )
-            con.commit()
-
-            if cursor.rowcount == 0:
-                self._log.debug("No hay ningun oferta con ese ID")
-                return False
-            else:
-                self._log.debug("Oferta actualizado")
-
-                return True
-
+    
     def borrar(self, idOferta: int):
         with conexion_sql() as con:
             cursor = con.cursor()
+
             cursor.execute(f"DELETE FROM oferta WHERE ID={idOferta};")
+            cursor.execute(f"DELETE FROM requisitos_oferta WHERE id_oferta={idOferta};")
+            cursor.execute(f"DELETE FROM ubicaciones_oferta WHERE id_oferta={idOferta};")
 
             con.commit()
 
             if cursor.rowcount == 0:
-                self._log.debug("No hay ningun oferta con ese ID")
+                self._log.debug("No hay ninguna oferta con ese ID")
                 return False
             else:
-                self._log.debug("Oferta eliminado")
+                self._log.debug("Oferta eliminada")
 
                 return True
 
@@ -106,11 +102,11 @@ class OfertaDao(OfertaDaoInterface):
                 f"""INSERT INTO oferta (Titulo, Companyia, Experiencia, Salario, Fecha_publicacion, Puesto_id, Es_teletrabajo) VALUES (
                 '{oferta.titulo}',
                 '{oferta.companyia}',
-                '{oferta.experiencia}', 
-                '{oferta.salario}',
-                '{oferta.fecha_publicacion}', 
-                '{oferta.puesto}', 
-                '{oferta.es_teletrabajo}'
+                {oferta.experiencia}, 
+                {oferta.salario},
+                '{oferta.fecha_publicacion}',
+                {oferta.puesto}, 
+                {oferta.es_teletrabajo}
                 );
                 """
             )
@@ -121,16 +117,19 @@ class OfertaDao(OfertaDaoInterface):
             else:
                 cursor.execute(f"SELECT last_insert_id();")
                 id_oferta = int(str(cursor.fetchone()[0]))
-                print(id_oferta)
 
                 for id_requisito in oferta.requisitos:
                     cursor.execute(
-                        f"INSERT INTO requisitos_oferta (id_requisito, id_oferta) VALUES({id_requisito}, {id_oferta});"
+                        f"INSERT INTO requisitos_oferta (id_oferta, id_requisito) VALUES({id_oferta},{id_requisito});"
                     )
 
-                for id_ubicacion in oferta.ubicacion:
+                for id_ubicacion in oferta.ubicaciones:
+                    print(
+                        f"INSERT INTO ubicaciones_oferta (id_oferta, id_ubicacion) VALUES({id_oferta},{id_ubicacion});"
+                    )
+
                     cursor.execute(
-                        f"INSERT INTO ubicaciones_oferta (id_oferta, id_ubicacion) VALUES({id_ubicacion}, {id_oferta});"
+                        f"INSERT INTO ubicaciones_oferta (id_oferta, id_ubicacion) VALUES({id_oferta},{id_ubicacion});"
                     )
 
                 con.commit()
