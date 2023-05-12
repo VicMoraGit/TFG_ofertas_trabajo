@@ -13,7 +13,6 @@ from exceptions.DescripcionNoEmbebida import DescripcionNoEmbebida
 
 # DAOs
 from sql.daoImpl.ofertaDaoImpl import OfertaDao
-from sql.daoImpl.puestoDaoImpl import PuestoDao
 
 # Selenium
 from selenium.webdriver.remote.webelement import WebElement
@@ -39,7 +38,6 @@ class Indeed(Portal):
 
         # DAOs
 
-        self.puestoDao = PuestoDao()
         self.ofertaDao = OfertaDao()
         # self._log.setLevel(DEBUG)
 
@@ -140,21 +138,16 @@ class Indeed(Portal):
 
             # Rellena el diccionario
             if not oferta.titulo == "":
-                oferta.ubicaciones = self._get_locations(posicion)
+                oferta.ubicaciones = self._get_locations(posicion, descripcion)
+                oferta.es_teletrabajo = self._is_teletrabajo(oferta.ubicaciones)
                 oferta.companyia = self._get_companyname(posicion)
                 oferta.fecha_publicacion = self._get_publish_date(posicion)
                 oferta.experiencia = self._get_experience(descripcion)
                 oferta.salario = self._get_salaryexpected(descripcion)
                 oferta.puesto = self._get_position(posicion)
-                # WIP ⬇⬇⬇
-                # oferta.es_teletrabajo = WIP
-                oferta.es_teletrabajo = False
                 oferta.requisitos = self._get_skills(descripcion)
 
                 self._log.debug("Informacion extraida.")
-
-                # Escribe en csv
-                # valores_posiciones.append(informacion_posicion.values())
 
                 # Inserta la oferta en BD
 
@@ -183,10 +176,6 @@ class Indeed(Portal):
 
         self._log.info(f"{len(posiciones)} ofertas analizadas.")
 
-        # Escribe todas las ofertas en el csv
-        self._csv.escribir_lineas(valores=valores_posiciones)
-        self._log.debug("Informacion escrita en el CSV")
-
         # Actualiza estadisticas
         self._n_ofertas_analizadas += n_ofertas_analizadas
         self._n_ofertas_con_salario += n_ofertas_con_salario
@@ -201,6 +190,14 @@ class Indeed(Portal):
             title = ""
 
         return title
+
+    def _is_teletrabajo(self, ubicaciones: list[int]):
+        """
+        53 es el ID de teletrabajo
+        """
+        if 53 in ubicaciones:
+            return True
+        return False
 
     def _get_position(self, position: WebElement):
         td = Traductor()
@@ -232,13 +229,20 @@ class Indeed(Portal):
     def _get_salaryexpected(self, position: WebElement):
         return self._filtro.filtrar_salario(position.text)
 
-    def _get_locations(self, position: WebElement):
+    def _get_locations(self, position: WebElement, descripcion: WebElement):
+        """
+        Extrae la localizacion de su CSS y de la descripcion del anuncio en caso de que existiesen
+        ubicaciones extra.
+        """
+
         posicion = position.find_element(By.CSS_SELECTOR, ".companyLocation")
         try:
-            locations = self._filtro.filtrar_localizacion(posicion.text)
+            locations = self._filtro.filtrar_localizacion(
+                posicion.text + descripcion.text
+            )
 
         except:
-            locations = ""
+            locations = []
         return locations
 
     def _get_skills(self, position: WebElement):

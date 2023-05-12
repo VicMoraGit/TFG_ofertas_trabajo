@@ -41,11 +41,10 @@ class OfertaDao(OfertaDaoInterface):
                 fecha_publicacion = datetime.strptime(str(ofertaRaw[5]), "%Y-%m-%d")
                 puesto_id = int(str(ofertaRaw[6]))
                 es_teletrabajo = bool(ofertaRaw[7])
-                
+
                 requisitos = []
                 cursor.execute(f"SELECT * FROM requisitos_oferta WHERE ID={idOferta};")
                 requisitosRaw = cursor.fetchall()
-
 
                 if requisitosRaw is not None:
                     for requisito in requisitosRaw:
@@ -54,7 +53,6 @@ class OfertaDao(OfertaDaoInterface):
                 ubicaciones = []
                 cursor.execute(f"SELECT * FROM ubicaciones_oferta WHERE ID={idOferta};")
                 ubicacionesRaw = cursor.fetchall()
-
 
                 if ubicacionesRaw is not None:
                     for ubicacion in ubicacionesRaw:
@@ -76,14 +74,15 @@ class OfertaDao(OfertaDaoInterface):
 
         return oferta
 
-    
     def borrar(self, idOferta: int):
         with conexion_sql() as con:
             cursor = con.cursor()
 
             cursor.execute(f"DELETE FROM oferta WHERE ID={idOferta};")
             cursor.execute(f"DELETE FROM requisitos_oferta WHERE id_oferta={idOferta};")
-            cursor.execute(f"DELETE FROM ubicaciones_oferta WHERE id_oferta={idOferta};")
+            cursor.execute(
+                f"DELETE FROM ubicaciones_oferta WHERE id_oferta={idOferta};"
+            )
 
             con.commit()
 
@@ -124,10 +123,6 @@ class OfertaDao(OfertaDaoInterface):
                     )
 
                 for id_ubicacion in oferta.ubicaciones:
-                    print(
-                        f"INSERT INTO ubicaciones_oferta (id_oferta, id_ubicacion) VALUES({id_oferta},{id_ubicacion});"
-                    )
-
                     cursor.execute(
                         f"INSERT INTO ubicaciones_oferta (id_oferta, id_ubicacion) VALUES({id_oferta},{id_ubicacion});"
                     )

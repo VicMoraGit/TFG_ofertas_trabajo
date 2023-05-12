@@ -88,7 +88,7 @@ class FiltroOfertas:
                 # coincida con la expresion regular. ej: 30.000 - 35.000 € devolvera 35.000€ por el '€'
 
                 salario = s.group()
-                salario = int(re.sub(r"[€$.,£]","",salario))
+                salario = int(re.sub(r"[€$.,£]", "", salario))
                 log.debug("Hay informacion sobre el salario")
 
         except:
@@ -163,11 +163,10 @@ class FiltroOfertas:
         localizacion = []
         texto_lowercase = unidecode(texto.lower())
 
-        for  provincia in PROVINCIAS_NORMALIZADAS.keys():
+        for provincia in PROVINCIAS_NORMALIZADAS.keys():
             if provincia in texto_lowercase:
-                indice = list(PROVINCIAS_COMUNIDADES.keys()).index(provincia)+1
+                indice = list(PROVINCIAS_COMUNIDADES.keys()).index(PROVINCIAS_NORMALIZADAS[provincia]) + 1
                 localizacion.append(indice)
-                
 
         return localizacion
 
