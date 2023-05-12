@@ -78,11 +78,11 @@ class OfertaDao(OfertaDaoInterface):
         with conexion_sql() as con:
             cursor = con.cursor()
 
-            cursor.execute(f"DELETE FROM oferta WHERE ID={idOferta};")
             cursor.execute(f"DELETE FROM requisitos_oferta WHERE id_oferta={idOferta};")
             cursor.execute(
                 f"DELETE FROM ubicaciones_oferta WHERE id_oferta={idOferta};"
             )
+            cursor.execute(f"DELETE FROM oferta WHERE ID={idOferta};")
 
             con.commit()
 
