@@ -488,7 +488,7 @@ PROVINCIAS_NORMALIZADAS = {
     "lerida": "Lérida",
     "lleida": "Lérida",
     "lugo": "Lugo",
-    "madrid": "Madrid",
+    "mad": "Madrid",
     "malaga": "Málaga",
     "melilla": "Melilla",
     "murcia": "Murcia",

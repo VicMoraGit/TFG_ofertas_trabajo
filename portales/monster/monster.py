@@ -1,8 +1,12 @@
 from time import sleep, time
 from logging import Logger, getLogger
+from traceback import format_exc
+from models.ofertaDto import Oferta
 
 # Clases proyecto
 from portales.portal import Portal
+from sql.daoImpl.ofertaDaoImpl import OfertaDao
+from util.azure_translator import Traductor
 from util.csvHandler import csvHandler
 import util.stats as stats
 
@@ -24,9 +28,10 @@ class Monster(Portal):
         self._base_url: str = "https://www.monster.es/"
         self._log: Logger = getLogger(__class__.__name__)
         self._titulo_ultima_oferta_pagina = ""
-        super().abrir_nav(headless=True)
+        super().abrir_nav(headless=False)
 
         # self._log.setLevel(DEBUG)
+        self.ofertaDao = OfertaDao()
 
     def buscar(self, keyword: str):
         self._busqueda_finalizada = False
@@ -52,12 +57,12 @@ class Monster(Portal):
         self._log.info(f"Analizando pagina {str(n_pagina)}")
 
         # Localizadores
-        posiciones_locator = 'div[aria-label="Empleos"] > div[tabindex="0"]'
+        posiciones_locator = "#JobCardGrid > ul > li"
 
         # Espera que carguen las posiciones. Si no hay posiciones es que se ha llegado a la ultima pagina.
         try:
             WebDriverWait(driver=driver, timeout=10).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, posiciones_locator))
+                EC.visibility_of_element_located((By.CSS_SELECTOR, posiciones_locator))
             )
         except TimeoutException:
             self._busqueda_finalizada = True
@@ -73,11 +78,8 @@ class Monster(Portal):
         titulo = ""
 
         # Localizadores
-        posiciones_locator = 'div[aria-label="Empleos"] > div[tabindex="0"]'
+        posiciones_locator = "#JobCardGrid > ul > li"
         descripcion_oferta_locator = "BigJobCardId"
-
-        # Presiona ESC ya que a veces aparece un pop up de inicio de sesion que para el script
-        driver.find_element(By.TAG_NAME, "body").send_keys(Keys.ESCAPE)
 
         # Obtiene las posiciones de esa pagina. Si no hay es que ha llegado a la ultima pagina.
         try:
@@ -89,50 +91,47 @@ class Monster(Portal):
 
         # Abre cada posicion y extrae la informacion
         for i, posicion in enumerate(posiciones):
-            # Se mueve al elemento y espera a que cargue su descripcion para sacar la info
-            self._scroll_al_elemento(posicion)
-            sleep(0.5)
-            posicion.click()
 
-            # Si despues de 10 segundos no ha encontrado la descripcion, ha acabado la busqueda
+            # Si despues de 10 segundos no ha encontrado la descripcion o hay error al hacer scroll, ha acabado la busqueda
             try:
+                # Se mueve al elemento y espera a que cargue su descripcion para sacar la info
+
+                self._scroll_al_elemento(posicion)
+                sleep(0.5)
+                posicion.click()
                 descripcion = WebDriverWait(driver=driver, timeout=10).until(
-                    EC.presence_of_element_located((By.ID, descripcion_oferta_locator))
+                    EC.visibility_of_element_located((By.ID, descripcion_oferta_locator))
                 )
             except:
                 self._busqueda_finalizada = True
                 return
 
             # Extrae la informacion de la oferta visible
-            informacion_posicion = {}
-            titulo = self._get_title(posicion)
-            ubicacion = self._get_location(posicion)
-            compañia = self._get_companyname(posicion)
-            fecha = self._get_publish_date(posicion)
-            experiencia = self._get_experience(descripcion)
-            salario = self._get_salaryexpected(descripcion)
-            skills = self._get_skills(descripcion)
-
-            self._log.debug("Informacion extraida.")
+            oferta: Oferta = Oferta()
+            oferta.titulo = self._get_title(descripcion)
 
             # Rellena el diccionario
-            if not titulo == "":
-                informacion_posicion["titulo"] = titulo
-                informacion_posicion["compañia"] = compañia
-                informacion_posicion["experiencia"] = experiencia
-                informacion_posicion["salario"] = salario
-                informacion_posicion["ubicacion"] = ubicacion
-                informacion_posicion["fecha"] = fecha
-                informacion_posicion["skills"] = skills
+            if not oferta.titulo == "":
+                oferta.ubicaciones = self._get_locations(descripcion)
+                oferta.es_teletrabajo = self._is_teletrabajo(oferta.ubicaciones)
+                oferta.companyia = self._get_companyname(descripcion)
+                oferta.fecha_publicacion = self._get_publish_date(descripcion)
+                oferta.experiencia = self._get_experience(descripcion)
+                oferta.salario = self._get_salaryexpected(descripcion)
+                oferta.puesto = self._get_position(descripcion)
+                oferta.requisitos = self._get_skills(descripcion)
 
-                # Escribe en csv
-                valores_posiciones.append(informacion_posicion.values())
+                self._log.debug("Informacion extraida.")
+
+                # Inserta la oferta en BD
+
+                self.ofertaDao.crear(oferta)
 
                 # Actualiza estadisticas
                 n_ofertas_analizadas += 1
-                if salario != "Sin informacion":
+                if oferta.salario is not None:
                     n_ofertas_con_salario += 1
-                if experiencia != "Sin informacion":
+                if oferta.experiencia is not None:
                     n_ofertas_con_experiencia += 1
 
                 self._log.debug("Estadisticas actualizadas")
@@ -145,10 +144,6 @@ class Monster(Portal):
 
         self._log.info(f"{len(posiciones)} ofertas analizadas.")
 
-        # Escribe todas las ofertas en el csv
-        self._csv.escribir_lineas(valores=valores_posiciones)
-        self._log.debug("Informacion escrita en el CSV")
-
         # Actualiza estadisticas
         self._n_ofertas_analizadas += n_ofertas_analizadas
         self._n_ofertas_con_salario += n_ofertas_con_salario
@@ -156,17 +151,15 @@ class Monster(Portal):
         self._n_paginas_analizadas += 1
 
     def _get_title(self, position):
-        return position.find_element(
-            By.CSS_SELECTOR, 'a[data-test-id="svx-job-title"]'
-        ).text.strip()
+        return position.find_element(By.CSS_SELECTOR, "h1.JobViewTitle").text.strip()
 
     def _get_companyname(self, position):
         try:
             empresa = position.find_element(
-                By.CSS_SELECTOR, 'h3[data-test-id="svx-job-company"]'
+                By.CSS_SELECTOR, 'a[class^="company-name"] > h2'
             ).text
         except:
-            empresa = "Sin Informacion"
+            empresa = None
 
         return empresa
 
@@ -176,12 +169,42 @@ class Monster(Portal):
     def _get_salaryexpected(self, position):
         return self._filtro.filtrar_salario(position.text)
 
-    def _get_location(self, position):
-        return self._filtro.filtrar_localizacion(
-            position.find_element(
-                By.CSS_SELECTOR, 'p[data-test-id="svx-job-location"]'
-            ).text.strip()
-        )
+    def _is_teletrabajo(self, ubicaciones: list[int]):
+        """
+        53 es el ID de teletrabajo
+        """
+        if 53 in ubicaciones:
+            return True
+        return False
+
+    def _get_position(self, position: WebElement):
+        td = Traductor()
+        indice_puesto = 0
+        try:
+            title = position.find_element(By.CSS_SELECTOR, "h1.JobViewTitle").text
+            dominio_idioma = td.detectar_idioma(title)
+
+            if dominio_idioma != "es":
+                title = td.traducir(dominio_idioma, "es", title)
+            indice_puesto = self._filtro.filtrar_posicion(title)
+
+        except:
+            self._log.error(format_exc())
+
+        return indice_puesto
+
+    def _get_locations(self, descripcion: WebElement):
+        """
+        Extrae la localizacion de su CSS y de la descripcion del anuncio en caso de que existiesen
+        ubicaciones extra.
+        """
+
+        try:
+            locations = self._filtro.filtrar_localizacion(descripcion.text)
+
+        except:
+            locations = []
+        return locations
 
     def _get_skills(self, position):
         return self._filtro.filtrar_skills(position.text)
@@ -189,7 +212,7 @@ class Monster(Portal):
     def _get_publish_date(self, position):
         return self._filtro.filtrar_fecha(
             position.find_element(
-                By.CSS_SELECTOR, 'span[data-test-id="svx-job-date"]'
+                By.CSS_SELECTOR, '[data-test-id="svx-jobview-posted"]'
             ).text
         )
 

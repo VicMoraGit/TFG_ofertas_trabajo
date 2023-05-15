@@ -23,7 +23,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import WebDriverException
 
 # TODO:
-# [ ]: Comprobar teletrabajo
+# [x]: Comprobar teletrabajo
 # [x]: Multiples localizaciones
 
 
