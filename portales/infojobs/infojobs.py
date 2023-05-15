@@ -315,5 +315,3 @@ for i in range(1, 21):
         "https://api.infojobs.net/api/7/offer?q=Big%20Data&page=" + str(i)
     )
     boton_enviar.click()
-
-    print(driver.find_element(By.ID, "formattedBody").text)

@@ -7,7 +7,7 @@ class OfertaDaoInterface(ABC):
     
     
     @abstractmethod
-    def actualizar(self,oferta:Oferta):
+    def obtener(self,idOferta:int):
         pass
 
     @abstractmethod

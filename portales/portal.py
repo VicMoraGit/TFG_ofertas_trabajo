@@ -12,8 +12,10 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
+import undetected_chromedriver as uc
 
-DRIVER_VERSION = "112.0.5615.49"
+DRIVER_VERSION_MANAGER = "112.0.5615.49"
+DRIVER_VERSION_UNDETECTED = 113
 
 
 class Portal(obi):
@@ -39,9 +41,15 @@ class Portal(obi):
         # options.add_experimental_option("excludeSwitches",["enable-automation"])
         if headless:
             options.add_argument("--headless")
-        s = Service(ChromeDriverManager(version=DRIVER_VERSION).install())
+            s = Service(ChromeDriverManager(version=DRIVER_VERSION_MANAGER).install())
 
-        self._driver = WebDriver(service=s, options=options)
+            self._driver = WebDriver(service=s, options=options)
+
+        else:
+
+            self._driver = uc.Chrome(
+            version_main=DRIVER_VERSION_UNDETECTED,
+        )
 
     def buscar(self, keyword: str):
         pass

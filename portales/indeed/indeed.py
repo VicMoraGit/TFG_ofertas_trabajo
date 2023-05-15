@@ -2,14 +2,17 @@
 from logging import Logger, getLogger, DEBUG
 from time import sleep
 from traceback import format_exc
+from models.ofertaDto import Oferta
 
 # Clases proyecto
 from portales.portal import Portal
-from sql.daoImpl.puestoDaoImpl import PuestoDao
 from util.azure_translator import Traductor
 from util.csvHandler import csvHandler
 import util.stats as stats
 from exceptions.DescripcionNoEmbebida import DescripcionNoEmbebida
+
+# DAOs
+from sql.daoImpl.ofertaDaoImpl import OfertaDao
 
 # Selenium
 from selenium.webdriver.remote.webelement import WebElement
@@ -18,9 +21,10 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import WebDriverException
-from selenium.webdriver.chrome.webdriver import WebDriver
-from selenium.webdriver.chrome.options import Options
-from webdriver_manager.chrome import ChromeDriverManager
+
+# TODO:
+# [x]: Comprobar teletrabajo
+# [x]: Multiples localizaciones
 
 
 class Indeed(Portal):
@@ -31,7 +35,10 @@ class Indeed(Portal):
         self._log: Logger = getLogger(__class__.__name__)
         self._titulo_ultima_oferta_pagina = ""
         self._busqueda_finalizada = False
-        self.puestoDao = PuestoDao()
+
+        # DAOs
+
+        self.ofertaDao = OfertaDao()
         # self._log.setLevel(DEBUG)
 
     def buscar(self, keyword: str):
@@ -119,43 +126,38 @@ class Indeed(Portal):
             if len(driver.window_handles) > 1:
                 raise DescripcionNoEmbebida("Descripcion no embebida")
 
-            # Si despues de dos segundos no ha encontrado la descripcion, ha saltado un captcha
+            # Si despues de 10 segundos no ha encontrado la descripcion, ha saltado un captcha
             descripcion = WebDriverWait(driver=driver, timeout=10).until(
                 EC.presence_of_element_located(
                     (By.CSS_SELECTOR, descripcion_oferta_locator)
                 )
             )
-
             # Extrae la informacion de la oferta visible
-            informacion_posicion = {}
-            titulo = self._get_title(posicion)
-            ubicacion = self._get_location(posicion)
-            compañia = self._get_companyname(posicion)
-            fecha = self._get_publish_date(posicion)
-            experiencia = self._get_experience(descripcion)
-            salario = self._get_salaryexpected(descripcion)
-            skills = self._get_skills(descripcion)
-
-            self._log.debug("Informacion extraida.")
+            oferta: Oferta = Oferta()
+            oferta.titulo = self._get_title(posicion)
 
             # Rellena el diccionario
-            if not titulo == "":
-                informacion_posicion["titulo"] = titulo
-                informacion_posicion["compañia"] = compañia
-                informacion_posicion["experiencia"] = experiencia
-                informacion_posicion["salario"] = salario
-                informacion_posicion["ubicacion"] = ubicacion
-                informacion_posicion["fecha"] = fecha
-                informacion_posicion["skills"] = skills
+            if not oferta.titulo == "":
+                oferta.ubicaciones = self._get_locations(posicion, descripcion)
+                oferta.es_teletrabajo = self._is_teletrabajo(oferta.ubicaciones)
+                oferta.companyia = self._get_companyname(posicion)
+                oferta.fecha_publicacion = self._get_publish_date(posicion)
+                oferta.experiencia = self._get_experience(descripcion)
+                oferta.salario = self._get_salaryexpected(descripcion)
+                oferta.puesto = self._get_position(posicion)
+                oferta.requisitos = self._get_skills(descripcion)
 
-                # Escribe en csv
-                valores_posiciones.append(informacion_posicion.values())
+                self._log.debug("Informacion extraida.")
+
+                # Inserta la oferta en BD
+
+                self.ofertaDao.crear(oferta)
 
                 # Actualiza estadisticas
                 n_ofertas_analizadas += 1
-                if salario != "Sin informacion":
+                if oferta.salario is not None:
                     n_ofertas_con_salario += 1
-                if experiencia != "Sin informacion":
+                if oferta.experiencia is not None:
                     n_ofertas_con_experiencia += 1
 
                 self._log.debug("Estadisticas actualizadas")
@@ -174,10 +176,6 @@ class Indeed(Portal):
 
         self._log.info(f"{len(posiciones)} ofertas analizadas.")
 
-        # Escribe todas las ofertas en el csv
-        self._csv.escribir_lineas(valores=valores_posiciones)
-        self._log.debug("Informacion escrita en el CSV")
-
         # Actualiza estadisticas
         self._n_ofertas_analizadas += n_ofertas_analizadas
         self._n_ofertas_con_salario += n_ofertas_con_salario
@@ -185,25 +183,37 @@ class Indeed(Portal):
         self._n_paginas_analizadas += 1
 
     def _get_title(self, position: WebElement):
-        td = Traductor()
+        try:
+            title = position.find_element(By.CSS_SELECTOR, ".jobTitle").text
+        except:
+            self._log.error(format_exc())
+            title = ""
 
+        return title
+
+    def _is_teletrabajo(self, ubicaciones: list[int]):
+        """
+        53 es el ID de teletrabajo
+        """
+        if 53 in ubicaciones:
+            return True
+        return False
+
+    def _get_position(self, position: WebElement):
+        td = Traductor()
+        indice_puesto = 0
         try:
             title = position.find_element(By.CSS_SELECTOR, ".jobTitle").text
             dominio_idioma = td.detectar_idioma(title)
 
             if dominio_idioma != "es":
                 title = td.traducir(dominio_idioma, "es", title)
-
             indice_puesto = self._filtro.filtrar_posicion(title)
-            print("Titulo oferta ", title)
-            title = self.puestoDao.obtener(indice_puesto)
-            print(title)
 
         except:
             self._log.error(format_exc())
-            title = ""
 
-        return title
+        return indice_puesto
 
     def _get_companyname(self, position: WebElement):
         try:
@@ -219,14 +229,21 @@ class Indeed(Portal):
     def _get_salaryexpected(self, position: WebElement):
         return self._filtro.filtrar_salario(position.text)
 
-    def _get_location(self, position: WebElement):
+    def _get_locations(self, position: WebElement, descripcion: WebElement):
+        """
+        Extrae la localizacion de su CSS y de la descripcion del anuncio en caso de que existiesen
+        ubicaciones extra.
+        """
+
         posicion = position.find_element(By.CSS_SELECTOR, ".companyLocation")
         try:
-            location = self._filtro.filtrar_localizacion(posicion.text)
+            locations = self._filtro.filtrar_localizacion(
+                posicion.text + descripcion.text
+            )
 
         except:
-            location = ""
-        return location
+            locations = []
+        return locations
 
     def _get_skills(self, position: WebElement):
         return self._filtro.filtrar_skills(position.text)

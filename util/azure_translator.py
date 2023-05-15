@@ -53,8 +53,9 @@ class Traductor:
         try:
             request = post(url, params=params, headers=headers, json=body)
             json = request.json()
-            return json[0]["language"]
-
+            if json[0]["score"] <= 0.8:
+                return json[0]["language"]
+            else: "en"
         except:
             self._log.error(format_exc())
             return None

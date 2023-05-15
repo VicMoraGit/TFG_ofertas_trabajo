@@ -84,4 +84,4 @@ class UbicacionDao(UbicacionDaoInterface):
 
                     return True
         except:
-            print(traceback.format_exc())
+            self._log.error(traceback.format_exc())

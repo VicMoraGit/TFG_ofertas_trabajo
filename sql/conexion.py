@@ -19,5 +19,6 @@ def conexion_sql():
         yield conn
     except:
         log.warning(traceback.format_exc())
+        conn.rollback()
         conn.close()
         
