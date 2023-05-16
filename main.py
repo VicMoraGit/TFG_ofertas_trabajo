@@ -1,5 +1,8 @@
 import logging
 from time import time
+from models.requisitoDto import Requisito
+from sql.daoImpl.requisitoDaoImpl import RequisitoDao
+from util.constantes import ALL_SKILLS
 
 from util.csvHandler import csvHandler
 import util.stats as stats
@@ -27,10 +30,10 @@ if __name__ == "__main__":
     n_paginas = 1
 
     portales.append(Tecnoempleo(n_paginas=n_paginas, csvHandler=csvh))
-    portales.append(Monster(n_paginas=n_paginas,csvHandler=csvh))
-    portales.append(Indeed(n_paginas=n_paginas, csvHandler=csvh, dominio_pais="es"))
-    portales.append(Indeed(n_paginas=n_paginas, csvHandler=csvh, dominio_pais="uk"))
-    portales.append(Indeed(n_paginas=n_paginas,csvHandler=csvh,dominio_pais="fr"))
+    # portales.append(Monster(n_paginas=n_paginas,csvHandler=csvh))
+    # portales.append(Indeed(n_paginas=n_paginas, csvHandler=csvh, dominio_pais="es"))
+    # portales.append(Indeed(n_paginas=n_paginas, csvHandler=csvh, dominio_pais="uk"))
+    # portales.append(Indeed(n_paginas=n_paginas,csvHandler=csvh,dominio_pais="fr"))
 
     stats.s_inicio = time()
     for portal in portales:
