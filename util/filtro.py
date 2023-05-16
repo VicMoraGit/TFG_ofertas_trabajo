@@ -146,13 +146,14 @@ class FiltroOfertas:
         # Se compara si alguna skill esta presente en la descripcion de la oferta
 
         for indice, skill in enumerate(ALL_SKILLS):
-            # La expresion regular se asegura de que la skill coincida con una palabra completa
+            # La expresion regular se asegura de que una de las denominaciones de la skill coincida con una parte del texto
+            for denominacion in skill[0]:
+                p = re.compile(rf"\b{re.escape(denominacion.lower())}\b")
+                s = p.search(texto_lowercase)
 
-            p = re.compile(rf"\b{re.escape(skill[0].lower())}\b")
-            s = p.search(texto_lowercase)
-
-            if s is not None:
-                skills_oferta.append(indice + 1)
+                if s is not None:
+                    skills_oferta.append(indice + 1)
+                    break
 
         if len(skills_oferta) == 0:
             log.debug("No se encontraron requisitos")
@@ -168,7 +169,7 @@ class FiltroOfertas:
                 indice = list(PROVINCIAS_COMUNIDADES.keys()).index(PROVINCIAS_NORMALIZADAS[provincia]) + 1
                 localizacion.append(indice)
 
-        return localizacion
+        return set(localizacion)
 
     def filtrar_posicion(self, titulo: str):
         """
