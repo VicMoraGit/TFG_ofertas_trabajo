@@ -169,7 +169,7 @@ class FiltroOfertas:
                 indice = list(PROVINCIAS_COMUNIDADES.keys()).index(PROVINCIAS_NORMALIZADAS[provincia]) + 1
                 localizacion.append(indice)
 
-        return localizacion
+        return set(localizacion)
 
     def filtrar_posicion(self, titulo: str):
         """
