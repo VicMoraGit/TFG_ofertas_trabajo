@@ -1,7 +1,5 @@
-from datetime import date
-from dataclasses import dataclass
-
-from models.puestoDto import Puesto
+from dataclasses import dataclass, field
+from util.constantes import ALL_SKILLS, PROVINCIAS_COMUNIDADES
 
 
 @dataclass
@@ -15,8 +13,8 @@ class Oferta:
     _fecha_publicacion: str = ""
     _puesto: int = 0
     _es_teletrabajo: bool = False
-    _ubicaciones: list[int] = []
-    _requisitos: list[int] = []
+    _ubicaciones: list[int] = field(default_factory=list)
+    _requisitos: list[int] = field(default_factory=list)
 
     @property
     def id(self):
@@ -93,3 +91,27 @@ class Oferta:
     @requisitos.setter
     def requisitos(self, requisitos: list[int]):
         self._requisitos = requisitos
+
+    def to_csv(self):
+
+        nombres_ubicaciones = self._get_ubicaciones_from_ids()
+        nombres_requisitos = self._get_requisitos_from_ids()
+        valores = [self._titulo, self._companyia,
+                   self._experiencia, str(self._salario), nombres_ubicaciones, self._fecha_publicacion, nombres_requisitos]
+        return valores
+
+    def _get_ubicaciones_from_ids(self):
+        nombres_ubicaciones = []
+
+        for id_ubicacion in self._ubicaciones:
+            nombres_ubicaciones.append(
+                list(PROVINCIAS_COMUNIDADES.keys())[id_ubicacion-1])
+
+        return nombres_ubicaciones
+
+    def _get_requisitos_from_ids(self):
+        nombres_requisitos = []
+
+        for id_requisito in self._requisitos:
+            nombres_requisitos.append(ALL_SKILLS[id_requisito-1][0][0])
+        return nombres_requisitos

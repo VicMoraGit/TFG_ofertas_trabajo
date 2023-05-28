@@ -1,5 +1,5 @@
 from time import sleep, time
-from logging import Logger, getLogger
+from logging import DEBUG, Logger, getLogger
 from traceback import format_exc
 from models.ofertaDto import Oferta
 
@@ -26,7 +26,7 @@ class Tecnoempleo(Portal):
         self._titulo_ultima_oferta_pagina = ""
         super().abrir_nav(headless=False)
 
-        # self._log.setLevel(DEBUG)
+        self._log.setLevel(DEBUG)
         self.ofertaDao = OfertaDao()
 
     def buscar(self, keyword: str):
@@ -114,15 +114,18 @@ class Tecnoempleo(Portal):
 
                 self._log.debug("Informacion extraida.")
 
-                # Inserta la oferta en BD
+                # Inserta la oferta en las posiciones para el csv
+                valores_posiciones.append(oferta.to_csv())
 
+                # Inserta la oferta en BD
                 self.ofertaDao.crear(oferta)
 
                 # Actualiza estadisticas
+
                 n_ofertas_analizadas += 1
-                if oferta.salario is not None:
+                if oferta.salario != "NULL":
                     n_ofertas_con_salario += 1
-                if oferta.experiencia is not None:
+                if oferta.experiencia != "NULL":
                     n_ofertas_con_experiencia += 1
 
                 self._log.debug("Estadisticas actualizadas")
@@ -137,11 +140,8 @@ class Tecnoempleo(Portal):
         # Si es la ultima, finaliza la busqueda y no añade las ultimas
         # posiciones ni estadisticas.
 
-        if titulo == self._titulo_ultima_oferta_pagina:
-            self._busqueda_finalizada = True
-            return
-        else:
-            self._titulo_ultima_oferta_pagina = titulo
+        # Escribe en CSV
+        self._csv.escribir_lineas(valores_posiciones)
 
         self._log.info(f"{len(posiciones)} ofertas analizadas.")
 
@@ -150,6 +150,12 @@ class Tecnoempleo(Portal):
         self._n_ofertas_con_salario += n_ofertas_con_salario
         self._n_ofertas_con_experiencia += n_ofertas_con_experiencia
         self._n_paginas_analizadas += 1
+
+        if titulo == self._titulo_ultima_oferta_pagina:
+            self._busqueda_finalizada = True
+            return
+        else:
+            self._titulo_ultima_oferta_pagina = titulo
 
     def _get_link(self, position: WebElement):
         return position.find_element(By.CSS_SELECTOR, "h3 > a").get_attribute("href")
@@ -225,7 +231,7 @@ class Tecnoempleo(Portal):
         )
 
     def _extraer_caracteristica(self, position: WebElement, nombre_caracteristica) -> str:
-        valor = ""
+        valor = "NULL"
 
         # Localizadores
         caracteristicas_locator = "ul > li"

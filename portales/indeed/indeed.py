@@ -39,7 +39,7 @@ class Indeed(Portal):
         # DAOs
 
         self.ofertaDao = OfertaDao()
-        # self._log.setLevel(DEBUG)
+        self._log.setLevel(DEBUG)
 
     def buscar(self, keyword: str):
         # Reseteo de variables en cada busqueda
@@ -152,17 +152,18 @@ class Indeed(Portal):
 
                 self._log.debug("Informacion extraida.")
 
-                # Inserta la oferta en BD
+                # Inserta la oferta en las posiciones para el csv
+                valores_posiciones.append(oferta.to_csv())
 
+                # Inserta la oferta en BD
                 self.ofertaDao.crear(oferta)
 
                 # Actualiza estadisticas
                 n_ofertas_analizadas += 1
-                if oferta.salario is not None:
+                if oferta.salario != "NULL":
                     n_ofertas_con_salario += 1
-                if oferta.experiencia is not None:
+                if oferta.experiencia != "NULL":
                     n_ofertas_con_experiencia += 1
-
                 self._log.debug("Estadisticas actualizadas")
 
             self._log.debug(f"Oferta analizada {i+1}/{len(posiciones)}")
@@ -171,11 +172,8 @@ class Indeed(Portal):
         # Si es la ultima, finaliza la busqueda y no añade las ultimas
         # posiciones ni estadisticas.
 
-        if titulo == self._titulo_ultima_oferta_pagina:
-            self._busqueda_finalizada = True
-            return
-        else:
-            self._titulo_ultima_oferta_pagina = titulo
+        # Escribe en CSV
+        self._csv.escribir_lineas(valores_posiciones)
 
         self._log.info(f"{len(posiciones)} ofertas analizadas.")
 
@@ -184,6 +182,12 @@ class Indeed(Portal):
         self._n_ofertas_con_salario += n_ofertas_con_salario
         self._n_ofertas_con_experiencia += n_ofertas_con_experiencia
         self._n_paginas_analizadas += 1
+
+        if titulo == self._titulo_ultima_oferta_pagina:
+            self._busqueda_finalizada = True
+            return
+        else:
+            self._titulo_ultima_oferta_pagina = titulo
 
     def _get_title(self, position: WebElement):
         try:

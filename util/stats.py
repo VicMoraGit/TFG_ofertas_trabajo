@@ -97,10 +97,10 @@ def exporta_stats():
 
         f.write(f"Se han analizado {n_ofertas_analizadas} ofertas.\n")
         f.write(
-            f"Solo {n_ofertas_con_salario} ofertas tienen informacion sobre el salario.\n"
+            f"{n_ofertas_con_salario} ofertas tienen informacion sobre el salario.\n"
         )
         f.write(
-            f"Solo {n_ofertas_con_experiencia} ofertas tienen informacion sobre la experiencia.\n"
+            f"{n_ofertas_con_experiencia} ofertas tienen informacion sobre la experiencia.\n"
         )
         f.write(
             f"Tiempo para recoger los datos: {round((s_final - s_inicio) / 60, 2)} mins.\n"
