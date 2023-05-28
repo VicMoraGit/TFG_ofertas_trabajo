@@ -111,7 +111,8 @@ PALABRAS_RELACIONADAS_ROL = [
         "incrustados": 3,
     },  # 9
     {"agente": 5, "servicio": 3, "asistencia": 5, "apoyo": 2, "tecnico": 3},  # 10
-    {"probador": 5, "software": 5, "tester": 5, "comprobador": 5, "evaluador": 5},  # 11
+    {"probador": 5, "software": 5, "tester": 5,
+        "comprobador": 5, "evaluador": 5},  # 11
     {  # 12
         "ingeniero": 5,
         "ingenieros": 5,
@@ -166,7 +167,7 @@ PALABRAS_RELACIONADAS_ROL = [
         "negocios": 5,
         "empresarial": 4,
         "tic": 1,
-        "BI":5
+        "BI": 5
     },  # 17
     {  # 18
         "ingeniero": 5,
@@ -569,22 +570,22 @@ PROVINCIAS_COMUNIDADES = {
 }
 ALL_SKILLS = [
     [
-        ["Aurelia","AureliaJS"],
+        ["Aurelia", "AureliaJS"],
         "Framework de JavaScript para aplicaciones de navegador, moviles y de escritorio",
         "https://aurelia.io/docs",
         Categoria.FRAMEWORK,
         SubFramework.FRONTEND,
     ],
     [
-        ["EmberJS","Ember"],
+        ["EmberJS", "Ember"],
         "Framework de JavaScript para aplicaciones de navegador",
         "https://guides.emberjs.com/release/",
         Categoria.FRAMEWORK,
         SubFramework.FRONTEND,
     ],
-    
+
     [
-        ["NightwatchJS","Nightwatch"],
+        ["NightwatchJS", "Nightwatch"],
         "Framework de JavaScript para realizar tests end-to-end(E2E) en aplicaciones y sitios web.",
         "https://nightwatchjs.org/",
         Categoria.FRAMEWORK,
@@ -598,107 +599,107 @@ ALL_SKILLS = [
         SubFramework.INTERNACIONALIZACION,
     ],
     [
-        ["AlpineJS","Alpine"],
+        ["AlpineJS", "Alpine"],
         "Framework de JavaScript muy ligera para web",
         "https://alpinejs.dev/",
         Categoria.FRAMEWORK,
         SubFramework.FRONTEND,
     ],
     [
-        ["Stimulus","StimulusJS"],
+        ["Stimulus", "StimulusJS"],
         "Framework de JavaScript sencillo y modesto",
         "https://stimulus.hotwired.dev/",
         Categoria.FRAMEWORK,
         SubFramework.FRONTEND,
     ],
     [
-        ["NativeScript","Native Script"],
+        ["NativeScript", "Native Script"],
         "Framework de JavaScript para aplicaciones nativas en iOS o Android",
         "https://docs.nativescript.org/",
         Categoria.FRAMEWORK,
         SubFramework.MOVIL,
     ],
     [
-        ["Relay","RelayJS"],
+        ["Relay", "RelayJS"],
         "Libreria de JavaScript para el framework React para gestion de datos en GraphQL",
         "https://relay.dev/docs/",
         Categoria.LIBRERIA,
         SubLibreria.GESTION_DATOS,
     ],
     [
-        ["CycleJS","Cycle"],
+        ["CycleJS", "Cycle"],
         "Framework para aplicaciones web funcionales",
         "https://cycle.js.org/",
         Categoria.FRAMEWORK,
         SubFramework.FRONTEND,
     ],
     [
-        ["BabylonJS","Babylon"],
+        ["BabylonJS", "Babylon"],
         "Motor de juegos en 3D basado en web",
         "https://doc.babylonjs.com/",
         Categoria.FRAMEWORK,
         SubFramework.GAME,
     ],
     [
-        ["FlightJS","Flight"],
+        ["FlightJS", "Flight"],
         "Framework minimalista para aplicaciones web por Twitter",
         "https://flightjs.github.io/",
         Categoria.FRAMEWORK,
         SubFramework.FRONTEND,
     ],
-    
+
     [
-        ["Onsen UI","OnsenUI","Onsen"],
+        ["Onsen UI", "OnsenUI", "Onsen"],
         "Framework de interfaz de usuario para aplicaciones móviles híbridas",
         "https://onsen.io/v2/docs/",
         Categoria.FRAMEWORK,
         SubFramework.FRONTEND,
     ],
     [
-        ["CylonJS","Cylon"],
+        ["CylonJS", "Cylon"],
         "Framework de robótica y automatización basada en JavaScript",
         "https://cylonjs.com/documentation/",
         Categoria.FRAMEWORK,
         SubFramework.ROBOTICA,
     ],
-    
+
     [
-        ["Jest","JestJS"],
+        ["Jest", "JestJS"],
         "Framework de pruebas de JavaScript",
         "https://jestjs.io/docs/en/getting-started",
         Categoria.FRAMEWORK,
         SubFramework.TEST,
     ],
     [
-        ["FeathersJS","Feathers"],
+        ["FeathersJS", "Feathers"],
         "Framework de aplicaciones web en tiempo real y API RESTful para Node.js",
         "https://docs.feathersjs.com/",
         Categoria.FRAMEWORK,
         SubFramework.FULLSTACK,
     ],
     [
-        ["AVA","AVAJS"],
+        ["AVA", "AVAJS"],
         "Framework de pruebas de JavaScript que se ejecuta en paralelo para una ejecución más rápida",
         "https://github.com/avajs",
         Categoria.FRAMEWORK,
         SubFramework.TEST,
     ],
     [
-        ["Bootboxjs","Bootbox"],
+        ["Bootboxjs", "Bootbox"],
         "Biblioteca de JavaScript que proporciona cuadros de diálogo y modales para su uso en aplicaciones web",
         "http://bootboxjs.com/documentation.html",
         Categoria.LIBRERIA,
         SubLibreria.UI,
     ],
     [
-        ["Highcharts","HighchartsJS"],
+        ["Highcharts", "HighchartsJS"],
         "Biblioteca de gráficos interactivos en JavaScript que permite la creación de visualizaciones de datos sofisticadas y personalizables en aplicaciones web",
         "https://www.highcharts.com/docs/index",
         Categoria.LIBRERIA,
         SubLibreria.UI,
     ],
     [
-        ["Prime UI","PrimeUI"],
+        ["Prime UI", "PrimeUI"],
         "Colección de componentes de interfaz de usuario de código abierto para aplicaciones web, construidos sobre la biblioteca de JavaScript PrimeFaces",
         "https://www.primefaces.org/primeui/",
         Categoria.LIBRERIA,
@@ -712,77 +713,77 @@ ALL_SKILLS = [
         SubLibreria.ACCESS,
     ],
     [
-        ["Typo3","T3"],
+        ["Typo3", "T3"],
         "Sistema de gestión de contenidos de código abierto basado en PHP, utilizado para construir sitios web y aplicaciones web empresariales de alta complejidad",
         "https://typo3.org/documentation/",
         Categoria.SOFTWARE,
         SubSoftware.CMS,
     ],
     [
-        ["CubeJS","Cube"],
+        ["CubeJS", "Cube"],
         "Herramienta de código abierto que permite la creación de aplicaciones analíticas y de inteligencia empresarial con Node.js y bases de datos analíticas como PostgreSQL, MySQL, y Google BigQuery",
         "https://cube.dev/docs/",
         Categoria.MIDDLEWARE,
         SubNoAplica.NO_APLICA,
     ],
     [
-        ["RequireJS","Require"],
+        ["RequireJS", "Require"],
         "Biblioteca de JavaScript que permite la carga de módulos de manera asíncrona, mejorando la eficiencia y el rendimiento de las aplicaciones web",
         "https://requirejs.org/docs/start.html",
         Categoria.LIBRERIA,
         SubLibreria.DEPENDENCIAS,
     ],
     [
-        ["Zepto","ZeptoJS"],
+        ["Zepto", "ZeptoJS"],
         "Biblioteca de JavaScript para aplicaciones web móviles, similar a jQuery pero de tamaño reducido y mejor rendimiento en dispositivos móviles",
         "https://zeptojs.com/",
         Categoria.LIBRERIA,
         SubLibreria.DOM,
     ],
     [
-        ["Jasmine","Jasminejs"],
+        ["Jasmine", "Jasminejs"],
         "Framework de pruebas de JavaScript que se utiliza para realizar pruebas de comportamiento y unitarias en aplicaciones web",
         "https://jasmine.github.io/tutorials/your_first_suite",
         Categoria.FRAMEWORK,
         SubFramework.TEST,
     ],
     [
-        ["QUnit","QUnitJS"],
+        ["QUnit", "QUnitJS"],
         "Framework de pruebas unitarias de JavaScript desarrollado por jQuery, utilizado para realizar pruebas en aplicaciones web",
         "https://qunitjs.com/intro/",
         Categoria.FRAMEWORK,
         SubFramework.TEST,
     ],
     [
-        ["Mocha","MochaJS"],
+        ["Mocha", "MochaJS"],
         "Framework de pruebas de JavaScript que se utiliza para realizar pruebas unitarias, de integración y de extremo a extremo en aplicaciones web y Node.js",
         "https://mochajs.org/#getting-started",
         Categoria.FRAMEWORK,
         SubFramework.TEST,
     ],
     [
-        ["Sketch","Sketchjs"],
+        ["Sketch", "Sketchjs"],
         "Biblioteca de JavaScript que permite la creación de gráficos vectoriales y animaciones en aplicaciones web utilizando HTML5 canvas",
         "https://github.com/intridea/sketch.js",
         Categoria.LIBRERIA,
         SubLibreria.UI,
     ],
     [
-        ["Mithril","MithrilJS"],
+        ["Mithril", "MithrilJS"],
         "Framework de JavaScript de código abierto para la creación de aplicaciones web de una sola página (SPA), que utiliza una sintaxis simple y concisa para la creación de componentes y la manipulación del DOM",
         "https://mithril.js.org/",
         Categoria.FRAMEWORK,
         SubFramework.FRONTEND,
     ],
     [
-        ["Enact","EnactJS"],
+        ["Enact", "EnactJS"],
         "Framework de código abierto basado en React para el desarrollo de aplicaciones de TV",
         "https://enactjs.com/docs/",
         Categoria.FRAMEWORK,
         SubFramework.FRONTEND,
     ],
     [
-        ["ZK","ZKoss"],
+        ["ZK", "ZKoss"],
         "Framework de desarrollo de aplicaciones web de código abierto en Java que permite la creación de aplicaciones web en tiempo real con una interfaz de usuario rica y una arquitectura de procesamiento en el lado del servidor",
         "https://www.zkoss.org/documentation/",
         Categoria.FRAMEWORK,
@@ -796,7 +797,7 @@ ALL_SKILLS = [
         SubFramework.FULLSTACK,
     ],
     [
-        ["Konva","KonvaJS"],
+        ["Konva", "KonvaJS"],
         "Biblioteca de JavaScript de código abierto que se utiliza para crear gráficos vectoriales y animaciones interactivas en aplicaciones web utilizando HTML5 canvas",
         "https://konvajs.org/docs/",
         Categoria.LIBRERIA,
@@ -817,7 +818,7 @@ ALL_SKILLS = [
         SubFramework.FRONTEND,
     ],
     [
-        ["Knockout","KnockoutJS"],
+        ["Knockout", "KnockoutJS"],
         "Biblioteca de JavaScript de código abierto que se utiliza para crear interfaces de usuario dinámicas y escalables en aplicaciones web, utilizando el patrón de diseño MVVM para la separación clara de la lógica de la interfaz de usuario y los datos subyacentes",
         "https://knockoutjs.com/documentation/introduction.html",
         Categoria.LIBRERIA,
@@ -831,14 +832,14 @@ ALL_SKILLS = [
         SubFramework.FRONTEND,
     ],
     [
-        ["Lit","LitJS"],
+        ["Lit", "LitJS"],
         "Biblioteca de JavaScript de código abierto para la creación de componentes web reutilizables y escalables utilizando la sintaxis de plantillas HTML y el enlace de datos bidireccional",
         "https://lit.dev/docs/",
         Categoria.LIBRERIA,
         SubLibreria.UI,
     ],
     [
-        ["SeempleJS","Seemple"],
+        ["SeempleJS", "Seemple"],
         "Biblioteca de JavaScript de código abierto para la creación de aplicaciones web escalables y mantenibles. Utiliza el patrón de diseño MVVM y la programación declarativa para la separación clara de la lógica de la interfaz de usuario y los datos subyacentes",
         "https://seemple.js.org/",
         Categoria.FRAMEWORK,
@@ -852,14 +853,14 @@ ALL_SKILLS = [
         SubLibreria.IO,
     ],
     [
-        ["MeteorJS","Meteor"],
+        ["MeteorJS", "Meteor"],
         "Plataforma de desarrollo web con JavaScript en el cliente y el servidor",
         "https://docs.meteor.com/",
         Categoria.FRAMEWORK,
         SubFramework.FULLSTACK,
     ],
     [
-        ["ExtJS","Ext"],
+        ["ExtJS", "Ext"],
         "Framework JavaScript para la creación de aplicaciones web de alta calidad y ricas en características",
         "https://docs.sencha.com/extjs/",
         Categoria.FRAMEWORK,
@@ -880,7 +881,7 @@ ALL_SKILLS = [
         SubNoAplica.NO_APLICA,
     ],
     [
-        ["VanillaJS","Vanilla"],
+        ["VanillaJS", "Vanilla"],
         "Framework para javascript multiplataforma y ligero",
         "https://vanilla-js.com/",
         Categoria.FRAMEWORK,
@@ -901,7 +902,7 @@ ALL_SKILLS = [
         SubFramework.FRONTEND,
     ],
     [
-        ["SailsJS","Sails"],
+        ["SailsJS", "Sails"],
         "Framework de aplicaciones web en tiempo real basado en Node.js que proporciona una arquitectura MVC (Modelo Vista Controlador) para la construcción de aplicaciones escalables y fáciles de mantener",
         "https://sailsjs.com/",
         Categoria.FRAMEWORK,
@@ -915,7 +916,7 @@ ALL_SKILLS = [
         SubLibreria.UI,
     ],
     [
-        ["Dojo Toolkit","DojoToolkit","Dojo"],
+        ["Dojo Toolkit", "DojoToolkit", "Dojo"],
         "Conjunto de herramientas de JavaScript de código abierto que proporciona una estructura modular y herramientas para la creación de aplicaciones web complejas y ricas en funcionalidades",
         "https://dojotoolkit.org/",
         Categoria.SDK,
@@ -929,21 +930,21 @@ ALL_SKILLS = [
         SubFramework.BACKEND,
     ],
     [
-        ["Kendo UI","KendoUI"],
+        ["Kendo UI", "KendoUI"],
         "Framework de desarrollo de aplicaciones web que proporciona una amplia variedad de componentes de interfaz de usuario, herramientas de datos y funcionalidades para crear aplicaciones ricas y escalables",
         "https://www.telerik.com/kendo-ui",
         Categoria.FRAMEWORK,
         SubFramework.FRONTEND,
-    ], 
+    ],
     [
-        ["NuclearJS","Nuclear"],
+        ["NuclearJS", "Nuclear"],
         "Librería para aplicaciones web que permite gestionar el estado de la aplicación de una manera sencilla y escalable mediante la utilización de un patrón de arquitectura Flux",
         "https://optimizely.github.io/nuclear-js/",
         Categoria.LIBRERIA,
         SubLibreria.ESTADO,
     ],
     [
-        ["Java Web Toolkit","JWT"],
+        ["Java Web Toolkit", "JWT"],
         "Herramienta que permite desarrollar aplicaciones web de manera eficiente utilizando el lenguaje de programación Java",
         "https://www.webtoolkit.eu/jwt",
         Categoria.LIBRERIA,
@@ -957,42 +958,42 @@ ALL_SKILLS = [
         SubFramework.FULLSTACK,
     ],
     [
-        ["D3","D3js"],
+        ["D3", "D3js"],
         "Biblioteca de visualización de datos basada en web que permite a los desarrolladores crear gráficos dinámicos y personalizados utilizando HTML, SVG y CSS",
         "https://d3js.org/",
         Categoria.LIBRERIA,
         SubLibreria.UI,
     ],
     [
-        ["HandlebarsJS","Handlebars"],
+        ["HandlebarsJS", "Handlebars"],
         "Motor de plantillas para JavaScript que permite generar HTML dinámico al combinar datos con un archivo de plantilla",
         "https://handlebarsjs.com/",
         Categoria.LIBRERIA,
         SubLibreria.UI,
     ],
     [
-        ["AmpersandJS","Ampersand"],
+        ["AmpersandJS", "Ampersand"],
         "Framework de JavaScript que proporciona una arquitectura modular y escalable para la construcción de aplicaciones web",
         "http://ampersandjs.com/",
         Categoria.FRAMEWORK,
         SubFramework.FULLSTACK,
     ],
     [
-        ["SharepointPlus","Sharepoint+","Sharepoint Plus"],
+        ["SharepointPlus", "Sharepoint+", "Sharepoint Plus"],
         "Biblioteca de JavaScript para interactuar con la API de SharePoint",
         "https://github.com/Aymkdn/SharepointPlus",
         Categoria.LIBRERIA,
         SubLibreria.API,
     ],
     [
-        ["MarionetteJS","Marionette"],
+        ["MarionetteJS", "Marionette"],
         "Biblioteca para construir aplicaciones de Backbone.js más complejas y mantenibles",
         "https://marionettejs.com/",
         Categoria.FRAMEWORK,
         SubFramework.BACKEND,
     ],
     [
-        ["RiotJS","Riot"],
+        ["RiotJS", "Riot"],
         "Biblioteca simple y rápida para construir interfaces de usuario.",
         "https://riot.js.org/",
         Categoria.LIBRERIA,
@@ -1027,7 +1028,7 @@ ALL_SKILLS = [
         SubLibreria.UI,
     ],
     [
-        ["BackboneJS","Backbone"],
+        ["BackboneJS", "Backbone"],
         "Framework JavaScript que permite desarrollar aplicaciones web estructuradas",
         "https://backbonejs.org/",
         Categoria.FRAMEWORK,
@@ -1041,7 +1042,7 @@ ALL_SKILLS = [
         SubFramework.FULLSTACK,
     ],
     [
-        ["UIZE","UIZEJS"],
+        ["UIZE", "UIZEJS"],
         "Framework de JavaScript para crear interfaces de usuario de manera rápida y fácil",
         "http://www.uize.com/",
         Categoria.FRAMEWORK,
@@ -1118,12 +1119,12 @@ ALL_SKILLS = [
         SubSoftware.DISENYO,
     ],
     [
-        ["InDesign","In Design"],
+        ["InDesign", "In Design"],
         "Software de maquetación y diseño de publicaciones",
         "https://helpx.adobe.com/indesign/user-guide.html",
         Categoria.SOFTWARE,
         SubSoftware.DISENYO,
-    ], 
+    ],
     [
         ["Premiere"],
         "Software de edición de vídeo",
@@ -1153,14 +1154,14 @@ ALL_SKILLS = [
         SubNoAplica.NO_APLICA,
     ],
     [
-        ["Angular","AngularJS"],
+        ["Angular", "AngularJS"],
         "Framework de JavaScript para construir aplicaciones web del lado del cliente",
         "https://angular.io/",
         Categoria.FRAMEWORK,
         SubFramework.FRONTEND,
     ],
     [
-        ["ASP.NET","ASP"],
+        ["ASP.NET", "ASP"],
         "Tecnología de Microsoft para desarrollo web del lado del servidor utilizando C# o VB.NET",
         "https://www.asp.net/",
         Categoria.FRAMEWORK,
@@ -1174,7 +1175,7 @@ ALL_SKILLS = [
         SubSoftware.DISENYO,
     ],
     [
-        ["Bootstrap","Boot strap"],
+        ["Bootstrap", "Boot strap"],
         "Framework front-end para el desarrollo rápido y fácil de sitios web responsivo",
         "https://getbootstrap.com/docs/5.0/getting-started/introduction/",
         Categoria.FRAMEWORK,
@@ -1216,7 +1217,7 @@ ALL_SKILLS = [
         SubNoAplica.NO_APLICA,
     ],
     [
-        ["CSS","CSS3"],
+        ["CSS", "CSS3"],
         "Lenguaje de hojas de estilo para la presentación de páginas web",
         "https://developer.mozilla.org/en-US/docs/Web/CSS",
         Categoria.LENGUAJE,
@@ -1244,7 +1245,7 @@ ALL_SKILLS = [
         SubNoAplica.NO_APLICA,
     ],
     [
-        ["Android","AndroidOS","Android OS"],
+        ["Android", "AndroidOS", "Android OS"],
         "Sistema operativo móvil de código abierto",
         "https://developer.android.com/docs",
         Categoria.OS,
@@ -1265,7 +1266,7 @@ ALL_SKILLS = [
         SubOS.BSD,
     ],
     [
-        ["Windows Phone","WindowsPhone"],
+        ["Windows Phone", "WindowsPhone"],
         "Sistema operativo móvil desarrollado por Microsoft para teléfonos inteligentes, que ahora ha sido descontinuado",
         "https://docs.microsoft.com/en-us/previous-versions/windows/apps/hh202936(v=win.10)",
         Categoria.OS,
@@ -1286,7 +1287,7 @@ ALL_SKILLS = [
         SubNoAplica.NO_APLICA,
     ],
     [
-        ["HTML","HTML5"],
+        ["HTML", "HTML5"],
         "Lenguaje de marcado utilizado para crear páginas web",
         "https://developer.mozilla.org/en-US/docs/Web/HTML",
         Categoria.LENGUAJE,
@@ -1300,7 +1301,7 @@ ALL_SKILLS = [
         SubNoAplica.NO_APLICA,
     ],
     [
-        ["Android Studio","AndroidStudio"],
+        ["Android Studio", "AndroidStudio"],
         "Entorno de desarrollo integrado oficial para la plataforma Android",
         "https://developer.android.com/studio",
         Categoria.IDE,
@@ -1328,7 +1329,7 @@ ALL_SKILLS = [
         SubNoAplica.NO_APLICA,
     ],
     [
-        ["Visual Studio Code","Visual Studio","VSCode"],
+        ["Visual Studio Code", "Visual Studio", "VSCode"],
         "Entorno de desarrollo integrado propietario de Microsoft para múltiples lenguajes de programación",
         "https://docs.microsoft.com/en-us/visualstudio/?view=vs-2022",
         Categoria.IDE,
@@ -1356,15 +1357,15 @@ ALL_SKILLS = [
         SubNoAplica.NO_APLICA,
     ],
     [
-        ["J2EE","JAVAEE","JAVA EE","JEE"],
+        ["J2EE", "JAVAEE", "JAVA EE", "JEE"],
         "Conjunto de especificaciones para construir aplicaciones empresariales en Java",
         "https://docs.oracle.com/javaee/7/index.html",
         Categoria.ESPECIFICACION,
         SubNoAplica.NO_APLICA,
     ],
-    
+
     [
-        ["JAVA SE","JAVASE","JSE"],
+        ["JAVA SE", "JAVASE", "JSE"],
         "Conjunto de especificaciones para construir aplicaciones estandares en Java",
         "https://www.oracle.com/java/",
         Categoria.ESPECIFICACION,
@@ -1448,7 +1449,7 @@ ALL_SKILLS = [
         SubFramework.TEST,
     ],
     [
-        ["Maven","MVN"],
+        ["Maven", "MVN"],
         "Herramienta de gestión de proyectos para construir y administrar aplicaciones Java",
         "https://maven.apache.org/guides/",
         Categoria.SOFTWARE,
@@ -1462,7 +1463,7 @@ ALL_SKILLS = [
         SubFramework.BACKEND,
     ],
     [
-        ["Spring Boot","Springboot"],
+        ["Spring Boot", "Springboot"],
         "Framework de Java para crear aplicaciones Spring de forma más rápida y sencilla",
         "https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/",
         Categoria.FRAMEWORK,
@@ -1483,29 +1484,29 @@ ALL_SKILLS = [
         SubNoAplica.NO_APLICA,
     ],
     [
-        ["NuxtJS","Nuxt"],
+        ["NuxtJS", "Nuxt"],
         "Framework de JavaScript para aplicaciones web universales y de renderizado del lado del servidor",
         "https://nuxtjs.org/docs/2.x/get-started/installation",
         Categoria.FRAMEWORK,
         SubFramework.BACKEND,
     ],
     [
-        ["NextJS","Next"],
+        ["NextJS", "Next"],
         "Framework de React para el desarrollo de aplicaciones web universales y de renderizado del lado del servidor",
         "https://nextjs.org/docs",
         Categoria.FRAMEWORK,
         SubFramework.BACKEND,
     ],
-    
+
     [
-        ["Electron","ElectronJS"],
+        ["Electron", "ElectronJS"],
         "Framework de JavaScript para el desarrollo de aplicaciones de escritorio multiplataforma",
         "https://www.electronjs.org/docs",
         Categoria.FRAMEWORK,
         SubFramework.FULLSTACK,
     ],
     [
-        ["ExpressJS","Express"],
+        ["ExpressJS", "Express"],
         "Framework de JavaScript para el desarrollo de aplicaciones web y servicios REST",
         "https://expressjs.com/",
         Categoria.FRAMEWORK,
@@ -1526,21 +1527,21 @@ ALL_SKILLS = [
         SubNoAplica.NO_APLICA,
     ],
     [
-        ["NodeJS","Node"],
+        ["NodeJS", "Node"],
         "Entorno en tiempo de ejecucion de JavaScript para construir aplicaciones de red escalables",
         "https://nodejs.org/en/docs/",
         Categoria.EE,
         SubNoAplica.NO_APLICA,
     ],
     [
-        ["React","ReactJS"],
+        ["React", "ReactJS"],
         "Framework de JavaScript para construir interfaces de usuario",
         "https://reactjs.org/docs/",
         Categoria.FRAMEWORK,
         SubFramework.FRONTEND,
     ],
     [
-        ["Redux","ReduxJS"],
+        ["Redux", "ReduxJS"],
         "Biblioteca de gestión de estado para aplicaciones de JavaScript",
         "https://redux.js.org/",
         Categoria.LIBRERIA,
@@ -1554,7 +1555,7 @@ ALL_SKILLS = [
         SubNoAplica.NO_APLICA,
     ],
     [
-        ["Vue","VueJS"],
+        ["Vue", "VueJS"],
         "Framework de JavaScript para construir interfaces de usuario",
         "https://vuejs.org/v2/guide/",
         Categoria.FRAMEWORK,
@@ -1589,7 +1590,7 @@ ALL_SKILLS = [
         SubFramework.MOVIL,
     ],
     [
-        ["MS SQL","MSSQL","MS SQL SERVER"],
+        ["MS SQL", "MSSQL", "MS SQL SERVER"],
         "Sistema de gestión de bases de datos relacionales desarrollado por Microsoft",
         "https://docs.microsoft.com/en-us/sql/sql-server/?view=sql-server-ver15",
         Categoria.SGBD,
@@ -1610,7 +1611,7 @@ ALL_SKILLS = [
         SubFramework.TEST,
     ],
     [
-        ["Objective-C","Objective C","ObjectiveC"],
+        ["Objective-C", "Objective C", "ObjectiveC"],
         "Lenguaje de programación utilizado principalmente para el desarrollo de aplicaciones para el sistema operativo iOS",
         "https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjectiveC/Introduction/introObjectiveC.html",
         Categoria.LENGUAJE,
@@ -1694,7 +1695,7 @@ ALL_SKILLS = [
         SubFramework.TEST,
     ],
     [
-        ["Python","Python3","Python2"],
+        ["Python", "Python3", "Python2"],
         "Lenguaje de programación de alto nivel, con una sintaxis simple y fácil de aprender",
         "https://docs.python.org/3/",
         Categoria.LENGUAJE,
@@ -1722,7 +1723,7 @@ ALL_SKILLS = [
         SubNoAplica.NO_APLICA,
     ],
     [
-        ["React Native","ReactNative"],
+        ["React Native", "ReactNative"],
         "Framework para desarrollo de aplicaciones móviles nativas en JavaScript",
         "https://reactnative.dev/docs/getting-started",
         Categoria.FRAMEWORK,
@@ -1786,7 +1787,7 @@ ALL_SKILLS = [
         SubNoAplica.NO_APLICA,
     ],
     [
-        ["Tensorflow","TSFlow","TFLOW"],
+        ["Tensorflow", "TSFlow", "TFLOW"],
         "Biblioteca de código abierto de aprendizaje automático desarrollada por Google",
         "https://www.tensorflow.org/api_docs",
         Categoria.LIBRERIA,
@@ -1807,7 +1808,7 @@ ALL_SKILLS = [
         SubNoAplica.NO_APLICA,
     ],
     [
-        ["Visual Basic","VisualBasic"],
+        ["Visual Basic", "VisualBasic"],
         "Lenguaje de programación de Microsoft para el desarrollo de aplicaciones Windows",
         "https://docs.microsoft.com/en-us/dotnet/visual-basic/getting-started/",
         Categoria.LENGUAJE,
@@ -1849,7 +1850,7 @@ ALL_SKILLS = [
         SubNoAplica.NO_APLICA,
     ],
     [
-        ["Active Directory","ActiveDirectory","ADDS","AD"],
+        ["Active Directory", "ActiveDirectory", "ADDS", "AD"],
         "Servicio de directorio de Microsoft utilizado para gestionar recursos en una red",
         "https://docs.microsoft.com/en-us/windows-server/identity/ad-ds/get-started/virtual-dc/active-directory-domain-services-overview",
         Categoria.SOFTWARE,
@@ -1926,7 +1927,7 @@ ALL_SKILLS = [
         SubSGBD.SQL,
     ],
     [
-        ["PostgreSQL","Postgre"],
+        ["PostgreSQL", "Postgre"],
         "Sistema de gestión de bases de datos relacional de código abierto",
         "https://www.postgresql.org/docs/",
         Categoria.SGBD,
@@ -1940,7 +1941,7 @@ ALL_SKILLS = [
         SubSGBD.NO_SQL,
     ],
     [
-        ["SQL Server","SQLServer"],
+        ["SQL Server", "SQLServer"],
         "Sistema de gestión de bases de datos relacional de Microsoft",
         "https://docs.microsoft.com/en-us/sql/sql-server/?view=sql-server-ver15",
         Categoria.SGBD,
@@ -1968,14 +1969,14 @@ ALL_SKILLS = [
         SubOS.LINUX,
     ],
     [
-        ["Kali Linux","Kali"],
+        ["Kali Linux", "Kali"],
         "Distribución de Linux especializada en pruebas de penetración y seguridad",
         "https://docs.kali.org/",
         Categoria.OS,
         SubOS.LINUX,
     ],
     [
-        ["Red Hat","RedHat"],
+        ["Red Hat", "RedHat"],
         "Distribución de Linux empresarial de código abierto",
         "https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/",
         Categoria.OS,
@@ -1989,21 +1990,21 @@ ALL_SKILLS = [
         SubOS.LINUX,
     ],
     [
-        ["MacOS","Mac OS"],
+        ["MacOS", "Mac OS"],
         "Sistema operativo exclusivo de los dispositivos Mac de Apple",
         "https://developer.apple.com/macos/",
         Categoria.OS,
         SubOS.BSD,
     ],
     [
-        ["tvOS","tv OS"],
+        ["tvOS", "tv OS"],
         "Sistema operativo de Apple para Apple TV",
         "https://developer.apple.com/tvos/",
         Categoria.OS,
         SubOS.BSD,
     ],
     [
-        ["MQSeries","MQ","IBM MQ Series","IBM MQ"],
+        ["MQSeries", "MQ", "IBM MQ Series", "IBM MQ"],
         "Software de mensajería de IBM",
         "https://www.ibm.com/docs/en/ibm-mq",
         Categoria.SOFTWARE,
@@ -2024,14 +2025,15 @@ ALL_SKILLS = [
         SubNoAplica.NO_APLICA,
     ],
     [
-        ["MS Exchange Server","MSES","MS ES","MSExchange","MS Exchange","MSExchangeServer"],
+        ["MS Exchange Server", "MSES", "MS ES",
+            "MSExchange", "MS Exchange", "MSExchangeServer"],
         "Servidor de correo electrónico y colaboración de Microsoft",
         "https://docs.microsoft.com/en-us/exchange/",
         Categoria.SOFTWARE,
         SubSoftware.MENSAJERIA,
     ],
     [
-        ["MS Office","MSOffice","Office"],
+        ["MS Office", "MSOffice", "Office"],
         "Suite de aplicaciones de ofimática de Microsoft",
         "https://support.microsoft.com/en-us/office",
         Categoria.SOFTWARE,
@@ -2052,7 +2054,7 @@ ALL_SKILLS = [
         SubSoftware.NEGOCIOS,
     ],
     [
-        ["Oracle Service Bus","OracleServiceBus","OracleSB"],
+        ["Oracle Service Bus", "OracleServiceBus", "OracleSB"],
         "Middleware de Oracle para integración de servicios",
         "https://docs.oracle.com/en/middleware/fusion-middleware/12.2.1.4/osb/index.html",
         Categoria.MIDDLEWARE,
@@ -2087,7 +2089,7 @@ ALL_SKILLS = [
         SubNoAplica.NO_APLICA,
     ],
     [
-        ["TCP/IP","TCP","IP"],
+        ["TCP/IP", "TCP", "IP"],
         "Protocolo de comunicación utilizado en internet y redes privadas",
         "https://tools.ietf.org/html/rfc1180",
         Categoria.ESPECIFICACION,
@@ -2101,7 +2103,7 @@ ALL_SKILLS = [
         SubSoftware.SEG,
     ],
     [
-        ["F5 Network","F5"],
+        ["F5 Network", "F5"],
         "Software que ofrece servicios de entrega de aplicaciones y seguridad de redes",
         "https://docs.cloud.f5.com/docs/",
         Categoria.SOFTWARE,
@@ -2143,28 +2145,28 @@ ALL_SKILLS = [
         SubSoftware.ECM,
     ],
     [
-        ["Amazon Web Service","AWS"],
+        ["Amazon Web Service", "AWS"],
         "Plataforma de servicios en la nube de Amazon que ofrece una amplia gama de servicios de infraestructura, plataforma y software como servicio",
         "https://aws.amazon.com/documentation/",
         Categoria.SOFTWARE,
         SubSoftware.SUITE,
     ],
     [
-        ["Google Cloud Platform","GCP"],
+        ["Google Cloud Platform", "GCP"],
         "Plataforma de servicios en la nube de Google que ofrece servicios de infraestructura, plataforma y software como servicio",
         "https://cloud.google.com/docs",
         Categoria.SOFTWARE,
         SubSoftware.SUITE,
     ],
     [
-        ["IBM Bluemix","Bluemix"],
+        ["IBM Bluemix", "Bluemix"],
         "Plataforma de servicios en la nube de IBM que permite a los desarrolladores crear, ejecutar y gestionar aplicaciones en la nube",
         "https://www.ibm.com/cloud/bluemix",
         Categoria.SOFTWARE,
         SubSoftware.SUITE,
     ],
     [
-       ["Microsoft Azure","Azure"],
+        ["Microsoft Azure", "Azure"],
         "Plataforma de servicios en la nube de Microsoft que ofrece servicios de infraestructura, plataforma y software como servicio",
         "https://docs.microsoft.com/en-us/azure/",
         Categoria.SOFTWARE,
@@ -2234,13 +2236,13 @@ ALL_SKILLS = [
         SubVCS.CENT,
     ],
     [
-        ["Svelte","SvelteJS"],
+        ["Svelte", "SvelteJS"],
         "Framework de JavaScript",
         "https://svelte.dev/",
         Categoria.FRAMEWORK,
         SubFramework.FRONTEND,
     ],
-    
+
     [
         ["Docker"],
         "Plataforma para crear, implementar y ejecutar aplicaciones en contenedores",
@@ -2249,14 +2251,14 @@ ALL_SKILLS = [
         SubSoftware.CONT,
     ],
     [
-        ["Hyper-V","HyperV"],
+        ["Hyper-V", "HyperV"],
         "Tecnología de virtualización de Microsoft",
         "https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/",
         Categoria.SOFTWARE,
         SubSoftware.VIRTUAL,
     ],
     [
-        ["Kubernetes","K8s"],
+        ["Kubernetes", "K8s"],
         "Plataforma de orquestación de contenedores",
         "https://kubernetes.io/docs/",
         Categoria.SOFTWARE,
@@ -2291,7 +2293,7 @@ ALL_SKILLS = [
         SubOS.WIN,
     ],
     [
-        ["Windows Server","WindowsServer"],
+        ["Windows Server", "WindowsServer"],
         "Sistema operativo de Microsoft para servidores",
         "https://docs.microsoft.com/en-us/windows-server/",
         Categoria.OS,
@@ -2312,7 +2314,7 @@ ALL_SKILLS = [
         SubOS.UNIX,
     ],
     [
-        ["Cassandra","CassandraDB"],
+        ["Cassandra", "CassandraDB"],
         "Base de datos distribuida NoSQL de código abierto diseñada para manejar grandes cantidades de datos en múltiples servidores, proporcionando alta disponibilidad y sin un único punto de falla",
         "https://cassandra.apache.org/doc/latest/",
         Categoria.SGBD,
@@ -2340,7 +2342,7 @@ ALL_SKILLS = [
         SubFramework.CD,
     ],
     [
-        ["HyperLedger Fabric","HyperLedgerFabric"],
+        ["HyperLedger Fabric", "HyperLedgerFabric"],
         "Plataforma de blockchain de código abierto que permite la creación de aplicaciones empresariales basadas en blockchain",
         "https://hyperledger-fabric.readthedocs.io/en/release-2.3/",
         Categoria.FRAMEWORK,
@@ -2354,21 +2356,21 @@ ALL_SKILLS = [
         SubSoftware.NEGOCIOS,
     ],
     [
-        ["MS Power BI","MSPowerBI","PowerBI"],
+        ["MS Power BI", "MSPowerBI", "PowerBI"],
         "Herramienta de inteligencia empresarial utilizada para visualizar y analizar datos",
         "https://docs.microsoft.com/en-us/power-bi/",
         Categoria.SOFTWARE,
         SubSoftware.NEGOCIOS,
     ],
     [
-        ["Oracle BI","OracleBI"],
+        ["Oracle BI", "OracleBI"],
         "Plataforma de inteligencia empresarial utilizada para la creación de informes, análisis y paneles",
         "https://docs.oracle.com/en/business-intelligence/index.html",
         Categoria.SOFTWARE,
         SubSoftware.NEGOCIOS,
     ],
     [
-        ["Qlik Sense","QlikSense"],
+        ["Qlik Sense", "QlikSense"],
         "Herramienta de visualización de datos utilizada para analizar y compartir información en tiempo real",
         "https://www.qlik.com/us/products/qlik-sense",
         Categoria.SOFTWARE,
@@ -2542,4 +2544,21 @@ ALL_SKILLS = [
         Categoria.SOFTWARE,
         SubSoftware.RENDIMIENTO,
     ],
+]
+
+SOFT_SKILLS = [
+    [
+        ["Negociación", "Persuasión", "Negociar", "Discusión", "Argumentación", "Trato",
+            "Compromiso", "Discutir", "Debatir", "Debate", "Mediar", "Mediación"],
+        "",
+        "",
+        Categoria.SOFT_SKILL,
+        SubNoAplica.NO_APLICA,
+
+    ],
+    [["Negociación"],
+        "",
+        "",
+        Categoria.SOFT_SKILL,
+        SubNoAplica.NO_APLICA,]
 ]

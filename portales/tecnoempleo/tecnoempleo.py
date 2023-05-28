@@ -15,8 +15,6 @@ from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.chrome.webdriver import WebDriver
-from selenium.webdriver.chrome.options import Options
 
 
 class Tecnoempleo(Portal):
@@ -59,7 +57,8 @@ class Tecnoempleo(Portal):
 
         # Espera que carguen las posiciones
         WebDriverWait(driver=driver, timeout=10).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, posiciones_locator))
+            EC.presence_of_element_located(
+                (By.CSS_SELECTOR, posiciones_locator))
         )
 
     def _analizar_posiciones(self):
@@ -104,7 +103,8 @@ class Tecnoempleo(Portal):
             # Rellena el diccionario
             if not oferta.titulo == "":
                 oferta.ubicaciones = self._get_locations(descripcion)
-                oferta.es_teletrabajo = self._is_teletrabajo(oferta.ubicaciones)
+                oferta.es_teletrabajo = self._is_teletrabajo(
+                    oferta.ubicaciones)
                 oferta.companyia = self._get_companyname(descripcion)
                 oferta.fecha_publicacion = self._get_publish_date(descripcion)
                 oferta.experiencia = self._get_experience(descripcion)
@@ -165,7 +165,7 @@ class Tecnoempleo(Portal):
                 By.CSS_SELECTOR, 'span[itemprop="name"]'
             ).text
         except:
-            empresa = None
+            empresa = ""
 
         return empresa
 
@@ -187,7 +187,7 @@ class Tecnoempleo(Portal):
             return True
         return False
 
-    def _get_locations(self, descripcion: WebElement):
+    def _get_locations(self, descripcion: WebElement) -> list:
         """
         Extrae la localizacion de su CSS y de la descripcion del anuncio en caso de que existiesen
         ubicaciones extra.
@@ -197,13 +197,14 @@ class Tecnoempleo(Portal):
 
         except:
             locations = []
-        return locations
+        return list(locations)
 
     def _get_position(self, position: WebElement):
         td = Traductor()
         indice_puesto = 0
         try:
-            title = position.find_element(By.CSS_SELECTOR, 'h1[itemprop="title"]').text
+            title = position.find_element(
+                By.CSS_SELECTOR, 'h1[itemprop="title"]').text
             dominio_idioma = td.detectar_idioma(title)
 
             if dominio_idioma != "es":
@@ -223,8 +224,8 @@ class Tecnoempleo(Portal):
             position.find_element(By.CSS_SELECTOR, "span.ml-4").text
         )
 
-    def _extraer_caracteristica(self, position: WebElement, nombre_caracteristica):
-        valor = None
+    def _extraer_caracteristica(self, position: WebElement, nombre_caracteristica) -> str:
+        valor = ""
 
         # Localizadores
         caracteristicas_locator = "ul > li"

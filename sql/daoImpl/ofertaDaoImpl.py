@@ -38,12 +38,14 @@ class OfertaDao(OfertaDaoInterface):
                 companyia = str(ofertaRaw[2])
                 experiencia = str(ofertaRaw[3])
                 salario = int(str(ofertaRaw[4]))
-                fecha_publicacion = datetime.strptime(str(ofertaRaw[5]), "%Y-%m-%d")
+                fecha_publicacion = datetime.strptime(
+                    str(ofertaRaw[5]), "%Y-%m-%d")
                 puesto_id = int(str(ofertaRaw[6]))
                 es_teletrabajo = bool(ofertaRaw[7])
 
                 requisitos = []
-                cursor.execute(f"SELECT * FROM requisitos_oferta WHERE ID={idOferta};")
+                cursor.execute(
+                    f"SELECT * FROM requisitos_oferta WHERE ID={idOferta};")
                 requisitosRaw = cursor.fetchall()
 
                 if requisitosRaw is not None:
@@ -51,7 +53,8 @@ class OfertaDao(OfertaDaoInterface):
                         requisitos.append(requisito[1])
 
                 ubicaciones = []
-                cursor.execute(f"SELECT * FROM ubicaciones_oferta WHERE ID={idOferta};")
+                cursor.execute(
+                    f"SELECT * FROM ubicaciones_oferta WHERE ID={idOferta};")
                 ubicacionesRaw = cursor.fetchall()
 
                 if ubicacionesRaw is not None:
@@ -64,7 +67,7 @@ class OfertaDao(OfertaDaoInterface):
                     companyia,
                     experiencia,
                     salario,
-                    fecha_publicacion,
+                    fecha_publicacion.strftime("%Y-%m-%d"),
                     puesto_id,
                     es_teletrabajo,
                     ubicaciones,
@@ -78,7 +81,8 @@ class OfertaDao(OfertaDaoInterface):
         with conexion_sql() as con:
             cursor = con.cursor()
 
-            cursor.execute(f"DELETE FROM requisitos_oferta WHERE id_oferta={idOferta};")
+            cursor.execute(
+                f"DELETE FROM requisitos_oferta WHERE id_oferta={idOferta};")
             cursor.execute(
                 f"DELETE FROM ubicaciones_oferta WHERE id_oferta={idOferta};"
             )
@@ -115,17 +119,19 @@ class OfertaDao(OfertaDaoInterface):
                 return False
             else:
                 cursor.execute(f"SELECT last_insert_id();")
-                id_oferta = int(str(cursor.fetchone()[0]))
+                resultado = cursor.fetchone()
+                if resultado is not None:
+                    id_oferta = int(str(resultado[0]))
 
-                for id_requisito in oferta.requisitos:
-                    cursor.execute(
-                        f"INSERT INTO requisitos_oferta (id_oferta, id_requisito) VALUES({id_oferta},{id_requisito});"
-                    )
+                    for id_requisito in oferta.requisitos:
+                        cursor.execute(
+                            f"INSERT INTO requisitos_oferta (id_oferta, id_requisito) VALUES({id_oferta},{id_requisito});"
+                        )
 
-                for id_ubicacion in oferta.ubicaciones:
-                    cursor.execute(
-                        f"INSERT INTO ubicaciones_oferta (id_oferta, id_ubicacion) VALUES({id_oferta},{id_ubicacion});"
-                    )
+                    for id_ubicacion in oferta.ubicaciones:
+                        cursor.execute(
+                            f"INSERT INTO ubicaciones_oferta (id_oferta, id_ubicacion) VALUES({id_oferta},{id_ubicacion});"
+                        )
 
                 con.commit()
                 self._log.debug("Oferta creada")

@@ -41,11 +41,13 @@ def imprime_stats():
     print("\n")
 
     print(f"Se han analizado {n_ofertas_analizadas} ofertas.")
-    print(f"Solo {n_ofertas_con_salario} ofertas tienen informacion sobre el salario.")
+    print(
+        f"Solo {n_ofertas_con_salario} ofertas tienen informacion sobre el salario.")
     print(
         f"Solo {n_ofertas_con_experiencia} ofertas tienen informacion sobre la experiencia."
     )
-    print(f"Tiempo para recoger los datos: {round((s_final - s_inicio) / 60, 2)} mins.")
+    print(
+        f"Tiempo para recoger los datos: {round((s_final - s_inicio) / 60, 2)} mins.")
 
     print("\n")
     print("=" * 60)

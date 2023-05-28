@@ -51,7 +51,8 @@ class Indeed(Portal):
                 # Para cada pagina un driver nuevo
                 super().abrir_nav()
                 self._driver.get(self._base_url)
-                self._log.info(f"Indeed.com {self.dominio_pais.upper()} abierta")
+                self._log.info(
+                    f"Indeed.com {self.dominio_pais.upper()} abierta")
 
                 try:
                     self._buscar_keyword(keyword=keyword, n_pagina=i)
@@ -89,7 +90,8 @@ class Indeed(Portal):
 
         # Espera que carguen las posiciones
         WebDriverWait(driver=driver, timeout=10).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, posiciones_locator))
+            EC.presence_of_element_located(
+                (By.CSS_SELECTOR, posiciones_locator))
         )
 
     def _scroll_al_elemento(self, posicion):
@@ -139,7 +141,8 @@ class Indeed(Portal):
             # Rellena el diccionario
             if not oferta.titulo == "":
                 oferta.ubicaciones = self._get_locations(posicion, descripcion)
-                oferta.es_teletrabajo = self._is_teletrabajo(oferta.ubicaciones)
+                oferta.es_teletrabajo = self._is_teletrabajo(
+                    oferta.ubicaciones)
                 oferta.companyia = self._get_companyname(posicion)
                 oferta.fecha_publicacion = self._get_publish_date(posicion)
                 oferta.experiencia = self._get_experience(descripcion)
@@ -199,7 +202,7 @@ class Indeed(Portal):
             return True
         return False
 
-    def _get_position(self, position: WebElement):
+    def _get_position(self, position: WebElement) -> int:
         td = Traductor()
         indice_puesto = 0
         try:
@@ -217,7 +220,8 @@ class Indeed(Portal):
 
     def _get_companyname(self, position: WebElement):
         try:
-            company = position.find_element(By.CSS_SELECTOR, ".companyName").text
+            company = position.find_element(
+                By.CSS_SELECTOR, ".companyName").text
 
         except:
             company = ""
@@ -226,10 +230,10 @@ class Indeed(Portal):
     def _get_experience(self, position: WebElement):
         return self._filtro.filtrar_experiencia(position.text)
 
-    def _get_salaryexpected(self, position: WebElement):
+    def _get_salaryexpected(self, position: WebElement) -> (str | int):
         return self._filtro.filtrar_salario(position.text)
 
-    def _get_locations(self, position: WebElement, descripcion: WebElement):
+    def _get_locations(self, position: WebElement, descripcion: WebElement) -> list:
         """
         Extrae la localizacion de su CSS y de la descripcion del anuncio en caso de que existiesen
         ubicaciones extra.
@@ -243,14 +247,15 @@ class Indeed(Portal):
 
         except:
             locations = []
-        return locations
+        return list(locations)
 
     def _get_skills(self, position: WebElement):
         return self._filtro.filtrar_skills(position.text)
 
     def _get_publish_date(self, position: WebElement):
         try:
-            publish_date = position.find_element(By.CSS_SELECTOR, "span.date").text
+            publish_date = position.find_element(
+                By.CSS_SELECTOR, "span.date").text
         except:
             publish_date = ""
 

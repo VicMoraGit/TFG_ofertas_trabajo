@@ -74,7 +74,8 @@ class UbicacionDao(UbicacionDaoInterface):
             with conexion_sql() as con:
                 cursor = con.cursor()
 
-                cursor.execute(f"INSERT INTO ubicacion (Provincia, Comunidad) VALUES('{ubicacion.provincia}','{ubicacion.comunidad}');")
+                cursor.execute(
+                    f"INSERT INTO ubicacion (Provincia, Comunidad) VALUES('{ubicacion.provincia}','{ubicacion.comunidad}');")
                 con.commit()
                 if cursor.rowcount == 0:
                     self._log.debug("No se ha podido crear la ubicacion")
