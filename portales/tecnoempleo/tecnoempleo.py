@@ -1,5 +1,5 @@
 from time import sleep, time
-from logging import Logger, getLogger
+from logging import DEBUG, Logger, getLogger
 from traceback import format_exc
 from models.ofertaDto import Oferta
 
@@ -15,8 +15,6 @@ from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.chrome.webdriver import WebDriver
-from selenium.webdriver.chrome.options import Options
 
 
 class Tecnoempleo(Portal):
@@ -28,7 +26,7 @@ class Tecnoempleo(Portal):
         self._titulo_ultima_oferta_pagina = ""
         super().abrir_nav(headless=False)
 
-        # self._log.setLevel(DEBUG)
+        self._log.setLevel(DEBUG)
         self.ofertaDao = OfertaDao()
 
     def buscar(self, keyword: str):
@@ -59,7 +57,8 @@ class Tecnoempleo(Portal):
 
         # Espera que carguen las posiciones
         WebDriverWait(driver=driver, timeout=10).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, posiciones_locator))
+            EC.presence_of_element_located(
+                (By.CSS_SELECTOR, posiciones_locator))
         )
 
     def _analizar_posiciones(self):
@@ -104,7 +103,8 @@ class Tecnoempleo(Portal):
             # Rellena el diccionario
             if not oferta.titulo == "":
                 oferta.ubicaciones = self._get_locations(descripcion)
-                oferta.es_teletrabajo = self._is_teletrabajo(oferta.ubicaciones)
+                oferta.es_teletrabajo = self._is_teletrabajo(
+                    oferta.ubicaciones)
                 oferta.companyia = self._get_companyname(descripcion)
                 oferta.fecha_publicacion = self._get_publish_date(descripcion)
                 oferta.experiencia = self._get_experience(descripcion)
@@ -114,15 +114,18 @@ class Tecnoempleo(Portal):
 
                 self._log.debug("Informacion extraida.")
 
-                # Inserta la oferta en BD
+                # Inserta la oferta en las posiciones para el csv
+                valores_posiciones.append(oferta.to_csv())
 
+                # Inserta la oferta en BD
                 self.ofertaDao.crear(oferta)
 
                 # Actualiza estadisticas
+
                 n_ofertas_analizadas += 1
-                if oferta.salario is not None:
+                if oferta.salario != "NULL":
                     n_ofertas_con_salario += 1
-                if oferta.experiencia is not None:
+                if oferta.experiencia != "NULL":
                     n_ofertas_con_experiencia += 1
 
                 self._log.debug("Estadisticas actualizadas")
@@ -137,11 +140,8 @@ class Tecnoempleo(Portal):
         # Si es la ultima, finaliza la busqueda y no añade las ultimas
         # posiciones ni estadisticas.
 
-        if titulo == self._titulo_ultima_oferta_pagina:
-            self._busqueda_finalizada = True
-            return
-        else:
-            self._titulo_ultima_oferta_pagina = titulo
+        # Escribe en CSV
+        self._csv.escribir_lineas(valores_posiciones)
 
         self._log.info(f"{len(posiciones)} ofertas analizadas.")
 
@@ -150,6 +150,12 @@ class Tecnoempleo(Portal):
         self._n_ofertas_con_salario += n_ofertas_con_salario
         self._n_ofertas_con_experiencia += n_ofertas_con_experiencia
         self._n_paginas_analizadas += 1
+
+        if titulo == self._titulo_ultima_oferta_pagina:
+            self._busqueda_finalizada = True
+            return
+        else:
+            self._titulo_ultima_oferta_pagina = titulo
 
     def _get_link(self, position: WebElement):
         return position.find_element(By.CSS_SELECTOR, "h3 > a").get_attribute("href")
@@ -165,7 +171,7 @@ class Tecnoempleo(Portal):
                 By.CSS_SELECTOR, 'span[itemprop="name"]'
             ).text
         except:
-            empresa = None
+            empresa = ""
 
         return empresa
 
@@ -187,7 +193,7 @@ class Tecnoempleo(Portal):
             return True
         return False
 
-    def _get_locations(self, descripcion: WebElement):
+    def _get_locations(self, descripcion: WebElement) -> list:
         """
         Extrae la localizacion de su CSS y de la descripcion del anuncio en caso de que existiesen
         ubicaciones extra.
@@ -197,13 +203,14 @@ class Tecnoempleo(Portal):
 
         except:
             locations = []
-        return locations
+        return list(locations)
 
     def _get_position(self, position: WebElement):
         td = Traductor()
         indice_puesto = 0
         try:
-            title = position.find_element(By.CSS_SELECTOR, 'h1[itemprop="title"]').text
+            title = position.find_element(
+                By.CSS_SELECTOR, 'h1[itemprop="title"]').text
             dominio_idioma = td.detectar_idioma(title)
 
             if dominio_idioma != "es":
@@ -223,8 +230,8 @@ class Tecnoempleo(Portal):
             position.find_element(By.CSS_SELECTOR, "span.ml-4").text
         )
 
-    def _extraer_caracteristica(self, position: WebElement, nombre_caracteristica):
-        valor = None
+    def _extraer_caracteristica(self, position: WebElement, nombre_caracteristica) -> str:
+        valor = "NULL"
 
         # Localizadores
         caracteristicas_locator = "ul > li"

@@ -32,7 +32,7 @@ class Traductor:
 
         except:
             self._log.error(format_exc())
-            return None
+            return ""
 
     def detectar_idioma(self, texto: str) -> str:
         ruta = "/detect"
@@ -55,7 +55,8 @@ class Traductor:
             json = request.json()
             if json[0]["score"] <= 0.8:
                 return json[0]["language"]
-            else: "en"
+            else:
+                return "en"
         except:
             self._log.error(format_exc())
-            return None
+            return ""

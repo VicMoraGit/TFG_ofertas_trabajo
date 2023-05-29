@@ -39,7 +39,7 @@ class Indeed(Portal):
         # DAOs
 
         self.ofertaDao = OfertaDao()
-        # self._log.setLevel(DEBUG)
+        self._log.setLevel(DEBUG)
 
     def buscar(self, keyword: str):
         # Reseteo de variables en cada busqueda
@@ -51,7 +51,8 @@ class Indeed(Portal):
                 # Para cada pagina un driver nuevo
                 super().abrir_nav()
                 self._driver.get(self._base_url)
-                self._log.info(f"Indeed.com {self.dominio_pais.upper()} abierta")
+                self._log.info(
+                    f"Indeed.com {self.dominio_pais.upper()} abierta")
 
                 try:
                     self._buscar_keyword(keyword=keyword, n_pagina=i)
@@ -89,7 +90,8 @@ class Indeed(Portal):
 
         # Espera que carguen las posiciones
         WebDriverWait(driver=driver, timeout=10).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, posiciones_locator))
+            EC.presence_of_element_located(
+                (By.CSS_SELECTOR, posiciones_locator))
         )
 
     def _scroll_al_elemento(self, posicion):
@@ -139,7 +141,8 @@ class Indeed(Portal):
             # Rellena el diccionario
             if not oferta.titulo == "":
                 oferta.ubicaciones = self._get_locations(posicion, descripcion)
-                oferta.es_teletrabajo = self._is_teletrabajo(oferta.ubicaciones)
+                oferta.es_teletrabajo = self._is_teletrabajo(
+                    oferta.ubicaciones)
                 oferta.companyia = self._get_companyname(posicion)
                 oferta.fecha_publicacion = self._get_publish_date(posicion)
                 oferta.experiencia = self._get_experience(descripcion)
@@ -149,17 +152,18 @@ class Indeed(Portal):
 
                 self._log.debug("Informacion extraida.")
 
-                # Inserta la oferta en BD
+                # Inserta la oferta en las posiciones para el csv
+                valores_posiciones.append(oferta.to_csv())
 
+                # Inserta la oferta en BD
                 self.ofertaDao.crear(oferta)
 
                 # Actualiza estadisticas
                 n_ofertas_analizadas += 1
-                if oferta.salario is not None:
+                if oferta.salario != "NULL":
                     n_ofertas_con_salario += 1
-                if oferta.experiencia is not None:
+                if oferta.experiencia != "NULL":
                     n_ofertas_con_experiencia += 1
-
                 self._log.debug("Estadisticas actualizadas")
 
             self._log.debug(f"Oferta analizada {i+1}/{len(posiciones)}")
@@ -168,11 +172,8 @@ class Indeed(Portal):
         # Si es la ultima, finaliza la busqueda y no añade las ultimas
         # posiciones ni estadisticas.
 
-        if titulo == self._titulo_ultima_oferta_pagina:
-            self._busqueda_finalizada = True
-            return
-        else:
-            self._titulo_ultima_oferta_pagina = titulo
+        # Escribe en CSV
+        self._csv.escribir_lineas(valores_posiciones)
 
         self._log.info(f"{len(posiciones)} ofertas analizadas.")
 
@@ -181,6 +182,12 @@ class Indeed(Portal):
         self._n_ofertas_con_salario += n_ofertas_con_salario
         self._n_ofertas_con_experiencia += n_ofertas_con_experiencia
         self._n_paginas_analizadas += 1
+
+        if titulo == self._titulo_ultima_oferta_pagina:
+            self._busqueda_finalizada = True
+            return
+        else:
+            self._titulo_ultima_oferta_pagina = titulo
 
     def _get_title(self, position: WebElement):
         try:
@@ -199,7 +206,7 @@ class Indeed(Portal):
             return True
         return False
 
-    def _get_position(self, position: WebElement):
+    def _get_position(self, position: WebElement) -> int:
         td = Traductor()
         indice_puesto = 0
         try:
@@ -217,7 +224,8 @@ class Indeed(Portal):
 
     def _get_companyname(self, position: WebElement):
         try:
-            company = position.find_element(By.CSS_SELECTOR, ".companyName").text
+            company = position.find_element(
+                By.CSS_SELECTOR, ".companyName").text
 
         except:
             company = ""
@@ -226,10 +234,10 @@ class Indeed(Portal):
     def _get_experience(self, position: WebElement):
         return self._filtro.filtrar_experiencia(position.text)
 
-    def _get_salaryexpected(self, position: WebElement):
+    def _get_salaryexpected(self, position: WebElement) -> (str | int):
         return self._filtro.filtrar_salario(position.text)
 
-    def _get_locations(self, position: WebElement, descripcion: WebElement):
+    def _get_locations(self, position: WebElement, descripcion: WebElement) -> list:
         """
         Extrae la localizacion de su CSS y de la descripcion del anuncio en caso de que existiesen
         ubicaciones extra.
@@ -243,14 +251,15 @@ class Indeed(Portal):
 
         except:
             locations = []
-        return locations
+        return list(locations)
 
     def _get_skills(self, position: WebElement):
         return self._filtro.filtrar_skills(position.text)
 
     def _get_publish_date(self, position: WebElement):
         try:
-            publish_date = position.find_element(By.CSS_SELECTOR, "span.date").text
+            publish_date = position.find_element(
+                By.CSS_SELECTOR, "span.date").text
         except:
             publish_date = ""
 

@@ -1,58 +1,56 @@
 from dataclasses import dataclass
 
+
 @dataclass
 class Requisito:
 
-    _id:int
-    _nombre:str
-    _descripcion:str
-    _enlace:str
-    _categoria:str
-    _subcategoria:str
+    _id: int
+    _nombre: str
+    _descripcion: str
+    _enlace: str
+    _categoria: str
+    _subcategoria: str
 
-	
     @property
     def id(self):
         return self._id
-    
+
     @property
     def nombre(self):
         return self._nombre
-    
+
     @nombre.setter
-    def nombre(self,nombre:str):
+    def nombre(self, nombre: str):
         self._nombre = nombre
-    
+
     @property
     def descripcion(self):
         return self._descripcion
-    
+
     @descripcion.setter
-    def descripcion(self,descripcion:str):
+    def descripcion(self, descripcion: str):
         self._descripcion = descripcion
-    
+
     @property
     def enlace(self):
         return self._enlace
-    
+
     @enlace.setter
-    def enlace(self,enlace:str):
+    def enlace(self, enlace: str):
         self._enlace = enlace
-    
+
     @property
     def categoria(self):
         return self._categoria
-    
+
     @categoria.setter
-    def categoria(self,categoria:str):
+    def categoria(self, categoria: str):
         self._categoria = categoria
 
     @property
     def subcategoria(self):
         return self._subcategoria
-    
+
     @subcategoria.setter
-    def subcategoria(self,subcategoria:str):
+    def subcategoria(self, subcategoria: str):
         self._subcategoria = subcategoria
-    
-    

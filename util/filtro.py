@@ -68,13 +68,14 @@ class FiltroOfertas:
 
         # Si no contiene digitos, se habra publicado hoy. ej. "Recien publicado", "Hoy".
         else:
-            palabras_publicacion_hoy = ["recien", "hoy", "today", "now", "just"]
+            palabras_publicacion_hoy = [
+                "recien", "hoy", "today", "now", "just"]
             if any(x in texto_lowercase for x in palabras_publicacion_hoy):
                 fecha_string = date.today().strftime(formato_fecha)
 
         return fecha_string
 
-    def filtrar_salario(self, texto: str):
+    def filtrar_salario(self, texto: str) -> (str | int):
         salario = "NULL"
 
         # Extrae el salario de un texto, teniendo en cuenta numero de digitos, puntos, espacios y simbolo €
@@ -160,18 +161,19 @@ class FiltroOfertas:
 
         return skills_oferta
 
-    def filtrar_localizacion(self, texto: str):
+    def filtrar_localizacion(self, texto: str) -> set:
         localizacion = []
         texto_lowercase = unidecode(texto.lower())
 
         for provincia in PROVINCIAS_NORMALIZADAS.keys():
             if provincia in texto_lowercase:
-                indice = list(PROVINCIAS_COMUNIDADES.keys()).index(PROVINCIAS_NORMALIZADAS[provincia]) + 1
+                indice = list(PROVINCIAS_COMUNIDADES.keys()).index(
+                    PROVINCIAS_NORMALIZADAS[provincia]) + 1
                 localizacion.append(indice)
 
         return set(localizacion)
 
-    def filtrar_posicion(self, titulo: str):
+    def filtrar_posicion(self, titulo: str) -> int:
         """
         Cada indice representa un rol de IT. La lista que se encuentra en cada indice,
         alberga palabras que se relacionan con ese rol.
@@ -182,7 +184,8 @@ class FiltroOfertas:
         4. Ese indice es el mismo que el de la BD.
         """
         # Eliminamos acentos y el femenino, se pasa a minusculas y se divide por palabras.
-        titulo = unidecode(titulo.lower()).replace("/a", "").split(" ")
+        palabras_titulo = unidecode(
+            titulo.lower()).replace("/a", "").split(" ")
 
         indice_mas_alto = 98
         puntuacion_rol = 0
@@ -191,12 +194,12 @@ class FiltroOfertas:
         # En caso de que se haga referencia a una beca/practicas se devuelve ese indice antes de comparar nada mas
 
         for palabra in PALABRAS_RELACIONADAS_ROL[0].keys():
-            if palabra in titulo:
+            if palabra in palabras_titulo:
                 return 1
 
         for indice_actual, palabras in enumerate(PALABRAS_RELACIONADAS_ROL):
             for palabra in palabras.keys():
-                if palabra in titulo:
+                if palabra in palabras_titulo:
                     puntuacion_rol += palabras[palabra]
 
             if puntuacion_rol > puntuacion_rol_maxima:

@@ -1,6 +1,8 @@
 from strenum import StrEnum
 
+
 class Categoria(StrEnum):
+    SOFT_SKILL = "Soft Skill"
     FRAMEWORK = "Framework"
     LIBRERIA = "Librería"
     SDK = "Kit de desarrollo de software"
