@@ -53,6 +53,7 @@ class csvHandler:
             [
                 "Titulo",
                 "Compañia",
+                "Puesto",
                 "Experiencia",
                 "Salario",
                 "Ubicacion",

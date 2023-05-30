@@ -149,7 +149,7 @@ class FiltroOfertas:
         for indice, skill in enumerate(ALL_SKILLS):
             # La expresion regular se asegura de que una de las denominaciones de la skill coincida con una parte del texto
             for denominacion in skill[0]:
-                p = re.compile(rf"\b{re.escape(denominacion.lower())}\b")
+                p = re.compile(rf"{re.escape(denominacion.lower())}")
                 s = p.search(texto_lowercase)
 
                 if s is not None:
