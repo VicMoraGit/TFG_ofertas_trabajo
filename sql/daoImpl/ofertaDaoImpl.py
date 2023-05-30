@@ -1,5 +1,5 @@
 from datetime import datetime
-from logging import Logger, getLogger
+from logging import DEBUG, Logger, getLogger
 from interfaces.dao.ofertaDaoInterface import OfertaDaoInterface
 from models.ofertaDto import Oferta
 from sql.conexion import conexion_sql
@@ -77,6 +77,24 @@ class OfertaDao(OfertaDaoInterface):
 
         return oferta
 
+    def existe_oferta(self, oferta: Oferta):
+
+        with conexion_sql() as con:
+            cursor = con.cursor()
+            cursor.execute(
+                f"SELECT * FROM oferta WHERE Titulo='{oferta.titulo}' AND Companyia='{oferta.companyia}' AND Fecha_publicacion='{oferta.fecha_publicacion}';")
+
+            ofertaRaw = cursor.fetchone()
+
+            if ofertaRaw is None:
+
+                self._log.debug("No hay ningun oferta con ese ID")
+                return False
+
+            else:
+
+                return True
+
     def borrar(self, idOferta: int):
         with conexion_sql() as con:
             cursor = con.cursor()
@@ -99,6 +117,11 @@ class OfertaDao(OfertaDaoInterface):
                 return True
 
     def crear(self, oferta: Oferta):
+
+        if self.existe_oferta(oferta):
+            self._log.debug("La oferta ya existe")
+            return True
+
         with conexion_sql() as con:
             cursor = con.cursor()
             cursor.execute(
