@@ -19,13 +19,14 @@ FILTRO_FECHAS = ["nueva", "actualizada", "reciente"]
 
 PALABRAS_RELACIONADAS_ROL = [
     {  # 0
-        "practicas": 1,
-        "beca": 1,
-        "pasante": 1,
-        "interno": 1,
-        "pasantia": 1,
-        "programa": 1,
-    },  # No importan los valores en esta lista
+        "practicas": 5,
+        "beca": 5,
+        "pasante": 5,
+        "interno": 5,
+
+        "pasantia": 5,
+        "programa": 5,
+        "practica": 5},  # No importan los valores en esta lista
     {
         "administrador": 5,
         "administradores": 5,
@@ -53,6 +54,8 @@ PALABRAS_RELACIONADAS_ROL = [
         "backend": 5,
         "web": 2,
         "back-end": 5,
+        "back end": 5,
+
     },  # 3
     {
         "ingeniero": 5,
@@ -78,6 +81,7 @@ PALABRAS_RELACIONADAS_ROL = [
         "desarrollador": 5,
         "desarrolladores": 5,
         "frontend": 5,
+        "front end": 5,
         "web": 2,
         "front-end": 5,
         "frontal": 4,
@@ -433,6 +437,7 @@ PALABRAS_RELACIONADAS_ROL = [
         "programador": 5,
         "programadores": 5,
         "web": 5,
+        "fullstack": 5,
         "fullstack": 5,
         "full-stack": 5,
     },  # 49
