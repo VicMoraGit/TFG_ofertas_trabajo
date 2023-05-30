@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from sql.daoImpl.puestoDaoImpl import PuestoDao
 from util.constantes import ALL_SKILLS, PROVINCIAS_COMUNIDADES
 
 
@@ -96,7 +97,8 @@ class Oferta:
 
         nombres_ubicaciones = self._get_ubicaciones_from_ids()
         nombres_requisitos = self._get_requisitos_from_ids()
-        valores = [self._titulo, self._companyia,
+        nombre_puesto = self._get_puesto_from_id()
+        valores = [self._titulo, self._companyia, nombre_puesto,
                    self._experiencia, str(self._salario), nombres_ubicaciones, self._fecha_publicacion, nombres_requisitos]
         return valores
 
@@ -115,3 +117,9 @@ class Oferta:
         for id_requisito in self._requisitos:
             nombres_requisitos.append(ALL_SKILLS[id_requisito-1][0][0])
         return nombres_requisitos
+
+    def _get_puesto_from_id(self):
+        puesto = PuestoDao().obtener(self._puesto)
+        if puesto is not None:
+            return puesto.nombre
+        return "Sin definir"

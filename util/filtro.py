@@ -183,9 +183,9 @@ class FiltroOfertas:
         3. La lista que tenga mas palabras es el puesto de la oferta.
         4. Ese indice es el mismo que el de la BD.
         """
-        # Eliminamos acentos y el femenino, se pasa a minusculas y se divide por palabras.
+        # Eliminamos acentos y el femenino y se pasa a minusculas y se divide por palabras.
         palabras_titulo = unidecode(
-            titulo.lower()).replace("/a", "").split(" ")
+            titulo.lower()).replace("/a", "")
 
         indice_mas_alto = 98
         puntuacion_rol = 0
@@ -194,12 +194,18 @@ class FiltroOfertas:
         # En caso de que se haga referencia a una beca/practicas se devuelve ese indice antes de comparar nada mas
 
         for palabra in PALABRAS_RELACIONADAS_ROL[0].keys():
-            if palabra in palabras_titulo:
+            p = re.compile(rf"\b{re.escape(unidecode(palabra.lower()))}(\b|s)")
+            s = p.search(palabras_titulo)
+            if s is not None:
                 return 1
 
         for indice_actual, palabras in enumerate(PALABRAS_RELACIONADAS_ROL):
+
             for palabra in palabras.keys():
-                if palabra in palabras_titulo:
+                p = re.compile(
+                    rf"\b{re.escape(unidecode(palabra.lower()))}(\b|s)")
+                s = p.search(palabras_titulo)
+                if s is not None:
                     puntuacion_rol += palabras[palabra]
 
             if puntuacion_rol > puntuacion_rol_maxima:
