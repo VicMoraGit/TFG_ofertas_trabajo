@@ -13,12 +13,10 @@ import util.stats as stats
 # Selenium
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
-from selenium.webdriver.chrome.webdriver import WebDriver
-from selenium.webdriver.chrome.options import Options
+
 
 
 class Monster(Portal):
@@ -28,7 +26,7 @@ class Monster(Portal):
         self._base_url: str = "https://www.monster.es/"
         self._log: Logger = getLogger(__class__.__name__)
         self._titulo_ultima_oferta_pagina = ""
-        super().abrir_nav(headless=False)
+        super().abrir_nav()
         # self._log.setLevel(DEBUG)
         self.ofertaDao = OfertaDao()
 

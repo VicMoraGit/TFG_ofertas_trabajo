@@ -63,6 +63,7 @@ class Indeed(Portal):
                         break
 
                 except (DescripcionNoEmbebida, WebDriverException):
+                    self._driver.save_screenshot("error.png")
                     self._log.error(format_exc())
                     self._driver.quit()
                     break

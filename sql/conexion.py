@@ -9,7 +9,7 @@ log: Logger = getLogger("MySQL")
 @contextmanager
 def conexion_sql():
 
-    host = "localhost"
+    host = "host.docker.internal"
     user = "tfgUser"
     pwd = "tfgUser"
     db = "tfg"

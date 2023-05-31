@@ -8,14 +8,9 @@ from interfaces.operacionesBusquedaInterface import OperacionesBusquedaInterface
 
 # Selenium
 from selenium.webdriver.remote.webelement import WebElement
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.webdriver import WebDriver
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
 import undetected_chromedriver as uc
 
-DRIVER_VERSION_MANAGER = "112.0.5615.49"
-DRIVER_VERSION_UNDETECTED = 113
+DRIVER_VERSION_UNDETECTED = 114
 
 
 class Portal(obi):
@@ -35,21 +30,13 @@ class Portal(obi):
         self._ruta_captura_captcha = ""
         self._t_total = 0
 
-    def abrir_nav(self, headless=False):
-        options = Options()
+    def abrir_nav(self):
+        options = uc.ChromeOptions()
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage')
         # options.add_experimental_option("useAutomationExtension",False)
         # options.add_experimental_option("excludeSwitches",["enable-automation"])
-        if headless:
-            options.add_argument("--headless")
-            s = Service(ChromeDriverManager(version=DRIVER_VERSION_MANAGER).install())
-
-            self._driver = WebDriver(service=s, options=options)
-
-        else:
-
-            self._driver = uc.Chrome(
-            version_main=DRIVER_VERSION_UNDETECTED,
-        )
+        self._driver = uc.Chrome(options=options)
 
     def buscar(self, keyword: str):
         pass
