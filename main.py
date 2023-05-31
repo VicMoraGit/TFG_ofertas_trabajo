@@ -4,6 +4,8 @@ from models.requisitoDto import Requisito
 from sql.daoImpl.requisitoDaoImpl import RequisitoDao
 from util.constantes import ALL_SKILLS
 
+from pyvirtualdisplay.display import Display
+
 from util.csvHandler import csvHandler
 import util.stats as stats
 
@@ -28,24 +30,26 @@ if __name__ == "__main__":
     portales: list[Portal] = []
     keywords = ["Frontend"]
     n_paginas = 1
+    with Display() as disp:
+        # portales.append(Tecnoempleo(n_paginas=n_paginas, csvHandler=csvh))
+        # portales.append(Monster(n_paginas=n_paginas, csvHandler=csvh))
+        portales.append(Indeed(n_paginas=n_paginas,
+                        csvHandler=csvh, dominio_pais="es"))
+        # portales.append(Indeed(n_paginas=n_paginas, csvHandler=csvh, dominio_pa is="uk"))
+        # portales.append(Indeed(n_paginas=n_paginas,csvHandler=csvh,dominio_pais="fr"))
 
-    portales.append(Tecnoempleo(n_paginas=n_paginas, csvHandler=csvh))
-    # portales.append(Monster(n_paginas=n_paginas, csvHandler=csvh))
-    # portales.append(Indeed(n_paginas=n_paginas,csvHandler=csvh, dominio_pais="es"))
-    # portales.append(Indeed(n_paginas=n_paginas, csvHandler=csvh, dominio_pais="uk"))
-    # portales.append(Indeed(n_paginas=n_paginas,csvHandler=csvh,dominio_pais="fr"))
+        stats.s_inicio = time()
 
-    stats.s_inicio = time()
-    for portal in portales:
-        portal._iniciar_cronometro()
+        for portal in portales:
+            portal._iniciar_cronometro()
 
-        for keyword in keywords:
-            log.info(f"Buscando {keyword} en {portal.__class__.__name__}")
-            portal.buscar(keyword)
+            for keyword in keywords:
+                log.info(f"Buscando {keyword} en {portal.__class__.__name__}")
+                portal.buscar(keyword)
 
-        portal.actualizar_estadisticas()
+            portal.actualizar_estadisticas()
 
-    csvh.cerrar_archivo()
-    stats.s_final = time()
-    stats.imprime_stats()
-    stats.exporta_stats()
+        csvh.cerrar_archivo()
+        stats.s_final = time()
+        stats.imprime_stats()
+        stats.exporta_stats()
