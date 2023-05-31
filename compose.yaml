@@ -1,0 +1,7 @@
+services:
+  python:
+    image: script_python
+    build: .
+    container_name: python
+    extra_hosts:
+    - "host.docker.internal:host-gateway"
