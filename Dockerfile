@@ -39,4 +39,4 @@ COPY . .
 
 RUN apt install xvfb -y
 RUN pip install -r requirements.txt
-RUN python main.py
+RUN python main.py --docker
