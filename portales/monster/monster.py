@@ -18,7 +18,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 
 
-
 class Monster(Portal):
     def __init__(self, n_paginas: int, csvHandler: csvHandler):
         super().__init__(n_paginas, csvHandler)
@@ -37,10 +36,13 @@ class Monster(Portal):
         self._log.info("Monster.es abierta")
 
         for i in range(1, self._n_paginas_total + 1):
+
             self._buscar_keyword(keyword=keyword, n_pagina=i)
-            self._analizar_posiciones()
+
             if self._busqueda_finalizada:
                 break
+
+            self._analizar_posiciones()
 
     def _buscar_keyword(self, keyword: str, n_pagina: int):
         ruta_busqueda = "trabajo/buscar"
@@ -79,13 +81,9 @@ class Monster(Portal):
         posiciones_locator = "#JobCardGrid > ul > li"
         descripcion_oferta_locator = "BigJobCardId"
 
-        # Obtiene las posiciones de esa pagina. Si no hay es que ha llegado a la ultima pagina.
-        try:
-            posiciones = driver.find_elements(
-                By.CSS_SELECTOR, posiciones_locator)
-        except NoSuchElementException:
-            self._busqueda_finalizada = True
-            return
+        posiciones = driver.find_elements(
+            By.CSS_SELECTOR, posiciones_locator)
+
         self._log.info(f"Analizando ofertas.")
 
         # Abre cada posicion y extrae la informacion
