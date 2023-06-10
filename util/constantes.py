@@ -134,7 +134,8 @@ PALABRAS_RELACIONADAS_ROL = [
         "ciberseguridad": 4,
         "sistemas": 1,
         "embebidos": 1,
-        "IoT": 2,
+        "IoT": 6,
+        "IOT": 6,
         "internet": 1,
         "cosas": 1,
         "cibernetica": 3,
@@ -360,6 +361,7 @@ PALABRAS_RELACIONADAS_ROL = [
         "bd": 3,
         "bbdd": 3,
         "db": 3,
+        "db": 6,
     },
     {  # 39
         "disenador": 5,

@@ -18,7 +18,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 
 
-
 class Monster(Portal):
     def __init__(self, n_paginas: int, csvHandler: csvHandler):
         super().__init__(n_paginas, csvHandler)
@@ -26,21 +25,23 @@ class Monster(Portal):
         self._base_url: str = "https://www.monster.es/"
         self._log: Logger = getLogger(__class__.__name__)
         self._titulo_ultima_oferta_pagina = ""
-        super().abrir_nav()
-        # self._log.setLevel(DEBUG)
+        self._log.setLevel(DEBUG)
         self.ofertaDao = OfertaDao()
 
     def buscar(self, keyword: str):
         self._busqueda_finalizada = False
-
+        super().abrir_nav()
         self._driver.get(self._base_url)
         self._log.info("Monster.es abierta")
 
         for i in range(1, self._n_paginas_total + 1):
+
             self._buscar_keyword(keyword=keyword, n_pagina=i)
-            self._analizar_posiciones()
+
             if self._busqueda_finalizada:
                 break
+
+            self._analizar_posiciones()
 
     def _buscar_keyword(self, keyword: str, n_pagina: int):
         ruta_busqueda = "trabajo/buscar"
@@ -73,19 +74,14 @@ class Monster(Portal):
         n_ofertas_analizadas = 0
         n_ofertas_con_salario = 0
         n_ofertas_con_experiencia = 0
-        titulo = ""
 
         # Localizadores
         posiciones_locator = "#JobCardGrid > ul > li"
         descripcion_oferta_locator = "BigJobCardId"
 
-        # Obtiene las posiciones de esa pagina. Si no hay es que ha llegado a la ultima pagina.
-        try:
-            posiciones = driver.find_elements(
-                By.CSS_SELECTOR, posiciones_locator)
-        except NoSuchElementException:
-            self._busqueda_finalizada = True
-            return
+        posiciones = driver.find_elements(
+            By.CSS_SELECTOR, posiciones_locator)
+
         self._log.info(f"Analizando ofertas.")
 
         # Abre cada posicion y extrae la informacion
@@ -103,7 +99,6 @@ class Monster(Portal):
                         (By.ID, descripcion_oferta_locator))
                 )
             except:
-                self._busqueda_finalizada = True
                 break
 
             # Extrae la informacion de la oferta visible

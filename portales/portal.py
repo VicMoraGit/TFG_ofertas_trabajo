@@ -38,6 +38,9 @@ class Portal(obi):
         # options.add_experimental_option("excludeSwitches",["enable-automation"])
         self._driver = uc.Chrome(options=options)
 
+    def close(self):
+        self._driver.quit()
+
     def buscar(self, keyword: str):
         pass
 

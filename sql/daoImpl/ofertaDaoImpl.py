@@ -82,7 +82,7 @@ class OfertaDao(OfertaDaoInterface):
         with conexion_sql() as con:
             cursor = con.cursor()
             cursor.execute(
-                f"SELECT * FROM oferta WHERE Titulo='{oferta.titulo}' AND Companyia='{oferta.companyia}' AND Fecha_publicacion='{oferta.fecha_publicacion}';")
+                f"SELECT * FROM oferta WHERE Titulo='{oferta.titulo}' AND Companyia='{oferta.companyia}' AND Fecha_publicacion={oferta.fecha_publicacion};")
 
             ofertaRaw = cursor.fetchone()
 
@@ -118,6 +118,9 @@ class OfertaDao(OfertaDaoInterface):
 
     def crear(self, oferta: Oferta):
 
+        if oferta.fecha_publicacion != "NULL":
+            # Si la fecha existe, se añaden las comillas para evitar un error en SQL
+            oferta.fecha_publicacion = f"'{oferta.fecha_publicacion}'"
         if self.existe_oferta(oferta):
             self._log.debug("La oferta ya existe")
             return True
@@ -130,7 +133,7 @@ class OfertaDao(OfertaDaoInterface):
                 '{oferta.companyia}',
                 {oferta.experiencia}, 
                 {oferta.salario},
-                '{oferta.fecha_publicacion}',
+                {oferta.fecha_publicacion},
                 {oferta.puesto}, 
                 {oferta.es_teletrabajo}
                 );

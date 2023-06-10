@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 python:3
+FROM --platform=linux/amd64 python:3.10
 
 VOLUME /data
 
@@ -39,4 +39,4 @@ COPY . .
 
 RUN apt install xvfb -y
 RUN pip install -r requirements.txt
-RUN python main.py
+RUN python main.py --docker
