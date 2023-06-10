@@ -25,13 +25,12 @@ class Monster(Portal):
         self._base_url: str = "https://www.monster.es/"
         self._log: Logger = getLogger(__class__.__name__)
         self._titulo_ultima_oferta_pagina = ""
-        super().abrir_nav()
-        # self._log.setLevel(DEBUG)
+        self._log.setLevel(DEBUG)
         self.ofertaDao = OfertaDao()
 
     def buscar(self, keyword: str):
         self._busqueda_finalizada = False
-
+        super().abrir_nav()
         self._driver.get(self._base_url)
         self._log.info("Monster.es abierta")
 
@@ -75,7 +74,6 @@ class Monster(Portal):
         n_ofertas_analizadas = 0
         n_ofertas_con_salario = 0
         n_ofertas_con_experiencia = 0
-        titulo = ""
 
         # Localizadores
         posiciones_locator = "#JobCardGrid > ul > li"
@@ -101,7 +99,6 @@ class Monster(Portal):
                         (By.ID, descripcion_oferta_locator))
                 )
             except:
-                self._busqueda_finalizada = True
                 break
 
             # Extrae la informacion de la oferta visible

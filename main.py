@@ -28,14 +28,16 @@ if __name__ == "__main__":
     csvh = csvHandler()
     # Declaracion variables
     portales: list[Portal] = []
-    keywords = ["Frontend"]
-    n_paginas = 1
+    keywords = ["DevOps",  "Programador", "Desarrollador", "Analista", "Frontend", "Inteligencia artificial", "Backend",
+                "Fullstack", "Ciencia de datos", "Ciberseguridad", "IoT", "Redes", "Bases de datos", "Mineria de Datos", "Robotica", "Desarrollo de videojuegos"
+                ]
+    n_paginas = 30
     with Display() as disp:
-        # portales.append(Tecnoempleo(n_paginas=n_paginas, csvHandler=csvh))
-        # portales.append(Monster(n_paginas=n_paginas, csvHandler=csvh))
+        portales.append(Tecnoempleo(n_paginas=n_paginas, csvHandler=csvh))
+        portales.append(Monster(n_paginas=n_paginas, csvHandler=csvh))
         portales.append(Indeed(n_paginas=n_paginas,
                         csvHandler=csvh, dominio_pais="es"))
-        # portales.append(Indeed(n_paginas=n_paginas, csvHandler=csvh, dominio_pa is="uk"))
+        # portales.append(Indeed(n_paginas=n_paginas, csvHandler=csvh, dominio_pais="uk"))
         # portales.append(Indeed(n_paginas=n_paginas,csvHandler=csvh,dominio_pais="fr"))
 
         stats.s_inicio = time()
@@ -46,6 +48,7 @@ if __name__ == "__main__":
             for keyword in keywords:
                 log.info(f"Buscando {keyword} en {portal.__class__.__name__}")
                 portal.buscar(keyword)
+                portal.close()
 
             portal.actualizar_estadisticas()
 

@@ -65,7 +65,7 @@ class Indeed(Portal):
                 except (DescripcionNoEmbebida, WebDriverException):
                     self._driver.save_screenshot("error.png")
                     self._log.error(format_exc())
-                    self._driver.quit()
+                    self._busqueda_finalizada = True
                     break
 
                 if i == self._n_paginas_total - 1:
