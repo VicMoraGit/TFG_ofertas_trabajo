@@ -21,18 +21,24 @@ class csvHandler:
 
     def __obtener_ruta_archivo(self):
         # Devuelve ruta de un csv con la fecha de hoy en el nombre
-        dateTimeObj = date.today()
-        nombre_archivo = "Analisis_" + str(dateTimeObj) + ".csv"
+        fechaHoy = str(date.today())
+        i = 0
+        nombre_archivo = f"Analisis_{fechaHoy}_{str(i)}.csv"
 
         ruta = path.join(getcwd(), "data", "CSV", nombre_archivo)
         self._log.debug("Ruta creada")
+
+        while path.exists(ruta):
+            i += 1
+            nombre_archivo = f"Analisis_{fechaHoy}_{str(i)}.csv"
+            ruta = path.join(getcwd(), "data", "CSV", nombre_archivo)
 
         return ruta
 
     def __obtener_archivo(self):
         try:
             archivo = open(self._ruta, "w", encoding="UTF-8", newline="")
-            self._log.debug("Archivo creado/abierto")
+            self._log.debug("Archivo creado")
             return archivo
         except Exception as e:
             self._log.critical("Error al crear el archivo", exc_info=True)

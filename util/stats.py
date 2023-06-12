@@ -54,9 +54,7 @@ def imprime_stats():
 
 
 def exporta_stats():
-    dateTimeObj = date.today()
-    nombre_archivo = f"Estadisticas_ultima_ejecucion{dateTimeObj}.txt"
-    ruta = path.join(getcwd(), "data", "estadisticas", nombre_archivo)
+    ruta = __obtener_ruta_archivo()
 
     with open(ruta, "w") as f:
         f.write("=" * 60)
@@ -107,6 +105,22 @@ def exporta_stats():
         )
 
         f.write("=" * 60)
+
+
+def __obtener_ruta_archivo():
+    # Devuelve ruta de un csv con la fecha de hoy en el nombre
+    fechaHoy = str(date.today())
+    i = 0
+    nombre_archivo = f"Estadisticas_ultima_ejecucion_{fechaHoy}_{str(i)}.txt"
+
+    ruta = path.join(getcwd(), "data", "estadisticas", nombre_archivo)
+
+    while path.exists(ruta):
+        i += 1
+        nombre_archivo = f"Estadisticas_ultima_ejecucion_{fechaHoy}_{str(i)}.txt"
+        ruta = path.join(getcwd(), "data", "estadisticas", nombre_archivo)
+
+    return ruta
 
 
 n_ofertas_analizadas = 0
