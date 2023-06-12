@@ -7,7 +7,9 @@ from dateutil.relativedelta import relativedelta
 # Modulos externos
 from unidecode import (
     unidecode,
-)  # util para no tener en cuenta acentos y caracteres no-Ascii
+)
+# util para no tener en cuenta acentos y caracteres no-Ascii
+from exceptions.SalarioDemasiadoBajo import SalarioDemasiadoBajo
 
 from util.constantes import (
     ALL_SKILLS,
@@ -90,6 +92,9 @@ class FiltroOfertas:
 
                 salario = s.group()
                 salario = int(re.sub(r"[€$.,£]", "", salario))
+                if salario < 15120:
+                    salario = "NULL"
+                    raise SalarioDemasiadoBajo()
                 log.debug("Hay informacion sobre el salario")
 
         except:
