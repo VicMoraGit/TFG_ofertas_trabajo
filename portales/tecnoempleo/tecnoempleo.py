@@ -24,7 +24,7 @@ class Tecnoempleo(Portal):
         self._base_url: str = "https://www.tecnoempleo.com/"
         self._log: Logger = getLogger(__class__.__name__)
         self._titulo_ultima_oferta_pagina = ""
-        self._log.setLevel(DEBUG)
+        # self._log.setLevel(DEBUG)
         self.ofertaDao = OfertaDao()
 
     def buscar(self, keyword: str):

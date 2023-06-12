@@ -39,7 +39,7 @@ class Indeed(Portal):
         # DAOs
 
         self.ofertaDao = OfertaDao()
-        self._log.setLevel(DEBUG)
+        # self._log.setLevel(DEBUG)
 
     def buscar(self, keyword: str):
         # Reseteo de variables en cada busqueda
@@ -79,10 +79,10 @@ class Indeed(Portal):
         ruta_busqueda = "jobs"
         parametro_keyword = "q=" + keyword
         parametro_pagina = "start=" + str(n_pagina) + "0"
-
+        parametro_mas_recientes = 'sort=date'
         driver = self._driver
         driver.get(
-            f"{self._base_url}{ruta_busqueda}?{parametro_pagina}&{parametro_keyword}"
+            f"{self._base_url}{ruta_busqueda}?{parametro_pagina}&{parametro_keyword}&{parametro_mas_recientes}"
         )
         self._log.info(f"Analizando pagina {str(n_pagina+1)}")
 

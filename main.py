@@ -31,7 +31,7 @@ if __name__ == "__main__":
     keywords = ["DevOps",  "Programador", "Desarrollador", "Analista", "Frontend", "Inteligencia artificial", "Backend",
                 "Fullstack", "Ciencia de datos", "Ciberseguridad", "IoT", "Redes", "Bases de datos", "Mineria de Datos", "Robotica", "Desarrollo de videojuegos"
                 ]
-    n_paginas = 30
+    n_paginas = 100
     with Display() as disp:
         portales.append(Tecnoempleo(n_paginas=n_paginas, csvHandler=csvh))
         portales.append(Monster(n_paginas=n_paginas, csvHandler=csvh))
