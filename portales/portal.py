@@ -36,7 +36,8 @@ class Portal(obi):
         options.add_argument('--disable-dev-shm-usage')
         # options.add_experimental_option("useAutomationExtension",False)
         # options.add_experimental_option("excludeSwitches",["enable-automation"])
-        self._driver = uc.Chrome(options=options)
+        self._driver = uc.Chrome(
+            options=options, browser_executable_path="/usr/bin/brave-browser", version_main=DRIVER_VERSION_UNDETECTED)
 
     def close(self):
         self._driver.quit()
