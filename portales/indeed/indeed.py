@@ -21,6 +21,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import WebDriverException
+from selenium.common.exceptions import TimeoutException
 
 # TODO:
 # [x]: Comprobar teletrabajo
@@ -56,11 +57,13 @@ class Indeed(Portal):
 
                 try:
                     self._buscar_keyword(keyword=keyword, n_pagina=i)
-                    self._analizar_posiciones()
-                    self._driver.quit()
-
                     if self._busqueda_finalizada:
+                        self.close()
+
                         break
+                    self._analizar_posiciones()
+                    self._log.info("Quiting browser")
+                    self._driver.close()
 
                 except (DescripcionNoEmbebida, WebDriverException):
                     self._driver.save_screenshot("error.png")
@@ -89,11 +92,15 @@ class Indeed(Portal):
         # Localizadores
         posiciones_locator = "#mosaic-provider-jobcards > ul > li div.cardOutline"
 
-        # Espera que carguen las posiciones
-        WebDriverWait(driver=driver, timeout=10).until(
-            EC.presence_of_element_located(
-                (By.CSS_SELECTOR, posiciones_locator))
-        )
+        # Espera que carguen las posiciones. Si no hay posiciones es que se ha llegado a la ultima pagina.
+        try:
+            WebDriverWait(driver=driver, timeout=10).until(
+                EC.visibility_of_element_located(
+                    (By.CSS_SELECTOR, posiciones_locator))
+            )
+        except TimeoutException:
+            self._busqueda_finalizada = True
+            return
 
     def _scroll_al_elemento(self, posicion):
         driver = self._driver
@@ -185,7 +192,6 @@ class Indeed(Portal):
         self._n_paginas_analizadas += 1
 
         if titulo == self._titulo_ultima_oferta_pagina:
-            self._busqueda_finalizada = True
             return
         else:
             self._titulo_ultima_oferta_pagina = titulo

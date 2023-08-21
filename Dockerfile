@@ -17,7 +17,6 @@ RUN apt-get update && apt-get install -y \
     libdrm2 \
     libgbm1 \
     libgtk-3-0 \
-    #    libgtk-4-1 \
     libnspr4 \
     libnss3 \
     libwayland-client0 \
@@ -29,14 +28,17 @@ RUN apt-get update && apt-get install -y \
     xdg-utils \
     libu2f-udev \
     libvulkan1
-# Chrome 
-RUN curl -LO  https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-RUN apt-get install -y ./google-chrome-stable_current_amd64.deb
-RUN rm google-chrome-stable_current_amd64.deb
+# Brave 
+RUN curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
+RUN echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main"| tee /etc/apt/sources.list.d/brave-browser-release.list
+RUN apt update
+RUN apt install brave-browser=1.52.126 -y
 
 WORKDIR /data
 COPY . .
 
+#Librerias y requerimientos para python
 RUN apt install xvfb -y
 RUN pip install -r requirements.txt
+
 RUN python main.py --docker

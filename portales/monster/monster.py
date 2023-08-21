@@ -15,7 +15,7 @@ from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException, NoSuchElementException
+from selenium.common.exceptions import TimeoutException
 
 
 class Monster(Portal):
@@ -148,7 +148,7 @@ class Monster(Portal):
         self._n_paginas_analizadas += 1
 
     def _get_title(self, position):
-        return position.find_element(By.CSS_SELECTOR, "h1.JobViewTitle").text.strip()
+        return position.find_element(By.CSS_SELECTOR, "h2.JobViewTitle").text.strip()
 
     def _get_companyname(self, position) -> str:
         try:

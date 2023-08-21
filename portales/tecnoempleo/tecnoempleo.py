@@ -15,6 +15,7 @@ from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
 
 
 class Tecnoempleo(Portal):
@@ -35,9 +36,11 @@ class Tecnoempleo(Portal):
 
         for i in range(1, self._n_paginas_total + 1):
             self._buscar_keyword(keyword=keyword, n_pagina=i)
-            self._analizar_posiciones()
+
             if self._busqueda_finalizada:
                 break
+
+            self._analizar_posiciones()
 
     def _buscar_keyword(self, keyword: str, n_pagina: int):
         ruta_busqueda = "ofertas-trabajo"
@@ -53,11 +56,15 @@ class Tecnoempleo(Portal):
         # Localizadores
         posiciones_locator = "div.bg-white.col-12.col-sm-12.col-md-12.col-lg-9 > div.p-2.border-bottom.py-3.bg-white"
 
-        # Espera que carguen las posiciones
-        WebDriverWait(driver=driver, timeout=10).until(
-            EC.presence_of_element_located(
-                (By.CSS_SELECTOR, posiciones_locator))
-        )
+        # Espera que carguen las posiciones. Si no hay posiciones es que se ha llegado a la ultima pagina.
+        try:
+            WebDriverWait(driver=driver, timeout=10).until(
+                EC.visibility_of_element_located(
+                    (By.CSS_SELECTOR, posiciones_locator))
+            )
+        except TimeoutException:
+            self._busqueda_finalizada = True
+            return
 
     def _analizar_posiciones(self):
         driver = self._driver
@@ -150,7 +157,7 @@ class Tecnoempleo(Portal):
         self._n_paginas_analizadas += 1
 
         if titulo == self._titulo_ultima_oferta_pagina:
-            self._busqueda_finalizada = True
+
             return
         else:
             self._titulo_ultima_oferta_pagina = titulo
