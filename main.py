@@ -1,25 +1,64 @@
 import logging
+import traceback
 from time import time
-from models.requisitoDto import Requisito
-from sql.daoImpl.requisitoDaoImpl import RequisitoDao
-from util.constantes import ALL_SKILLS
 
 from pyvirtualdisplay.display import Display
 
 from util.csvHandler import csvHandler
 import util.stats as stats
+from util.gui.menu import Menu
 
-
-# from portales.infojobs.infojobs import InfoJobs
 from portales.indeed.indeed import Indeed
 from portales.monster.monster import Monster
 from portales.tecnoempleo.tecnoempleo import Tecnoempleo
 
 from portales.portal import Portal
 
+
+def quitScript(menu: Menu):
+
+    menu.showExitMenu()
+    exit()
+
+
+def showMenu(menu: Menu):
+
+    menu.showMenu()
+    match menu.resultado:
+        case 1:
+            pass
+        case 2:
+            menu.showInformesMenu()
+            match menu.informe:
+
+                case 1:
+                    pass
+
+                case 2:
+                    pass
+
+                case 3:
+                    pass
+
+                case 4:
+                    pass
+
+                case _:
+                    quitScript(menu)
+
+            quitScript(menu)
+
+        case _:
+            quitScript(menu)
+
+
 if __name__ == "__main__":
     # Configuracion logger
     # logging.basicConfig(level=logging.INFO)
+
+    menu = Menu()
+    showMenu(menu)
+
     logging.basicConfig(level=logging.INFO)
     log = logging.getLogger("main")
     log.setLevel(logging.DEBUG)
@@ -34,11 +73,11 @@ if __name__ == "__main__":
     n_paginas = 100
 
     with Display() as disp:
-        portales.append(Indeed(n_paginas=n_paginas,
-                        csvHandler=csvh, dominio_pais="es"))
+
         portales.append(Monster(n_paginas=n_paginas, csvHandler=csvh))
         portales.append(Tecnoempleo(n_paginas=n_paginas, csvHandler=csvh))
-
+        portales.append(Indeed(n_paginas=n_paginas,
+                        csvHandler=csvh, dominio_pais="es"))
         # portales.append(Indeed(n_paginas=n_paginas, csvHandler=csvh, dominio_pais="uk"))
         # portales.append(Indeed(n_paginas=n_paginas,csvHandler=csvh,dominio_pais="fr"))
 
@@ -53,6 +92,7 @@ if __name__ == "__main__":
                         f"Buscando {keyword} en {portal.__class__.__name__}")
                     portal.buscar(keyword)
                 except:
+                    log.info(traceback.format_exc())
                     continue
                 finally:
                     portal.close()
