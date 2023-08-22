@@ -2,7 +2,7 @@ from logging import Logger, getLogger
 import traceback
 
 from interfaces.dao.ubicacionDaoInterface import UbicacionDaoInterface
-from models.ubicacionDto import Ubicacion
+from models.dto.ubicacionDto import Ubicacion
 from sql.conexion import conexion_sql
 
 

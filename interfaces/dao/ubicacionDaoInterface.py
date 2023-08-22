@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from models.ubicacionDto import Ubicacion
+from models.dto.ubicacionDto import Ubicacion
 
 
 class UbicacionDaoInterface(ABC):

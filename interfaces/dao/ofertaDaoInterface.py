@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from models.ofertaDto import Oferta
+from models.dto.ofertaDto import Oferta
 
 
 class OfertaDaoInterface(ABC):

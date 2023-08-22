@@ -35,8 +35,10 @@ class Menu:
         print("\n" + "=" * 60 + "\n")
 
         print("*" * 60)
-        print("\n1. Extraer ofertas")
-        print("\n2. Mostrar informes\n")
+        print("\n1. Informe sobre los salarios medios en los puestos más populares.")
+        print("\n2. Informe sobre ubicación y teletrabajo.")
+        print("\n3. Informe sobre requisitos más demandados.")
+        print("\n4. Informe sobre la experiencia y el numero de ofertas.")
         print("*" * 60)
         match input("Selecciona una opción: "):
 

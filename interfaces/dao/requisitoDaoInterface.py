@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from models.requisitoDto import Requisito
+from models.dto.requisitoDto import Requisito
 
 
 class RequisitoDaoInterface(ABC):
