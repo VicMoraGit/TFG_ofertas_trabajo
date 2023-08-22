@@ -1,7 +1,7 @@
 from datetime import datetime
 from logging import DEBUG, Logger, getLogger
 from interfaces.dao.ofertaDaoInterface import OfertaDaoInterface
-from models.ofertaDto import Oferta
+from models.dto.ofertaDto import Oferta
 from sql.conexion import conexion_sql
 from sql.daoImpl.ubicacionDaoImpl import UbicacionDao
 

@@ -1,6 +1,6 @@
 from logging import Logger, getLogger
 from interfaces.dao.puestoDaoInterface import PuestoDaoInterface
-from models.puestoDto import Puesto
+from models.dto.puestoDto import Puesto
 from sql.conexion import conexion_sql
 
 

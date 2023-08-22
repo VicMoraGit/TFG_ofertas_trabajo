@@ -1,6 +1,6 @@
 from logging import Logger, getLogger
 from interfaces.dao.requisitoDaoInterface import RequisitoDaoInterface
-from models.requisitoDto import Requisito
+from models.dto.requisitoDto import Requisito
 from sql.conexion import conexion_sql
 
 

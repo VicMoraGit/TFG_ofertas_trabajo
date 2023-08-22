@@ -1,10 +1,10 @@
 from time import sleep, time
 from logging import DEBUG, Logger, getLogger
 from traceback import format_exc
-from models.ofertaDto import Oferta
+from models.dto.ofertaDto import Oferta
 
 # Clases proyecto
-from portales.portal import Portal
+from models.portales.portal import Portal
 from sql.daoImpl.ofertaDaoImpl import OfertaDao
 from util.azure_translator import Traductor
 from util.csvHandler import csvHandler

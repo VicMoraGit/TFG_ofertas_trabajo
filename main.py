@@ -8,11 +8,11 @@ from util.csvHandler import csvHandler
 import util.stats as stats
 from util.gui.menu import Menu
 
-from portales.indeed.indeed import Indeed
-from portales.monster.monster import Monster
-from portales.tecnoempleo.tecnoempleo import Tecnoempleo
+from models.portales.indeed.indeed import Indeed
+from models.portales.monster.monster import Monster
+from models.portales.tecnoempleo.tecnoempleo import Tecnoempleo
 
-from portales.portal import Portal
+from models.portales.portal import Portal
 
 
 def quitScript(menu: Menu):

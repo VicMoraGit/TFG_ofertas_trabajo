@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from models.puestoDto import Puesto
+from models.dto.puestoDto import Puesto
 
 
 class PuestoDaoInterface(ABC):

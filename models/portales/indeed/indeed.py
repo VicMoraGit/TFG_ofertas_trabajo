@@ -2,10 +2,10 @@
 from logging import Logger, getLogger, DEBUG
 from time import sleep
 from traceback import format_exc
-from models.ofertaDto import Oferta
+from models.dto.ofertaDto import Oferta
 
 # Clases proyecto
-from portales.portal import Portal
+from models.portales.portal import Portal
 from util.azure_translator import Traductor
 from util.csvHandler import csvHandler
 import util.stats as stats
