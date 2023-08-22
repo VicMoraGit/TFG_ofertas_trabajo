@@ -5,6 +5,7 @@ from time import time
 from pyvirtualdisplay.display import Display
 
 from util.csvHandler import csvHandler
+from util.informe import Informe
 import util.stats as stats
 from util.gui.menu import Menu
 
@@ -24,15 +25,17 @@ def quitScript(menu: Menu):
 def showMenu(menu: Menu):
 
     menu.showMenu()
+
     match menu.resultado:
         case 1:
             pass
         case 2:
             menu.showInformesMenu()
+            informe = Informe()
             match menu.informe:
 
                 case 1:
-                    pass
+                    informe.getInformePPS()
 
                 case 2:
                     pass

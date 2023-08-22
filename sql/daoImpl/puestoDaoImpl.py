@@ -10,6 +10,22 @@ class PuestoDao(PuestoDaoInterface):
         super().__init__()
         self._log: Logger = getLogger(__class__.__name__)
 
+    def getPuestosInformePPS(self):
+        # Devuelve los puestos con salario que mas se repiten, junto al salario medio de esos puestos
+        with conexion_sql() as con:
+            cursor = con.cursor()
+            cursor.execute(
+                f"SELECT AVG(o.Salario), p.Nombre  FROM oferta o  INNER JOIN puesto p ON p.ID = o.Puesto_id WHERE o.Puesto_id!=99 GROUP BY o.Puesto_id ORDER BY COUNT(o.Salario) DESC LIMIT 10;")
+
+            puestosRaw = cursor.fetchall()
+
+            puestos = {}
+            for puesto in puestosRaw:
+                puestos[str(puesto[1]).replace(" ", "\n")] = round(
+                    float(str(puesto[0])), 2)
+
+            return dict(sorted(puestos.items(), key=lambda item: item[1], reverse=True))
+
     def obtener(self, idPuesto: int) -> None | Puesto:
 
         puesto = None
