@@ -178,8 +178,7 @@ class Monster(Portal):
         td = Traductor()
         indice_puesto = 0
         try:
-            title = position.find_element(
-                By.CSS_SELECTOR, "h1.JobViewTitle").text
+            title = self._get_title(position)
             dominio_idioma = td.detectar_idioma(title)
 
             if dominio_idioma != "es":
