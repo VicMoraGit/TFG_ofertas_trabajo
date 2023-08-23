@@ -44,7 +44,7 @@ def showMenu(menu: Menu):
                     informe.getInformeRP()
 
                 case 4:
-                    pass
+                    informe.getInformeEP()
 
                 case _:
                     quitScript(menu)

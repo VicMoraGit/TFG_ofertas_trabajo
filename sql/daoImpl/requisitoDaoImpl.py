@@ -26,10 +26,10 @@ class RequisitoDao(RequisitoDaoInterface):
 
             requisitos = {}
             for requisito in requisitosRaw:
-                requisitos[str(requisito[0]).replace(" ", "\n")] = float(str(requisito[1]))
+                requisitos[str(requisito[0]).replace(
+                    " ", "\n")] = int(str(requisito[1]))
 
             return dict(sorted(requisitos.items(), key=lambda item: item[1], reverse=True))
-
 
     def obtener_por_nombre(self, nombre: str):
         requisito = None

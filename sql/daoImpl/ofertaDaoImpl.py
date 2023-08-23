@@ -22,6 +22,24 @@ class OfertaDao(OfertaDaoInterface):
         self._log: Logger = getLogger(__class__.__name__)
         self.ubicacionDao = UbicacionDao()
 
+    def getExperienciaInformeEP(self):
+        # Se devuelven el numero de ofertas por años de experiencia
+        with conexion_sql() as con:
+            cursor = con.cursor()
+            cursor.execute(
+                f"""SELECT  o.Experiencia , COUNT(o.Experiencia) FROM  tfg.oferta o 
+                    WHERE o.Experiencia != "NULL" 
+                    GROUP BY o.Experiencia ORDER BY o.Experiencia DESC;
+                    """)
+
+            experienciasRaw = cursor.fetchall()
+
+            experiencias = {}
+            for experiencia in experienciasRaw:
+                experiencias[str(experiencia[0])] = int(str(experiencia[1]))
+
+            return experiencias
+
     def obtener(self, idOferta: int) -> None | Oferta:
         oferta = None
 

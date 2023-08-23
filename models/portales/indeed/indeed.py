@@ -173,7 +173,6 @@ class Indeed(Portal):
                 if oferta.experiencia != "NULL":
                     n_ofertas_con_experiencia += 1
                 self._log.debug("Estadisticas actualizadas")
-            titulo = oferta.titulo
 
             self._log.debug(f"Oferta analizada {i+1}/{len(posiciones)}")
 
