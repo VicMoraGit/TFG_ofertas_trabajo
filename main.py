@@ -38,7 +38,7 @@ def showMenu(menu: Menu):
                     informe.getInformePPS()
 
                 case 2:
-                    pass
+                    informe.getInformeUPT()
 
                 case 3:
                     pass

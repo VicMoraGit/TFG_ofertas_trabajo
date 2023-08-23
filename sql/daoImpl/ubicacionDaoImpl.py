@@ -11,6 +11,37 @@ class UbicacionDao(UbicacionDaoInterface):
         super().__init__()
         self._log: Logger = getLogger(__class__.__name__)
 
+    def getUbicacionesInformeUPT(self):
+
+        with conexion_sql() as con:
+            cursor = con.cursor()
+            cursor.execute(
+                f"""SELECT COUNT(o.Titulo), u.Provincia, 
+                    COUNT(CASE WHEN o.Es_teletrabajo=TRUE THEN 1 END)
+                    FROM tfg.oferta o 
+                    INNER JOIN tfg.ubicaciones_oferta uo ON uo.id_oferta = o.ID
+                    INNER JOIN tfg.ubicacion u ON uo.id_ubicacion = u.ID WHERE u.Provincia != 'Teletrabajo' 
+                    GROUP BY u.Provincia ORDER BY COUNT(o.Titulo) DESC LIMIT 10;
+                """)
+
+            ubicacionesRaw = cursor.fetchall()
+            ubicaciones = []
+            for ubicacion in ubicacionesRaw:
+                ubicaciones.append(
+                    {
+                        "Provincia": ubicacion[1],
+                        "Ofertas totales": ubicacion[0],
+                        "Ofertas Teletrabajo": ubicacion[2],
+                        "Porcentaje teletrabajo": str(
+                            round(
+                                int(str(ubicacion[2]))
+                                * 100/int(str(ubicacion[0])), 2)
+                        ) + "%"
+                    }
+                )
+
+            return sorted(ubicaciones, key=lambda item: item["Ofertas totales"], reverse=True)
+
     def obtener(self, idUbicacion: int):
         ubicacion = None
 
