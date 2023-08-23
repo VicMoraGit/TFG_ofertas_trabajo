@@ -9,6 +9,28 @@ class RequisitoDao(RequisitoDaoInterface):
         super().__init__()
         self._log: Logger = getLogger(__class__.__name__)
 
+    def getRequisitosInformeRP(self):
+
+        # Devuelve los requisitos mas populares
+        with conexion_sql() as con:
+            cursor = con.cursor()
+            cursor.execute(
+                f"""SELECT  r.Nombre, COUNT(r.Nombre) FROM tfg.requisito r 
+                    INNER JOIN tfg.requisitos_oferta ro ON r.ID=ro.id_requisito 
+                    INNER JOIN tfg.oferta o ON o.ID = ro.id_oferta 
+                    WHERE r.Categoria  != "Soft Skill"
+                    GROUP BY r.Nombre ORDER BY COUNT(r.Nombre) DESC LIMIT 10;
+                    """)
+
+            requisitosRaw = cursor.fetchall()
+
+            requisitos = {}
+            for requisito in requisitosRaw:
+                requisitos[str(requisito[0]).replace(" ", "\n")] = float(str(requisito[1]))
+
+            return dict(sorted(requisitos.items(), key=lambda item: item[1], reverse=True))
+
+
     def obtener_por_nombre(self, nombre: str):
         requisito = None
 

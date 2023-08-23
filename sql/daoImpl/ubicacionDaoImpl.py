@@ -12,7 +12,7 @@ class UbicacionDao(UbicacionDaoInterface):
         self._log: Logger = getLogger(__class__.__name__)
 
     def getUbicacionesInformeUPT(self):
-
+        #Devuelve informacion sobre las ubicaciones de las ofertas y el teletrabajo en ellas
         with conexion_sql() as con:
             cursor = con.cursor()
             cursor.execute(

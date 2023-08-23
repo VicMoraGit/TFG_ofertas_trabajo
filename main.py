@@ -41,7 +41,7 @@ def showMenu(menu: Menu):
                     informe.getInformeUPT()
 
                 case 3:
-                    pass
+                    informe.getInformeRP()
 
                 case 4:
                     pass
@@ -77,10 +77,11 @@ if __name__ == "__main__":
 
     with Display() as disp:
 
-        portales.append(Monster(n_paginas=n_paginas, csvHandler=csvh))
         portales.append(Tecnoempleo(n_paginas=n_paginas, csvHandler=csvh))
         portales.append(Indeed(n_paginas=n_paginas,
                         csvHandler=csvh, dominio_pais="es"))
+        portales.append(Monster(n_paginas=n_paginas, csvHandler=csvh))
+
         # portales.append(Indeed(n_paginas=n_paginas, csvHandler=csvh, dominio_pais="uk"))
         # portales.append(Indeed(n_paginas=n_paginas,csvHandler=csvh,dominio_pais="fr"))
 

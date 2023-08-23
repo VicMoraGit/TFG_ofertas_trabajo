@@ -134,7 +134,7 @@ class Tecnoempleo(Portal):
                     n_ofertas_con_experiencia += 1
 
                 self._log.debug("Estadisticas actualizadas")
-
+            titulo = oferta.titulo
             self._log.debug(f"Oferta analizada {i+1}/{len(posiciones)}")
 
             # Cierra y devuelve el control a la pestaña de resultados
@@ -157,7 +157,7 @@ class Tecnoempleo(Portal):
         self._n_paginas_analizadas += 1
 
         if titulo == self._titulo_ultima_oferta_pagina:
-
+            self._busqueda_finalizada = True
             return
         else:
             self._titulo_ultima_oferta_pagina = titulo
