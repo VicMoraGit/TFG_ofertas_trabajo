@@ -1,5 +1,7 @@
+from sql.daoImpl.ofertaDaoImpl import OfertaDao
 from sql.daoImpl.puestoDaoImpl import PuestoDao
 import matplotlib.pyplot as plt
+from sql.daoImpl.requisitoDaoImpl import RequisitoDao
 
 from sql.daoImpl.ubicacionDaoImpl import UbicacionDao
 
@@ -9,6 +11,8 @@ class Informe:
     def __init__(self) -> None:
         self._puestoDao = PuestoDao()
         self._ubicacionDao = UbicacionDao()
+        self._requisitoDao = RequisitoDao()
+        self._ofertaDao = OfertaDao()
 
     def getInformePPS(self):  # Posiciones Populares ordenadas por salario
         puestos = self._puestoDao.getPuestosInformePPS()
@@ -26,7 +30,7 @@ class Informe:
 
         plt.show()
 
-    def getInformeUPT(self):  # Posiciones Populares ordenadas por salario
+    def getInformeUPT(self):  # Ubicaciones populares con datos sobre teletrabajo
         ubicaciones = self._ubicacionDao.getUbicacionesInformeUPT()
         x = list(range(1, 11))
         is_teletrabajo = [ubicacion["Ofertas Teletrabajo"]
@@ -47,5 +51,40 @@ class Informe:
         plt.title("Porcentaje de ofertas con teletrabajo por provincias")
         plt.bar_label(p1, porcentajes)
         plt.legend((p1[0], p2[0]), ('Teletrabajo', 'Presencial'))
+
+        plt.show()
+
+    def getInformeRP(self):  # Requisitos mas populares
+
+        requisitos = self._requisitoDao.getRequisitosInformeRP()
+        x = list(range(1, 11))
+        height_bars = list(requisitos.values())
+        labels = list(requisitos.keys())
+
+        plt.figure(figsize=(30, 10))
+        p = plt.bar(x, height=height_bars, tick_label=labels,
+                    width=0.7, color="lightskyblue")
+        plt.xlabel("Requisitos")
+        plt.ylabel("Ofertas que lo requieren")
+        plt.title("Requisitos mas demandados")
+        plt.bar_label(p, height_bars)
+
+        plt.show()
+
+    def getInformeEP(self):
+
+        experiencias = self._ofertaDao.getExperienciaInformeEP()
+        x = list(range(1, 7))
+
+        height_bars = list(experiencias.values())
+        labels = list(experiencias.keys())
+
+        plt.figure(figsize=(30, 10))
+        p = plt.bar(x, height=height_bars, tick_label=labels,
+                    width=0.7, color="lightskyblue")
+        plt.xlabel("Años de experiencia")
+        plt.ylabel("Número de ofertas")
+        plt.title("Numero de años de experiencia que mas se buscan en las ofertas")
+        plt.bar_label(p, height_bars)
 
         plt.show()

@@ -192,6 +192,7 @@ class Indeed(Portal):
         self._n_paginas_analizadas += 1
 
         if titulo == self._titulo_ultima_oferta_pagina:
+            self._busqueda_finalizada = True
             return
         else:
             self._titulo_ultima_oferta_pagina = titulo
