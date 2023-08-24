@@ -1,5 +1,7 @@
 from datetime import datetime
 from logging import DEBUG, Logger, getLogger
+
+from tqdm import tqdm
 from interfaces.dao.ofertaDaoInterface import OfertaDaoInterface
 from models.dto.ofertaDto import Oferta
 from sql.conexion import conexion_sql
@@ -40,12 +42,32 @@ class OfertaDao(OfertaDaoInterface):
 
             return experiencias
 
+    def obtenerTodasCSV(self):
+        with conexion_sql() as con:
+            cursor = con.cursor()
+            cursor.execute(f"SELECT COUNT(o.ID) FROM tfg.oferta o;")
+
+            totalRaw = cursor.fetchone()
+            if totalRaw is not None:
+                total = int(str(totalRaw[0]))
+            else:
+                return
+            ofertas = []
+            print()
+            for i in tqdm(range(1, total+1), desc="Progreso: "):
+                oferta = self.obtener(i)
+                if oferta is not None:
+                    ofertas.append(oferta.to_csv())
+
+            return ofertas
+
     def obtener(self, idOferta: int) -> None | Oferta:
         oferta = None
 
         with conexion_sql() as con:
             cursor = con.cursor()
-            cursor.execute(f"SELECT * FROM oferta WHERE ID={idOferta};")
+            cursor.execute(
+                f"SELECT * FROM tfg.oferta o WHERE o.ID={idOferta};")
 
             ofertaRaw = cursor.fetchone()
 
@@ -55,15 +77,14 @@ class OfertaDao(OfertaDaoInterface):
                 titulo = str(ofertaRaw[1])
                 companyia = str(ofertaRaw[2])
                 experiencia = str(ofertaRaw[3])
-                salario = int(str(ofertaRaw[4]))
-                fecha_publicacion = datetime.strptime(
-                    str(ofertaRaw[5]), "%Y-%m-%d")
+                salario = str(ofertaRaw[4])
+                fecha_publicacion = str(ofertaRaw[5])
                 puesto_id = int(str(ofertaRaw[6]))
                 es_teletrabajo = bool(ofertaRaw[7])
 
                 requisitos = []
                 cursor.execute(
-                    f"SELECT * FROM requisitos_oferta WHERE ID={idOferta};")
+                    f"SELECT * FROM tfg.requisitos_oferta ro WHERE ro.id_oferta={idOferta};")
                 requisitosRaw = cursor.fetchall()
 
                 if requisitosRaw is not None:
@@ -72,7 +93,7 @@ class OfertaDao(OfertaDaoInterface):
 
                 ubicaciones = []
                 cursor.execute(
-                    f"SELECT * FROM ubicaciones_oferta WHERE ID={idOferta};")
+                    f"SELECT * FROM tfg.ubicaciones_oferta uo WHERE uo.id_oferta={idOferta};")
                 ubicacionesRaw = cursor.fetchall()
 
                 if ubicacionesRaw is not None:
@@ -85,7 +106,7 @@ class OfertaDao(OfertaDaoInterface):
                     companyia,
                     experiencia,
                     salario,
-                    fecha_publicacion.strftime("%Y-%m-%d"),
+                    fecha_publicacion,
                     puesto_id,
                     es_teletrabajo,
                     ubicaciones,

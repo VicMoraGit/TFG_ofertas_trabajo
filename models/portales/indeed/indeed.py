@@ -7,7 +7,6 @@ from models.dto.ofertaDto import Oferta
 # Clases proyecto
 from models.portales.portal import Portal
 from util.azure_translator import Traductor
-from util.csvHandler import csvHandler
 import util.stats as stats
 from exceptions.DescripcionNoEmbebida import DescripcionNoEmbebida
 
@@ -29,8 +28,8 @@ from selenium.common.exceptions import TimeoutException
 
 
 class Indeed(Portal):
-    def __init__(self, n_paginas: int, csvHandler: csvHandler, dominio_pais="es"):
-        super().__init__(n_paginas, csvHandler)
+    def __init__(self, n_paginas: int, dominio_pais="es"):
+        super().__init__(n_paginas)
         self.dominio_pais = dominio_pais
         self._base_url: str = f"https://{dominio_pais}.indeed.com/"
         self._log: Logger = getLogger(__class__.__name__)
@@ -160,8 +159,6 @@ class Indeed(Portal):
 
                 self._log.debug("Informacion extraida.")
 
-                # Inserta la oferta en las posiciones para el csv
-                valores_posiciones.append(oferta.to_csv())
 
                 # Inserta la oferta en BD
                 self.ofertaDao.crear(oferta)
@@ -179,9 +176,6 @@ class Indeed(Portal):
         # Comprueba si esta es la ultima pagina de la palabra clave.
         # Si es la ultima, finaliza la busqueda y no añade las ultimas
         # posiciones ni estadisticas.
-
-        # Escribe en CSV
-        self._csv.escribir_lineas(valores_posiciones)
 
         self._log.info(f"{len(posiciones)} ofertas analizadas.")
 

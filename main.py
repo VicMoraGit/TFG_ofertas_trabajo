@@ -50,6 +50,12 @@ def showMenu(menu: Menu):
                     quitScript(menu)
 
             quitScript(menu)
+        case 3:
+            # Clase encargada del csv
+            csvh = csvHandler()
+            csvh.db2csv()
+            csvh.cerrar_archivo()
+            quitScript(menu)
 
         case _:
             quitScript(menu)
@@ -66,8 +72,6 @@ if __name__ == "__main__":
     log = logging.getLogger("main")
     log.setLevel(logging.DEBUG)
 
-    # Clase encargada del csv
-    csvh = csvHandler()
     # Declaracion variables
     portales: list[Portal] = []
     keywords = ["DevOps",  "Programador", "Desarrollador", "Analista", "Frontend", "Inteligencia artificial", "Backend",
@@ -75,12 +79,14 @@ if __name__ == "__main__":
                 ]
     n_paginas = 100
 
+    # Clase encargada del csv
+
     with Display() as disp:
 
-        portales.append(Tecnoempleo(n_paginas=n_paginas, csvHandler=csvh))
+        portales.append(Tecnoempleo(n_paginas=n_paginas))
+        portales.append(Monster(n_paginas=n_paginas))
         portales.append(Indeed(n_paginas=n_paginas,
-                        csvHandler=csvh, dominio_pais="es"))
-        portales.append(Monster(n_paginas=n_paginas, csvHandler=csvh))
+                               dominio_pais="es"))
 
         # portales.append(Indeed(n_paginas=n_paginas, csvHandler=csvh, dominio_pais="uk"))
         # portales.append(Indeed(n_paginas=n_paginas,csvHandler=csvh,dominio_pais="fr"))
@@ -103,7 +109,6 @@ if __name__ == "__main__":
 
             portal.actualizar_estadisticas()
 
-        csvh.cerrar_archivo()
         stats.s_final = time()
         stats.imprime_stats()
         stats.exporta_stats()

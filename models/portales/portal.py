@@ -1,6 +1,5 @@
 # Clases proyecto
 from time import time
-from util.csvHandler import csvHandler
 from util.filtro import FiltroOfertas
 import util.stats as stats
 
@@ -14,9 +13,8 @@ DRIVER_VERSION_UNDETECTED = 114
 
 
 class Portal(obi):
-    def __init__(self, n_paginas: int, csvHandler: csvHandler):
+    def __init__(self, n_paginas: int):
         self._n_paginas_total = n_paginas
-        self._csv = csvHandler
         self._filtro = FiltroOfertas()
 
         # Estadisticas Ofertas

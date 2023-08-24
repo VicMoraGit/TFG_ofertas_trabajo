@@ -206,7 +206,7 @@ PALABRAS_RELACIONADAS_ROL = [
         "ingeniero": 5,
         "ingenieros": 5,
         "nube": 5,
-        "sistemas": 2,
+        "sistemas": 5,
         "devops": 4,
         "programador": 5,
         "programadores": 5,
