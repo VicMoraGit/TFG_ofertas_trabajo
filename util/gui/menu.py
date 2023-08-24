@@ -18,8 +18,9 @@ class Menu:
 
     def showMenu(self):
         print("*" * 60)
-        print("\n1. Extraer ofertas")
-        print("\n2. Mostrar informes\n")
+        print("\n1. Extraer ofertas.")
+        print("\n2. Mostrar informes.")
+        print("\n3. Exportar ofertas.\n")
         print("*" * 60)
         opcion = input("Selecciona una opción: ")
 
@@ -28,6 +29,9 @@ class Menu:
 
         elif opcion == "2":
             self._resultado = 2
+
+        elif opcion == "3":
+            self._resultado = 3
 
         return
 
@@ -38,7 +42,7 @@ class Menu:
         print("\n1. Informe sobre los salarios medios en los puestos más populares.")
         print("\n2. Informe sobre ubicación y teletrabajo.")
         print("\n3. Informe sobre requisitos más demandados.")
-        print("\n4. Informe sobre la experiencia y el numero de ofertas.")
+        print("\n4. Informe sobre la experiencia y el numero de ofertas.\n")
         print("*" * 60)
         match input("Selecciona una opción: "):
 

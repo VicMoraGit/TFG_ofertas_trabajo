@@ -7,7 +7,6 @@ from models.dto.ofertaDto import Oferta
 from models.portales.portal import Portal
 from sql.daoImpl.ofertaDaoImpl import OfertaDao
 from util.azure_translator import Traductor
-from util.csvHandler import csvHandler
 import util.stats as stats
 
 # Selenium
@@ -19,8 +18,8 @@ from selenium.common.exceptions import TimeoutException
 
 
 class Monster(Portal):
-    def __init__(self, n_paginas: int, csvHandler: csvHandler):
-        super().__init__(n_paginas, csvHandler)
+    def __init__(self, n_paginas: int):
+        super().__init__(n_paginas)
 
         self._base_url: str = "https://www.monster.es/"
         self._log: Logger = getLogger(__class__.__name__)
@@ -119,9 +118,6 @@ class Monster(Portal):
 
                 self._log.debug("Informacion extraida.")
 
-                # Inserta la oferta en las posiciones para el csv
-                valores_posiciones.append(oferta.to_csv())
-
                 # Inserta la oferta en BD
                 self.ofertaDao.crear(oferta)
 
@@ -135,9 +131,6 @@ class Monster(Portal):
                 self._log.debug("Estadisticas actualizadas")
 
             self._log.debug(f"Oferta analizada {i+1}/{len(posiciones)}")
-
-        # Escribe en CSV
-        self._csv.escribir_lineas(valores_posiciones)
 
         self._log.info(f"{len(posiciones)} ofertas analizadas.")
 

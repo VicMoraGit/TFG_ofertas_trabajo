@@ -4,6 +4,8 @@ from datetime import date
 from os import getcwd, path
 from logging import Logger, getLogger, DEBUG
 
+from sql.daoImpl.ofertaDaoImpl import OfertaDao
+
 
 class csvHandler:
     def __init__(self) -> None:
@@ -14,6 +16,13 @@ class csvHandler:
         self._writer = self.__obtener_writer()
 
         self.__escribir_cabecera()
+
+    def db2csv(self):
+        dao = OfertaDao()
+        ofertas = dao.obtenerTodasCSV()
+
+        self.escribir_lineas(ofertas)
+        self._log.info("CSV guardado en " + self._ruta)
 
     def escribir_lineas(self, valores):
         self._writer.writerows(valores)
