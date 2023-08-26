@@ -1,6 +1,5 @@
 FROM --platform=linux/amd64 python:3.10
-
-VOLUME /data
+WORKDIR /data
 
 EXPOSE 3306
 
@@ -28,17 +27,17 @@ RUN apt-get update && apt-get install -y \
     xdg-utils \
     libu2f-udev \
     libvulkan1
+
 # Brave 
 RUN curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
 RUN echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main"| tee /etc/apt/sources.list.d/brave-browser-release.list
 RUN apt update
 RUN apt install brave-browser=1.52.126 -y
 
-WORKDIR /data
 COPY . .
 
 #Librerias y requerimientos para python
 RUN apt install xvfb -y
 RUN pip install -r requirements.txt
 
-RUN python main.py --docker
+ENTRYPOINT [ "python", "main.py", "--docker" ]
